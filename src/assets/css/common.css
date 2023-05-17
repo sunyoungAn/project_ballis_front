@@ -1,0 +1,154 @@
+/* 공통 margin-top => 헤더와 겹치기 때문에 설정
+*/
+.common_mt160 {
+    margin-top: 160px;
+}
+
+/* 관리자 페이지 전체 영역 설정 */
+.admin_wrap {
+    width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    /* padding: 0px 20px; */
+    overflow: hidden;
+}
+
+/* 관리자 페이지 컨텐츠 영역 설정 */
+.admin_content {
+    width: 1080px;
+    float: left;
+}
+
+.admin_input_wrap {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 관리자페이지 모달창 */
+.admin_blackBg {
+    width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* r g b apacity*/ 
+        position: fixed;
+        padding: 20px;
+        top:0;
+        left: 0;
+        z-index: 9999999; /* header보다 높아야 해서 높은 값 지정*/
+}
+
+.admin_whiteBg_payment {
+    width: 400px;
+    background: white;
+    border-radius: 10px; /* 테두리 둥글게*/
+    padding: 20px;
+    margin-top: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.admin_whiteBg_payment_delivery {
+    width: 800px;
+    background: white;
+    border-radius: 10px; /* 테두리 둥글게*/
+    padding: 20px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 리뷰 모달 */
+.review_blackBg {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* r g b apacity*/ 
+    position: fixed;
+    padding: 20px;
+    top:0;
+    left: 0;
+    z-index: 9999999; /* header보다 높아야 해서 높은 값 지정*/
+}
+
+.review_whiteBg {
+    width: 800px;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.customer_wrap {
+    width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+
+/* text박스 밑줄 형태 디자인 */
+/* input[type="text"] {
+    border: none;
+    border-bottom: 3px solid black;
+    outline: none;
+  } */
+
+.div_box{
+  text-align: center;
+}
+  
+.input_box{
+  width: 40%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.input_box_1{
+  width: 40%;
+  margin-left: 30%;
+  display: inline-block; 
+}
+  
+.lbl{
+  font-size: large;
+  font-weight: bolder;
+  padding: 10px;
+}
+  
+.button_box{
+  padding-top: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.button_box_1{
+  text-align: center;
+  margin: 0 auto;  
+}
+ 
+.button_box2{
+  text-align: center;
+  margin-bottom: 20px; 
+}
+
+.p_title{
+  font-size: large;
+  color: gray;
+}
+
+.p_tag_box{
+  text-align: center;
+  font-size: x-large;
+  font-weight: bold;
+ }
+
+.p_tag_box_2{
+  line-height: 70%;
+}
+
+.p_text{
+  font-size: small;
+}
+
+
+ 
