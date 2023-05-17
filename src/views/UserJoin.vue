@@ -54,9 +54,9 @@
     </div>
 
     <div class="button_box_1">
-      <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" v-model="state.gender" value="1" autocomplete="off" >
+      <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" v-model="state.gender" value="2" autocomplete="off" >
       <label class="btn btn-outline-success" for="success-outlined" name="gender" style="width: 100px; margin-right: 20px;">남성</label>
-      <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" v-model="state.gender" value="2" autocomplete="off">
+      <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" v-model="state.gender" value="1" autocomplete="off">
       <label class="btn btn-outline-success" for="danger-outlined" name="gender" style="width: 100px;">여성</label>
     </div>
 
