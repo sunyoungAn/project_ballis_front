@@ -21,10 +21,10 @@
                 </div>
 
                 <div class="item_box">
-                    <ul class="ul_item_box">
+                    <ul class="ul_item_box" v-for="tmp of state.list" :key="tmp">
                         <li>이미지</li>
-                        <li>상품명</li>
-                        <li>진행상태</li>
+                        <li>{{tmp.productName}}</li>
+                        <li>{{tmp.selling.sellingStatus === 1 ? '입찰중' : '기한만료'}}</li>
                     </ul>
                 </div>
             </article>
@@ -36,14 +36,35 @@
 <script>
 import MyPageMenu from '../components/MyPageMenu.vue';
 import SellingTab from '../components/SellingTab.vue';
+import { onMounted, reactive } from 'vue';
+import axios from 'axios';
 
 export default {
     components: { MyPageMenu, SellingTab },
 
     setup () {
+        const state = reactive({
+            list:[],
+            token : sessionStorage.getItem("TOKEN")
+        })
+
+        const handleData = async () =>{
+            const url = `/api/get/sellingall/${state.token}`;
+            const headers = {"Content-Type":"application/json", "auth" : state.token};
+            const { data } = await axios.get(url,{headers});
+            state.list = data;
+            console.log(state.list)
+        }
+
         
 
-        return {}
+        onMounted(()=>{
+            handleData();
+        })
+
+        return {
+            state
+        }
     }
 }
 </script>
@@ -55,7 +76,7 @@ export default {
     text-align: center;
     padding: 15px;
     display: grid;
-    grid-template-columns: auto 60% auto;
+    grid-template-columns: 20% 60% 20%;
     list-style-type: none;
 }
 
