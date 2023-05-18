@@ -13,7 +13,7 @@
             <div>
                 <ul style=" list-style-type: none;">
                     <div>
-                        <input type="date" @change="setMinDate"/> ~ <input type="date" :min="minDate"/>
+                        <input type="date" @change="setMinDate"/> ~ <input type="date" :min="state.minDate"/>
                         <button @click="handleSearch">Search</button>
                     </div>
                     <li style="color: gray;">
@@ -25,18 +25,23 @@
 </template>
 
 <script>
+import { reactive } from 'vue';
 export default {
-    data() {
-    return {
-      minDate: "",
-    };
-  },
-  methods: {
-    setMinDate(event) {
+    setup() {
+    const state = reactive({
+      minDate: '',
+    });
+
+    function setMinDate(event) {
       // 입력된 날짜 이후의 날짜를 선택할 수 있도록 설정
-      this.minDate = event.target.value;
-    },
-  },
+      state.minDate = event.target.value;
+    }
+
+    return {
+      state,
+      setMinDate
+    };
+  }
 };
 </script>
 

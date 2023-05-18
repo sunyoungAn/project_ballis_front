@@ -45,6 +45,7 @@
         const headers = { "Content-Type": "application/json", "auth": state.token };
         const { data } = await axios.get(url, { headers });
         state.list = data;
+        console.log(state.list)
       };
   
       const filteredList = computed(() => {

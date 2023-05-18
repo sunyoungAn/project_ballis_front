@@ -8,20 +8,22 @@
                 <br>
 
                 <div style="margin-bottom: 20px;">
-                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="width: 150px; height: 50px;">
-                        <option selected>전체</option>
-                        <option value="1">정산완료</option>
-                        <option value="2">취소완료</option>
-                        <option value="3">불합격반송</option>
-                        <option value="4">회수완료</option>
+                    <select class="form-select form-select-sm" v-model="state.selectedStatus" style="width: 150px; height: 50px;">
+                        <option v-for="option in statusOptions" :value="option.value" :key="option.value">{{ option.label }}</option>
                     </select>
                 </div>
 
                 <div class="item_box">
-                    <ul class="ul_item_box">
+                    <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
                         <li>이미지</li>
-                        <li>상품명</li>
-                        <li>진행상태</li>
+                        <li>{{tmp.productName}}</li>
+                        <li>
+                            {{ 
+                            tmp.contract.sellingStatus === 50 ? '정산완료' :
+                            tmp.contract.sellingStatus === 51 ? '취소완료' :
+                            tmp.contract.sellingStatus === 52 ? '불합격반송' : '회수완료'
+                            }}
+                        </li>
                     </ul>
                 </div>
             </article>
@@ -31,16 +33,60 @@
 </template>
 
 <script>
+import { computed, onMounted, reactive } from 'vue';
 import MyPageMenu from '../components/MyPageMenu.vue';
 import SellingTab from '../components/SellingTab.vue';
+import axios from 'axios';
 
 export default {
     components: { MyPageMenu, SellingTab },
 
     setup () {
-        
 
-        return {}
+        const state = reactive({
+            list:[],
+            token : sessionStorage.getItem("TOKEN"),
+            selectedStatus: ""
+        })
+
+        const handleData = async () =>{
+            const url = `/api/get/sellingend/${state.token}`;
+            const headers = {"Content-Type":"application/json", "auth" : state.token};
+            const { data } = await axios.get(url,{headers});
+            state.list = data;
+            console.log(state.list)
+        };
+
+        const filteredList = computed(() => {
+            if (state.selectedStatus === "") {
+            return state.list;
+            } else {
+            const status = parseInt(state.selectedStatus);
+                return state.list.filter(product => product.contract.sellingStatus === status);
+            }
+        });
+        
+        const statusOptions = computed(() => {
+            const options = [
+                { label: "전체", value: "" },
+                { label: "정산완료", value: 50 },
+                { label: "취소완료", value: 51 },
+                { label: "불합격반송", value: 52 },
+                { label: "회수완료", value: 53 }
+            ];
+            return options;
+        });
+
+
+        onMounted(()=>{
+            handleData();
+        })
+
+        return {
+            state,
+            statusOptions,
+            filteredList
+        }
     }
 }
 </script>

@@ -9,33 +9,19 @@
                     <a class="nav-link active" aria-current="page" href="/mypage/buyinging">진행중</a>
                     <a class="nav-link active" aria-current="page" href="/mypage/buyingend">완료</a>
                 </ul>
-            </div>
-            <div>
-                <ul style=" list-style-type: none;">
-                    <div>
-                        <input type="date" @change="setMinDate"/> ~ <input type="date" :min="minDate"/>
-                    </div>
-                    <li style="color: gray;">
-                        한 번에 조회 가능한 기간은 최대 6개월입니다.
-                    </li>
-                </ul>
-            </div>
+        </div>
     </article>
 </template>
 
 <script>
+
 export default {
-  data() {
+  setup() {
+
     return {
-      minDate: "",
+    
     };
-  },
-  methods: {
-    setMinDate(event) {
-      // 입력된 날짜 이후의 날짜를 선택할 수 있도록 설정
-      this.minDate = event.target.value;
-    },
-  },
+  }
 };
 </script>
 

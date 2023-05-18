@@ -8,23 +8,24 @@
                 <br>
 
                 <div style="margin-bottom: 20px;">
-                    <select class="form-select form-select-sm" aria-label=".form-select-sm example" style="width: 150px; height: 50px;">
-                        <option selected>전체</option>
-                        <option value="1">발송요청</option>
-                        <option value="2">발송완료</option>
-                        <option value="3">입고대기</option>
-                        <option value="4">입고완료</option>
-                        <option value="5">검수중</option>
-                        <option value="6">검수불합격</option>
-                        <option value="7">검수합격</option>
+                    <select class="form-select form-select-sm" v-model="state.selectedStatus" style="width: 150px; height: 50px;">
+                        <option v-for="option in statusOptions" :value="option.value" :key="option.value">{{ option.label }}</option>
                     </select>
                 </div>
 
                 <div class="item_box">
-                    <ul class="ul_item_box" v-for="tmp of state.list" :key="tmp">
+                    <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
                         <li>이미지</li>
                         <li>{{tmp.productName}}</li>
-                        <li>{{tmp.selling.sellingStatus === 1 ? '입찰중' : '기한만료'}}</li>
+                        <li>{{ 
+                            tmp.contract.sellingStatus === 21 ? '발송요청' :
+                            tmp.contract.sellingStatus === 22 ? '발송완료' :
+                            tmp.contract.sellingStatus === 23 ? '입고대기' :
+                            tmp.contract.sellingStatus === 24 ? '입고완료' :
+                            tmp.contract.sellingStatus === 25 ? '검수중' :
+                            tmp.contract.sellingStatus === 26 ? '검수불합격' : '검수합격'
+                            }}
+                        </li>
                     </ul>
                 </div>
             </article>
@@ -36,7 +37,7 @@
 <script>
 import MyPageMenu from '../components/MyPageMenu.vue';
 import SellingTab from '../components/SellingTab.vue';
-import { onMounted, reactive } from 'vue';
+import { computed, onMounted, reactive } from 'vue';
 import axios from 'axios';
 
 export default {
@@ -45,25 +46,49 @@ export default {
     setup () {
         const state = reactive({
             list:[],
-            token : sessionStorage.getItem("TOKEN")
+            token : sessionStorage.getItem("TOKEN"),
+            selectedStatus: ""
         })
 
         const handleData = async () =>{
-            const url = `/api/get/sellingall/${state.token}`;
+            const url = `/api/get/sellinging/${state.token}`;
             const headers = {"Content-Type":"application/json", "auth" : state.token};
             const { data } = await axios.get(url,{headers});
             state.list = data;
             console.log(state.list)
-        }
+        };
 
-        
+        const filteredList = computed(() => {
+            if (state.selectedStatus === "") {
+            return state.list;
+            } else {
+            const status = parseInt(state.selectedStatus);
+                return state.list.filter(product => product.contract.sellingStatus === status);
+            }
+        });
+
+        const statusOptions = computed(() => {
+            const options = [
+                { label: "전체", value: "" },
+                { label: "발송요청", value: 21 },
+                { label: "발송완료", value: 22 },
+                { label: "입고대기", value: 23 },
+                { label: "입고완료", value: 24 },
+                { label: "검수중", value: 25 },
+                { label: "검수불합격", value: 26 },
+                { label: "검수합격", value: 27 },
+            ];
+            return options;
+        });
 
         onMounted(()=>{
             handleData();
         })
 
         return {
-            state
+            state,
+            statusOptions,
+            filteredList
         }
     }
 }
