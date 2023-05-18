@@ -18,7 +18,6 @@
                 <p>즉시 판매가</p>
                 <p v-if="state.row[0].buyWishPrice">{{ state.row[0].buyWishPrice }}원</p>
                 <p v-else>- 원</p> 
-                {{  }}
                 <button @click="state.type = 'bid'">구매 입찰</button>
                 <button :disabled="state.onlyBid" @click="state.type = 'normal'">즉시 구매</button>
                 
@@ -65,7 +64,7 @@
 
 <script>
 import axios from 'axios';
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -92,9 +91,13 @@ export default {
             // item : ''
         })
 
-        // watchEffect(() => {
-        //     state.item = store.getters.getSelectedItem;
-        // })
+        watchEffect(() => {
+            // state.item = store.getters.getSelectedItem;
+            if(state.type === "normal") {
+                state.inputValue = '';
+                state.errorMessage = '';
+            }
+        });
         
         const handleDate = (days) => {
             state.days = days;
