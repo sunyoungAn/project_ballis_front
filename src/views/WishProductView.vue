@@ -5,13 +5,17 @@
            <my-page-menu></my-page-menu>
            
            <article>
+                <div class="p_tag_box">
+                    <p>관심상품</p>
+                    <hr>
+                </div>
                  <div class="item_box">
                      <ul class="ul_item_box" v-for="tmp of state.list" :key="tmp">
-                         <li><img :src="state.url" style="width: 50px; height: 50px;"></li>
-                         <li>{{tmp.productKorName}}</li>
+                         <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" style="width: 70px; height: 70px;"></li>
+                         <li>{{tmp.productName}}</li>
                          <div class="button-group">
-                             <button type="button" class="btn btn-outline-success">구매하기</button>
-                             <button type="button" class="btn btn-outline-success" @click="handleDelete(index, tmp.wishs[0].id)">삭제하기</button>
+                             <button type="button" class="btn btn-outline-success" @click="handleBuying(tmp.productId)">구매하기</button>
+                             <button type="button" class="btn btn-outline-success" @click="handleDelete(index, tmp.wish.id)">삭제하기</button>
                          </div>
                      </ul>
                  </div>
@@ -24,26 +28,35 @@
  import { onMounted, reactive } from 'vue'
  import MyPageMenu from '../components/MyPageMenu.vue'
  import axios from 'axios'
+import { useRouter } from 'vue-router'
  export default {
    components: { MyPageMenu },
      setup () {
+
+        const router = useRouter();
+
          const state = reactive({
              url : require('../assets/logo.png'),
              list:[],
-             wishs:[],
-             token : sessionStorage.getItem("TOKEN")
+             image:[],
+             token : sessionStorage.getItem("TOKEN"),
+             targetId : 3
          })
  
+         //관심상품 출력
          const handleData = async () =>{
              const url = `/api/get/wish/${state.token}`;
              const headers = {"Content-Type":"application/json", "auth" : state.token};
              const { data } = await axios.get(url,{headers});
              state.list = data;
              console.log(state.list)
-             state.wishs = data.wishs
-             console.log(state.wishs);
+         }
+         //상품구매이동
+         const handleBuying = async(id) =>{
+            router.push({path:'/product/one', query:{productid:id}});
          }
  
+         //관심상품 삭제
          const handleDelete = async (index, id) => {
              if (confirm('삭제하시겠습니까?')) {
                  const url = `/api/delete/wish/${id}`;
@@ -61,7 +74,8 @@
  
          return {
              state,
-             handleDelete
+             handleDelete,
+             handleBuying
          }
      }
  }
@@ -83,6 +97,7 @@
  
  .ul_item_box{
      text-align: center;
+     font-size:large;
      padding: 15px;
      display: grid;
      grid-template-columns: auto 75% auto;

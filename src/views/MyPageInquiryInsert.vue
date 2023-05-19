@@ -119,10 +119,9 @@ export default {
 
             const {data} = await axios.post(url,body,{headers});
             console.log(data);
-            if(data.status ===  200){
-                alert("등록되었습니다");
-                router.push({path:'/mypage/inquiry'});
-            }
+            window.alert("등록되었습니다");
+            router.push({path:'/mypage/inquiry'});
+
         }
 
         return {

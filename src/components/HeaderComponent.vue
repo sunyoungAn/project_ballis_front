@@ -33,7 +33,7 @@
                             <router-link class="nav-link" to="/notice">고객센터</router-link>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">관심상품</a>
+                            <a class="nav-link" href="/mypage/wish">관심상품</a>
                         </li>
                         <li class="nav-item" v-if="state.logged===false">
                             <!-- <a class="nav-link" href="/member/login">로그인</a> -->
