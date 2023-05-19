@@ -42,14 +42,14 @@
             </div>
         </div>
         <div class="outter_btn">
-            <img src="@/assets/image/arrow-trans.png" class="outter_right"/>
-            <img src="@/assets/image/arrow-trans.png" class="outter_left"/>
+            <img src="@/assets/image/arrow-trans.png" class="outter_right" @click="handleRight()" />
+            <img src="@/assets/image/arrow-trans.png" class="outter_left" @click="handleLeft()"/>
         </div>
     </div>
 </template>
 
 <script>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, watchEffect } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
@@ -68,9 +68,53 @@ export default {
         const router = useRouter(); 
 
         const state = reactive({
+            reviewId: 0,
+            productId: 0,
+            index: 0,
             reviewRows: [],
             productRows: [],
         });
+
+        watchEffect(()=> {
+            state.reviewId = props.reviewId
+            state.productId = props.productId
+        })
+
+        const handleRight = async() => {
+            try {    
+                const res = await axios.get(`/api/get/review/right?reviewId=${state.reviewId}`);
+                state.reviewId = res.data.review.reviewId;
+                state.productId = res.data.review.productId;
+                
+                state.index = 0;
+                receiveReview();
+                handleData();
+            } catch (err) {
+                if (err.response && err.response.status === 404) {
+                    alert("마지막 리뷰입니다.");
+                } else {
+                    console.error(err);
+                }
+            }
+        }
+
+        const handleLeft = async() => {
+            try {    
+                const res = await axios.get(`/api/get/review/left?reviewId=${state.reviewId}`);
+                state.reviewId = res.data.review.reviewId;
+                state.productId = res.data.review.productId;
+                
+                state.index = 0;
+                receiveReview();
+                handleData();
+            } catch (err) {
+                if (err.response && err.response.status === 404) {
+                    alert("첫번째 리뷰입니다.");
+                } else {
+                    console.error(err);
+                }
+            }
+        }
 
         const handleProductOne = (id) => {
             router.push({
@@ -81,7 +125,7 @@ export default {
 
         const receiveReview = async () => {
             try {
-                const res = await axios.get(`/api/get/review/one?reviewid=${props.reviewId}`);
+                const res = await axios.get(`/api/get/review/one?reviewid=${state.reviewId}`);
                 state.reviewRows = res.data;
                 console.log('1개리뷰', res.data);
             } catch (err) {
@@ -91,7 +135,7 @@ export default {
 
         const handleData = async () => {
             try {
-                const res = await axios.get(`/api/get/product/one?productid=${props.productId}`);
+                const res = await axios.get(`/api/get/product/one?productid=${state.productId}`);
                 console.log('리뷰내 한개상품', res.data);
                 state.productRows = res.data;
             } catch (err) {
@@ -106,6 +150,8 @@ export default {
 
         return {
             state,
+            handleRight,
+            handleLeft,
             handleProductOne
         };
     },

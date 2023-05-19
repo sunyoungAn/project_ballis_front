@@ -45,7 +45,7 @@ export default {
             contract : {}, 
             selling : {},
             
-            memberNumber : 1, // 로그인 구현후 수정
+            memberNumber : sessionStorage.getItem("TOKEN"),
             buyer_email: 'gildong@gmail.com',
             buyer_name: '홍길동',
             buyer_tel: '01042424242',

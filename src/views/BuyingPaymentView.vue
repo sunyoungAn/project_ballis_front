@@ -1,6 +1,6 @@
 <template>
     <!-- 모달영역 -->
-    <delivery-modal v-if="showModal" @close="showModal = false"/>
+    <address-modal v-if="showModal" @close="showModal = false"/>
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
     <div class="common_mt160">
         <!-- 빠른배송, 즉시구매 -->
@@ -18,8 +18,8 @@
 
             <h4>배송 주소</h4>
             <p><button @click="showModal = true">주소 추가</button></p>
-            <p><button @click="showAddressList = true">+</button></p>
-            <div v-if="!state.addressList">
+            <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
+            <div v-if="state.addressList.length === 0">
                 <p>주소를 추가하세요</p>
             </div>
             <div v-if="state.selectedAddress">
@@ -126,9 +126,9 @@
 </template>
 
 <script>
-import DeliveryModal from '@/components/DeliveryModal';
-import PaymentComponent from '@/components/PaymentComponent';
-import AddressListModal from '@/components/AddressListModal';
+import AddressModal from '@/components/AddressModal.vue';
+import PaymentComponent from '@/components/PaymentComponent.vue';
+import AddressListModal from '@/components/AddressListModal.vue';
 import axios from 'axios';
 import { onMounted, reactive, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -136,7 +136,7 @@ import { useStore } from 'vuex';
 
 export default {
     components: {
-        DeliveryModal,
+        AddressModal,
         PaymentComponent,
         AddressListModal
     },
@@ -155,7 +155,7 @@ export default {
             item : '',
             addressList : [],
             selectedAddress : {},
-            memberNumber : 1, // 로그인 구현 후 수정
+            memberNumber : sessionStorage.getItem("TOKEN"),
             
             row : [],
             sellingStatus : null,
