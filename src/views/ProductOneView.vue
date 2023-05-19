@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col" v-for="(tmp, i) in state.row" :key="i">
-                    <img :src="tmp.imagePath" class="img-fluid">
+                    <img :src="tmp.imagePath" class="img-fluid img_background">
                 </div>
                 <div class="col" v-for="(tmp, i) in state.row" :key="i">
                     <h4 style="font-weight: bold; text-decoration : underline;">{{ tmp.brandName }}</h4>
@@ -164,6 +164,9 @@ export default {
             axios.get(`/api/get/product/one?productid=${state.productid}`).then((res)=> {
                 console.log("한개", res.data);
                 state.row = res.data;
+                for(let i = 0; i<state.row.length; i++){
+                    state.row[i].imagePath = `/api/product/display?name=${state.row[i].imagePath}`;
+                }
             }).catch((err)=>{
                 console.log(err);
             })
@@ -225,6 +228,10 @@ export default {
     height: 160px;
     margin: 5px;
     border-radius: 10px;
+}
+
+.img_background {
+    background-color: #E0E0E0;
 }
 
 

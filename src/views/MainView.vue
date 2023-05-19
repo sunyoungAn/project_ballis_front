@@ -43,7 +43,7 @@
                 </div>
                 <div class="new_item_list">
                     <div class="new_item" v-for="(tmp, i) in state.displayedNewItems" :key="i" @click="handleProductOne(tmp.id)">
-                        <img :src="tmp.imagePath" class="new_item_img">
+                        <img :src="tmp.imagePath" class="new_item_img main_img_background">
                         <p style="font-weight: bold;">{{ tmp.brandName }}</p>
                         <p>{{ tmp.productEngName }}</p>
                         <div v-for="(fast, j) in state.newFast" :key="j">
@@ -73,7 +73,7 @@
                 
                 <div class="pop_item_list">
                     <div class="pop_item" v-for="(tmp, i) in state.displayedPopItems" :key="i" @click="handleProductOne(tmp.id)">
-                        <img :src="tmp.imagePath" class="pop_item_img">
+                        <img :src="tmp.imagePath" class="pop_item_img main_img_background">
                         <p style="font-weight: bold;">{{ tmp.brandName }}</p>
                         <p>{{ tmp.productEngName }}</p>
                         <div v-for="(fast, j) in state.popFast" :key="j">
@@ -181,6 +181,12 @@ export default {
                 .then(res => {
                     // console.log('신상품', res.data);
                     state.newRows = res.data.lists;
+
+                    // 이미지 url설정
+                    for(let i = 0; i<state.newRows.length; i++){
+                        state.newRows[i].imagePath = `/api/product/display?name=${state.newRows[i].imagePath}`;
+                    }
+
                     // 빠른배송 여부
                     state.newFast = res.data.storage;
                     // console.log("빠른배송", res.data.storage)
@@ -199,6 +205,12 @@ export default {
                 .then(res => {
                     // console.log('인기상품', res.data);
                     state.popRows = res.data.lists;
+
+                    // 이미지 url설정
+                    for(let i = 0; i<state.popRows.length; i++){
+                        state.popRows[i].imagePath = `/api/product/display?name=${state.popRows[i].imagePath}`;
+                    }
+
                     // 빠른배송 여부
                     state.popFast = res.data.storage;
                     // 4개씩 출력
@@ -329,5 +341,10 @@ hr{
     color: rgb(54, 186, 94);
     background-color: rgb(239, 255, 250);
     border: none;
+}
+
+.main_img_background {
+    width: 250px;
+    background-color: #E0E0E0;
 }
 </style>

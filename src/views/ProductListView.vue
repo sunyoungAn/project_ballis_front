@@ -132,7 +132,7 @@
 
         <div class="all_item_list">
             <div class="all_item" v-for="(tmp, i) in state.rows" :key="i" @click="handleProductOne(tmp.id)">
-                <img :src="tmp.imagePath" class="all_item_img">
+                <img :src="tmp.imagePath" class="all_item_img img_background">
                 <p style="font-weight: bold;">{{ tmp.brandName }}</p>
                 <p>{{ tmp.productEngName }}</p>
                 <p style="color: #aeaeae;">{{ tmp.productKorName }}</p>
@@ -297,6 +297,11 @@ export default {
                 
                 console.log('상품전체리스트', res.data.productAllList);
                 state.rows = res.data.productAllList;
+
+                // 이미지 url설정
+                for(let i = 0; i<state.rows.length; i++){
+                    state.rows[i].imagePath = `/api/product/display?name=${state.rows[i].imagePath}`;
+                }
             
             } catch (err) {
                 console.error(err);
@@ -408,6 +413,11 @@ label{
 #sorting {
     float: right;
     margin-right: 250px;
+}
+
+.img_background {
+    width: 250px;
+    background-color: #E0E0E0;
 }
 
 </style>
