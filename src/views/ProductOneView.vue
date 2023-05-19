@@ -1,11 +1,31 @@
 <template>
     <div class="common_mt160">
-        <div class="container">
-            <div class="row">
-                <div class="col" v-for="(tmp, i) in state.row" :key="i">
-                    <img :src="tmp.imagePath" class="img-fluid img_background">
+        <div class="row justify-content-center">
+            <div class="left_wrap">
+                <div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="false">
+                    <div class="carousel-indicators">
+                        <button v-for="(tmp, i) in state.row.images" :key="i" type="button" data-bs-target="#carouselExampleIndicators2" 
+                            :data-bs-slide-to="i" :class="{ active: i === 0 }">
+                        </button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div v-for="(tmp, i) in state.row.images" :key="i" :class="['carousel-item', { active: i === 0 }]">
+                            <img :src="tmp.imagePath" class="img-fluid img_background">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-                <div class="col" v-for="(tmp, i) in state.row" :key="i">
+            </div>
+
+            <div class="right_wrap">
+                <div class="col" v-for="(tmp, i) in state.row.product" :key="i">
                     <h4 style="font-weight: bold; text-decoration : underline;">{{ tmp.brandName }}</h4>
                     <h4>{{ tmp.productEngName }}</h4>
                     <p style="color: #aeaeae;">{{ tmp.productKorName }}</p>
@@ -162,11 +182,11 @@ export default {
 
 
         const handleData = () => {
-            axios.get(`/api/get/product/one?productid=${state.productid}`).then((res)=> {
-                console.log("한개", res.data);
+            axios.get(`/api/get/product/one/images?productid=${state.productid}`).then((res)=> {
+                console.log("상품정보,이미지", res.data);
                 state.row = res.data;
-                for(let i = 0; i<state.row.length; i++){
-                    state.row[i].imagePath = `/api/product/display?name=${state.row[i].imagePath}`;
+                for(let i = 0; i<state.row.images.length; i++){
+                    state.row.images[i].imagePath = `/api/product/display?name=${state.row.images[i].imagePath}`;
                 }
             }).catch((err)=>{
                 console.log(err);
@@ -188,11 +208,14 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.wrap {
-    display: flex;
-}
-.container{
+.top_container{
     border: 1px solid #cccccc;
+    /* display: flex;
+    justify-content: center; */
+}
+.left_wrap, .right_wrap{
+    width: 650px;
+    margin: 10px;
 }
 .col{
     border: 1px solid #cccccc;
@@ -200,11 +223,6 @@ export default {
 .product {
     margin: 10px;
 }
-/* #product_wish_price{
-    display: flex;
-    flex-direction: row;
-} */
-
 #wish_price_button{
     height: 100px;
     width: 300px;
