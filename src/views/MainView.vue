@@ -267,6 +267,7 @@ export default {
     width: 1100px;
     left: 50%;
     margin-left: -550px;
+    overflow: hidden;
 }
 .shortcut_list{
     text-align: center;
