@@ -46,7 +46,7 @@ export default {
             form:{
                 memberNumber: sessionStorage.getItem("TOKEN"),
                 name:"",
-                productId : Number(route.query.no),
+                productId: Number(route.query.productid),
                 content: "",
                 dataStatus:1,
                 mainImageDiv:0,
@@ -90,7 +90,7 @@ export default {
         }
        
         const handleInsert = async () => {
-            const url = `/api/add/review/${state.form.productId}`;
+            const url = `/api/add/review?productid=${state.form.productId}`;
             const headers = {"Content-Type":"multipart/form-data"};
             const body = new FormData();
             body.append("memberNumber", state.form.memberNumber);
@@ -119,7 +119,7 @@ export default {
             state,
             previewFiles,
             selectedFile,
-            handleInsert
+            handleInsert,
         }
     }
 }

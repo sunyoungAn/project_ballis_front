@@ -34,7 +34,7 @@
                           tmp.contract.buyingStatus === 61 ? '취소완료' :
                           tmp.contract.buyingStatus === 62 ? '반품완료' : '교환완료'
                           }}</li>
-                      <button @click="handleReview(tmp.contract.id)">리뷰작성</button>
+                      <button @click="handleReview(tmp.productId)">리뷰작성</button>
                     </ul>
                     
                 </div>
@@ -112,8 +112,8 @@ export default {
         return options;
       });
   
-      const handleReview = async(no) => {
-        router.push({path:'/mypage/buying/review', query:{code:no}});
+      const handleReview = async(id) => {
+        router.push({path:'/mypage/buying/review', query:{productid:id}});
       }
 
 
