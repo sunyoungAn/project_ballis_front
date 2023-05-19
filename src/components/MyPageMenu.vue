@@ -14,7 +14,7 @@
                         <a class="nav-link" href="/mypage/selling">판매내역</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">보관판매</a>
+                        <a class="nav-link" href="/mypage/inventory">보관판매</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/mypage/wish">관심상품</a>

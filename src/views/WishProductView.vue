@@ -92,7 +92,6 @@
  .item_box{
      width: 1000px;
      margin: 0px auto;
-     border: 1px solid black;
      display: inline-block;
  }
  

@@ -27,14 +27,16 @@
 
                 <div class="item_box">
                     <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
-                    <li>이미지</li>
-                    <li>{{ tmp.productName }}</li>
-                    <li>{{
-                        tmp.contract.buyingStatus === 60 ? '배송완료' :
-                        tmp.contract.buyingStatus === 61 ? '취소완료' :
-                        tmp.contract.buyingStatus === 62 ? '반품완료' : '교환완료'
-                        }}</li>
+                      <li>이미지</li>
+                      <li>{{ tmp.productName }}</li>
+                      <li>{{
+                          tmp.contract.buyingStatus === 60 ? '배송완료' :
+                          tmp.contract.buyingStatus === 61 ? '취소완료' :
+                          tmp.contract.buyingStatus === 62 ? '반품완료' : '교환완료'
+                          }}</li>
+                      <button @click="handleReview(tmp.contract.id)">리뷰작성</button>
                     </ul>
+                    
                 </div>
             </article>
 
@@ -47,6 +49,7 @@ import { computed, onMounted, reactive } from 'vue';
 import BuyingTab from '../components/BuyingTab.vue';
 import MyPageMenu from '../components/MyPageMenu.vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
     components: { MyPageMenu, BuyingTab },
@@ -57,6 +60,8 @@ export default {
         token: sessionStorage.getItem("TOKEN"),
         selectedStatus: "",
       });
+
+      const router = useRouter();
   
       //완료리스트 전체 출력
       const handleData = async () => {
@@ -107,6 +112,11 @@ export default {
         return options;
       });
   
+      const handleReview = async(no) => {
+        router.push({path:'/mypage/buying/review', query:{code:no}});
+      }
+
+
       onMounted(() => {
         handleData();
       });
@@ -116,7 +126,8 @@ export default {
         filteredList,
         statusOptions,
         setMinDate,
-        searchDate
+        searchDate,
+        handleReview
       };
     }
 }
@@ -129,7 +140,7 @@ export default {
     text-align: center;
     padding: 15px;
     display: grid;
-    grid-template-columns: auto 60% auto;
+    grid-template-columns: 15% 55% 15% 15%;
     list-style-type: none;
 }
 

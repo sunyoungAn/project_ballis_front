@@ -10,17 +10,6 @@
                     <a class="nav-link active" aria-current="page" href="/mypage/sellingend">완료</a>
                 </ul>
             </div>
-            <div>
-                <ul style=" list-style-type: none;">
-                    <div>
-                        <input type="date" @change="setMinDate"/> ~ <input type="date" :min="state.minDate"/>
-                        <button @click="handleSearch">Search</button>
-                    </div>
-                    <li style="color: gray;">
-                        한 번에 조회 가능한 기간은 최대 6개월입니다.
-                    </li>
-                </ul>
-            </div>
     </article>
 </template>
 

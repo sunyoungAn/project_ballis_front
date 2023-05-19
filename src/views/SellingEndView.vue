@@ -5,6 +5,17 @@
 
             <article>
                 <selling-tab></selling-tab>
+                <div>
+                    <ul style=" list-style-type: none;">
+                    <div>
+                        <input type="date" v-model="state.startDate" @change="setMinDate"/> ~ <input type="date" v-model="state.endDate" :min="state.minDate"/>
+                        <button @click="searchDate">검색</button>
+                    </div>
+                    <li style="color: gray;">
+                        한 번에 조회 가능한 기간은 최대 6개월입니다.
+                    </li>
+                    </ul>
+                </div>
                 <br>
 
                 <div style="margin-bottom: 20px;">
@@ -46,9 +57,13 @@ export default {
         const state = reactive({
             list:[],
             token : sessionStorage.getItem("TOKEN"),
-            selectedStatus: ""
+            selectedStatus: "",
+            minDate:'',
+            startDate:'',
+            endDate:''
         })
 
+        //종료 데이터 출력
         const handleData = async () =>{
             const url = `/api/get/sellingend/${state.token}`;
             const headers = {"Content-Type":"application/json", "auth" : state.token};
@@ -57,6 +72,24 @@ export default {
             console.log(state.list)
         };
 
+        // 입력된 날짜 이후의 날짜를 선택할 수 있도록 설정
+        function setMinDate(event) {
+            state.minDate = event.target.value;
+        }
+
+        //날짜 검색
+        const searchDate = async () => {
+            const startDate = new Date(state.startDate + 'T00:00:00').toISOString().split('T')[0];
+            const endDate = new Date(state.endDate + 'T00:00:00').toISOString().split('T')[0];
+            const url = `/api/selling/date/${state.token}`;
+            const headers = {"Content-Type": "application/json", "auth": state.token};
+            const params = { startDate, endDate };
+            const {data} = await axios.get(url, {headers, params});
+            console.log("date=>", data);
+            state.list = data;
+        }
+
+        //상태 검색
         const filteredList = computed(() => {
             if (state.selectedStatus === "") {
             return state.list;
@@ -66,6 +99,7 @@ export default {
             }
         });
         
+        //셀렉박스
         const statusOptions = computed(() => {
             const options = [
                 { label: "전체", value: "" },
@@ -85,7 +119,9 @@ export default {
         return {
             state,
             statusOptions,
-            filteredList
+            filteredList,
+            setMinDate,
+            searchDate
         }
     }
 }

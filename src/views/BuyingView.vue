@@ -11,7 +11,6 @@
                       <div>
                           <input type="date" v-model="state.startDate" @change="setMinDate"/> ~ <input type="date" v-model="state.endDate" :min="state.minDate"/>
                           <button @click="searchDate">검색</button>
-                          {{ state.startDate }} {{ state.endDate }}
                       </div>
                       <li style="color: gray;">
                           한 번에 조회 가능한 기간은 최대 6개월입니다.
@@ -58,7 +57,7 @@ export default {
         endDate:''
       });
   
-      //판매리스트 전체 출력
+      //구매입찰 전체 출력
       const handleData = async () => {
         const url = `/api/get/buying/${state.token}`;
         const headers = { "Content-Type": "application/json", "auth": state.token };

@@ -31,6 +31,8 @@ import Selling from '../views/SellingView.vue'
 import SellingIng from '../views/SellingIngView.vue'
 import SellingEnd from '../views/SellingEndView.vue'
 import WishProduct from '../views/WishProductView.vue'
+import Inventory from '../views/InventoryView.vue'
+import ReviewInsert from '../views/ReviewInsertView.vue'
 
 // 관리자기능
 import AdminProductListView from '../views/AdminProductListView.vue'
@@ -123,6 +125,8 @@ const routes = [
   {path: '/mypage/sellinging', component: SellingIng},
   {path: '/mypage/sellingend', component: SellingEnd},
   {path: '/mypage/wish', component: WishProduct},
+  {path: '/mypage/inventory', component: Inventory},
+  {path: '/mypage/buying/review', component: ReviewInsert},
   {
     path: '/admin/product/list',
     name: 'adminproductlist',
