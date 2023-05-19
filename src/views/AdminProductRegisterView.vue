@@ -117,7 +117,7 @@
                     <div>
                         <label class="form-label">대표이미지</label>
                         <div class="my-2 px-2">
-                            <img :src="state.mainImageUrl" class="rounded me-3" style="width: 200px; height: 200px;">
+                            <img :src="state.mainImageUrl" class="rounded me-3" v-bind:class="state.mainImagedata !== null ? 'admin_img_background' : 'admin_img_no_background' " style="width: 200px; height: 200px;">
                         </div>
                         <div class="my-3 col-6">
                             <input class="form-control" type="file" @change="handleMainImage($event)">
@@ -129,7 +129,7 @@
                             <img :src="state.subImageUrl" class="rounded me-3" style="width: 200px; height: 200px;">
                         </div>
                         <div v-else>
-                            <img v-for="image of state.subImageUrls" :key="image" :src="image" class="rounded me-3" style="width: 200px; height: 200px;">
+                            <img v-for="image of state.subImageUrls" :key="image" :src="image" class="rounded me-3 admin_img_background" style="width: 200px; height: 200px;">
                         </div>
                         <div class="mb-3 col-6">
                             <label class="form-label">*최대 2개까지 등록가능합니다.</label>

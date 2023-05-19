@@ -57,6 +57,17 @@
     margin-right: auto;
 }
 
+/* 관리자페이지 이미지 배경 색깔 */
+.admin_img_background {
+  width: 200px;
+  background-color: #E0E0E0;
+}
+
+.admin_img_no_background {
+  width: 200px;
+  background-color: white;
+}
+
 /* 리뷰 모달 */
 .review_blackBg {
     width: 100%;

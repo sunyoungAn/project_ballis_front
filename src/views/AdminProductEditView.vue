@@ -117,7 +117,7 @@
                     <div>
                         <label class="form-label">대표이미지</label>
                         <div class="my-2 px-2">
-                            <img :src="state.mainImageUrl" class="rounded me-3" style="width: 200px; height: 200px;">
+                            <img :src="state.mainImageUrl" class="rounded me-3" v-bind:class="state.mainImagedata !== null || state.mainImageId !== null ? 'admin_img_background' : 'admin_img_no_background' " style="width: 200px; height: 200px;">
                         </div>
                         <div v-if="state.selectMainFlag === false" style="width: 200px;">
                             <div class="d-flex justify-content-center">
@@ -135,7 +135,7 @@
                             <img :src="state.subImageUrl" class="rounded me-3" style="width: 200px; height: 200px;">
                         </div>
                         <div v-else class="my-2 px-2">
-                            <img v-for="image of state.tmpSubImageUrls" :key="image" :src="image" class="rounded me-3" style="width: 200px; height: 200px;">
+                            <img v-for="image of state.tmpSubImageUrls" :key="image" :src="image" class="rounded me-3 admin_img_background" style="width: 200px; height: 200px;">
                         </div>
                         <div v-if="state.subImageUrls.length !== 0" class="d-flex justify-content-start">
                             <div class="me-3" v-for="(id, idx) of state.subImageIds" :key="idx" style="width: 200px;">
@@ -468,5 +468,6 @@ export default {
 
 <style lang="css" scoped>
 @import "../assets/css/common.css";
+
 
 </style>
