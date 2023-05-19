@@ -12,7 +12,12 @@
                     <p>{{ state.item.productEngName }}</p>
                     <p style="color: #aeaeae;">{{ state.item.productKorName }}</p>
                     <p>{{ state.item.sellProductSize }}</p>
-                    <p v-if="state.item.inventoryDiv === 1"><button class="fast_small">빠른배송</button></p>    
+                    <p v-if="state.item.inventoryDiv === 1">
+                        <button class="fast_small">
+                            <img src="@/assets/image/lightning.png" class="lightning"/>
+                            빠른배송
+                        </button>
+                    </p>    
                 </div>
             </div>
 
@@ -83,7 +88,12 @@
                     <p>{{ state.row[0].productEngName }}</p>
                     <p style="color: #aeaeae;">{{ state.row[0].productKorName }}</p>
                     <p>{{ state.size }}</p>
-                    <p v-if="state.row[0].inventoryDiv === 1"><button class="fast_small">빠른배송</button></p>
+                    <p v-if="state.row[0].inventoryDiv === 1">
+                        <button class="fast_small">
+                            <img src="@/assets/image/lightning.png" class="lightning"/>
+                            빠른배송
+                        </button>
+                    </p>
                 </div>
             </div>
 
@@ -292,13 +302,4 @@ export default {
 .head p{
     margin: 1px 8px;
 }
-.fast_small{
-    width: 70px;
-    height: 30px;
-    font-size: 12px;
-    color: rgb(54, 186, 94);
-    background-color: rgb(239, 255, 250);
-    border: none;
-}
-
 </style>

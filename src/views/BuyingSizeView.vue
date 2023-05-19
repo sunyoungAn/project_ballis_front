@@ -7,24 +7,31 @@
                     <p style="font-weight: bold;">{{ state.forInfo.modelNumber }}</p>
                     <p>{{ state.forInfo.productEngName }}</p>
                     <p style="color: #aeaeae;">{{ state.forInfo.productKorName }}</p>
-                    <p v-if="state.rowFast.length > 0"><button class="fast_small">빠른배송</button></p>
+                    <p v-if="state.rowFast.length > 0">
+                        <button class="fast_small">
+                            <img src="@/assets/image/lightning.png" class="lightning"/>
+                            빠른배송
+                        </button>
+                    </p>
                 </div>
             </div>
             <hr />
             <div class="body">
-                <div class="size_list">
-                    <button class="button_size" v-for="size in state.sizes" :key="size" @click="handleMethod(size)">
-                        <div class="button_size_body1">{{ size }}</div>
-                        <div v-for="(tmp, i) in state.rowFast" :key="i">
-                            <div v-if="tmp.sellProductSize === size" class="button_size_body2">
-                                <button id="fast_small_icon">빠</button>
+                <div class="d-flex justify-content-center flex-row flex-wrap">
+                    <button class="button_size" v-for="(size, index) in state.sizes" :key="size" @click="handleMethod(size, index)">
+                        <div class="button_size_body1" :class="{ 'active': activeIndex === index }">{{ size }}</div>
+                        <div class="button_bottom">
+                            <div v-for="(tmp, i) in state.rowFast" :key="i">
+                                <div v-if="tmp.sellProductSize === size" class="button_size_body2">
+                                    <img src="@/assets/image/lightning.png" class="lightning"/>
+                                </div>
                             </div>
+                            <div v-for="(tmp, i) in state.rowCheaper" :key="i">
+                                <div v-if="tmp.sellProductSize === size">
+                                    <div class="button_size_body3" :class="{ 'active': activeIndex === index }">{{ tmp.sellWishPrice }}</div>
+                                </div>
+                            </div> 
                         </div>
-                        <div v-for="(tmp, i) in state.rowCheaper" :key="i">
-                            <div v-if="tmp.sellProductSize === size">
-                                <div class="button_size_body3">{{ tmp.sellWishPrice }}</div>
-                            </div>
-                        </div> 
                     </button>
                 </div>
 
@@ -76,7 +83,7 @@
 
 <script>
 import axios from 'axios';
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 export default {
@@ -92,13 +99,13 @@ export default {
             rowBoth : [],
             rowCheaper : [],
             forInfo : '',
-
             sizes : [],
             showMethod : false,
             methodSelect : 0,
             size : 0,
         })
 
+        const activeIndex = ref(null);
 
         const handleFast = (size, tmp) => {
             store.commit('setSelectedItem', tmp)
@@ -124,7 +131,6 @@ export default {
             })
         }
 
-
         const handleData = async() => {
             try {
                 const res = await axios.get(`/api/get/product/buy?productid=${state.productid}`);
@@ -137,25 +143,23 @@ export default {
                 console.log("일반배송", state.rowNormal)
                 console.log("둘중 저렴", state.rowBoth)
                 console.log("사이즈별 가장 저렴", state.rowCheaper)
-
                 state.forInfo = state.rowCheaper[0] // 항상 존재 -> 대표 정보 출력
                 // console.log("인포용",state.forInfo);
-                
                 
                 // 전체 사이즈 나열
                 for(let i = state.forInfo.sizeMin; i <= state.forInfo.sizeMax; i += state.forInfo.sizeUnit) {
                     state.sizes.push(i);
                 }
-
             } catch (err) {
                 console.error(err);
             }
         }
 
-        
-        const handleMethod = (size) => {
-            let hasMatchingSize = false;
+        const handleMethod = (size, index) => {
+            // css 전환
+            activeIndex.value = index;
 
+            let hasMatchingSize = false;
             // 빠른배송, 일반배송 모두 존재
             if(state.rowBoth) {                
                 for (let i = 0; i < state.rowBoth.length; i++) {
@@ -207,6 +211,7 @@ export default {
 
         return {
             state,
+            activeIndex,
             handleMethod,
             handleFast,
             handleType
@@ -231,21 +236,6 @@ export default {
 .head p{
     margin: 1px 8px;
 }
-.fast_small{
-    width: 70px;
-    height: 30px;
-    font-size: 12px;
-    color: rgb(54, 186, 94);
-    background-color: rgb(239, 255, 250);
-    border: none;
-}
-
-.size_list{
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
 .button_size{
     width: 230px;
     height: 70px;
@@ -254,19 +244,19 @@ export default {
     background-color: #ffffff;
     margin: 7px;
 }
-.button_size_body2{
-    display: inline-block;
-    margin: 0 5px;
+.button_size:focus{
+    border: 1.5px solid #000000;
 }
-.button_size_body3{
-    display: inline-block;
+.button_bottom {
+    display: flex;
+    justify-content: center;
+    position: relative;
 }
-#fast_small_icon{
-    width: 30px;
-    height: 30px;
-    font-size: 12px;
-    color: rgb(54, 186, 94);
-    background-color: rgb(239, 255, 250);
-    border: none;
+.button_size_body2 {
+    position: absolute;
+    left: 50px;
+}
+.button_size_body1.active, .button_size_body3.active {
+    font-weight: bold;
 }
 </style>

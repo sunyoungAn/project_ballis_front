@@ -47,7 +47,12 @@
                         <p style="font-weight: bold;">{{ tmp.brandName }}</p>
                         <p>{{ tmp.productEngName }}</p>
                         <div v-for="(fast, j) in state.newFast" :key="j">
-                            <p class="fast_small" v-if="fast.id === tmp.id && fast.hasStorage">빠른배송</p>
+                            <p v-if="fast.id === tmp.id && fast.hasStorage">
+                                <button class="fast_small">
+                                    <img src="@/assets/image/lightning.png" class="lightning"/>
+                                    빠른배송
+                                </button>
+                            </p>
                         </div>
                         <p>&nbsp;</p>
                         <div v-if="tmp.wishPrice">
@@ -77,7 +82,12 @@
                         <p style="font-weight: bold;">{{ tmp.brandName }}</p>
                         <p>{{ tmp.productEngName }}</p>
                         <div v-for="(fast, j) in state.popFast" :key="j">
-                            <p class="fast_small" v-if="fast.id === tmp.id && fast.hasStorage">빠른배송</p>
+                            <p v-if="fast.id === tmp.id && fast.hasStorage">
+                                <button class="fast_small">
+                                    <img src="@/assets/image/lightning.png" class="lightning"/>
+                                    빠른배송
+                                </button>
+                            </p>
                         </div>
                         <p>&nbsp;</p>
                         <div v-if="tmp.wishPrice">
@@ -335,15 +345,6 @@ hr{
     margin: 5px;
     border-radius: 10px;
 }
-.fast_small{
-    width: 70px;
-    height: 30px;
-    font-size: 12px;
-    color: rgb(54, 186, 94);
-    background-color: rgb(239, 255, 250);
-    border: none;
-}
-
 .main_img_background {
     width: 250px;
     background-color: #E0E0E0;

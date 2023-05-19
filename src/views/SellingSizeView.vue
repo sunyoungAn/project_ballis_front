@@ -12,12 +12,12 @@
             </div>
             <hr />
             <div class="body">
-                <div class="size_list">
-                    <button class="button_size" v-for="size in state.sizes" :key="size" @click="handleMethod(size)">
-                        <div class="button_size_body1">{{ size }}</div>
+                <div class="d-flex justify-content-center flex-row flex-wrap">
+                    <button class="button_size" v-for="(size, index) in state.sizes" :key="size" @click="handleMethod(size, index)">
+                        <div class="button_size_body1" :class="{ 'active': activeIndex === index }">{{ size }}</div>
                         <div v-for="(tmp, i) in state.row" :key="i">
                             <div v-if="tmp.buyProductSize === size">
-                                <div class="button_size_body3">{{ tmp.buyWishPrice }}</div>
+                                <div class="button_size_body3" :class="{ 'active': activeIndex === index }">{{ tmp.buyWishPrice }}</div>
                             </div>
                         </div> 
                     </button>
@@ -58,7 +58,7 @@
 
 <script>
 import axios from 'axios';
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 export default {
@@ -70,12 +70,13 @@ export default {
         const state = reactive({
             productid : Number(route.query.productid),
             row : [],
-
             sizes : [],
             showMethod : false,
             methodSelect : 0,
             size : 0,
         })
+
+        const activeIndex = ref(null);
 
         const handleType = (size, type, tmp) => {
             if(type === 'normal') {
@@ -90,7 +91,6 @@ export default {
                 }
             })
         }
-
 
         const handleData = async() => {
             try {
@@ -107,9 +107,11 @@ export default {
                 console.error(err);
             }
         }
-
         
-        const handleMethod = (size) => {
+        const handleMethod = (size, index) => {
+            // css 전환
+            activeIndex.value = index;
+
             for(let i = 0; i < state.row.length; i++) {
                 if(state.row[i].buyProductSize === size) {
                     state.size = size;
@@ -123,13 +125,13 @@ export default {
             state.showMethod = true;
         }
 
-
         onMounted (()=> {
             handleData();
         })
 
         return {
             state,
+            activeIndex,
             handleMethod,
             handleType
         }
@@ -153,21 +155,6 @@ export default {
 .head p{
     margin: 1px 8px;
 }
-.fast_small{
-    width: 70px;
-    height: 30px;
-    font-size: 12px;
-    color: rgb(54, 186, 94);
-    background-color: rgb(239, 255, 250);
-    border: none;
-}
-
-.size_list{
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
 .button_size{
     width: 230px;
     height: 70px;
@@ -176,19 +163,10 @@ export default {
     background-color: #ffffff;
     margin: 7px;
 }
-.button_size_body2{
-    display: inline-block;
-    margin: 0 5px;
+.button_size:focus{
+    border: 1.5px solid #000000;
 }
-.button_size_body3{
-    display: inline-block;
-}
-#fast_small_icon{
-    width: 30px;
-    height: 30px;
-    font-size: 12px;
-    color: rgb(54, 186, 94);
-    background-color: rgb(239, 255, 250);
-    border: none;
+.button_size_body1.active, .button_size_body3.active {
+    font-weight: bold;
 }
 </style>

@@ -260,13 +260,6 @@ export default {
 .head p{
     margin: 1px 8px;
 }
-.fast_small{
-    width: 70px;
-    height: 30px;
-    font-size: 12px;
-    color: rgb(54, 186, 94);
-    background-color: rgb(239, 255, 250);
-    border: none;
-}
+
 
 </style>

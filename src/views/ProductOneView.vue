@@ -40,21 +40,26 @@
                         <span>최근거래가</span>
                         <span style="float: right; font-size: 25px; font-weight: bold;">{{ tmp.price }}원</span>
                     </div>
-                    
-                    <div class="product d-flex align-items-center justify-content-around gap-2 col-6 mx-auto " id="product_wish_price">
-                        <button class="btn btn-primary btn-lg " type="button" id="wish_price_button" @click="handleBuying(state.productid)">
-                            <span>구매</span>
-                            <span v-if="tmp.sellWishPrice">
-                                <p>{{ tmp.sellWishPrice }}원</p>
-                                <p style="font-size: 15px;">즉시 구매가</p>
-                            </span>
+
+                
+                    <div class="product d-flex align-items-center justify-content-around gap-2 mx-auto" id="product_wish_price">
+                        <button class="btn btn-lg flex-grow-1 left_wish_price_button" type="button" @click="handleBuying(state.productid)">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>구매</div>
+                                <div v-if="tmp.sellWishPrice" class="text-end">
+                                    <p>{{ tmp.sellWishPrice }}원</p>
+                                    <p style="font-size: 15px;">즉시 구매가</p>
+                                </div>
+                            </div>
                         </button>
-                        <button class="btn btn-secondary btn-lg" type="button" id="wish_price_button" @click="handleSelling(state.productid)">
-                            <span>판매</span>
-                            <span v-if="tmp.buyWishPrice">
-                                <p>{{ tmp.buyWishPrice }}원</p>
-                                <p style="font-size: 15px;">즉시 판매가</p>
-                            </span>
+                        <button class="btn btn-lg flex-grow-1 right_wish_price_button" type="button" @click="handleSelling(state.productid)">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>판매</div>
+                                <div v-if="tmp.buyWishPrice" class="text-end">
+                                    <p>{{ tmp.buyWishPrice }}원</p>
+                                    <p style="font-size: 15px;">즉시 판매가</p>
+                                </div>
+                            </div>
                         </button>
                     </div>
 
@@ -210,8 +215,6 @@ export default {
 <style lang="css" scoped>
 .top_container{
     border: 1px solid #cccccc;
-    /* display: flex;
-    justify-content: center; */
 }
 .left_wrap, .right_wrap{
     width: 650px;
@@ -223,11 +226,28 @@ export default {
 .product {
     margin: 10px;
 }
-#wish_price_button{
-    height: 100px;
-    width: 300px;
+#product_wish_price{
+    width: 96%;
+    margin: 10px;
+    /* border: 1px solid #cccccc; */
 }
-#wish_price_button p {
+.left_wish_price_button, .right_wish_price_button {
+  height: 70px;
+  margin: 5x;
+}
+.left_wish_price_button {
+    background-color: #bcf780;
+}
+.left_wish_price_button:hover {
+    background-color: #deffbd;
+}
+.right_wish_price_button {
+    background-color: #80ebf7;
+}
+.right_wish_price_button:hover {
+    background-color: #b7f2f9;
+}
+.left_wish_price_button p, .right_wish_price_button p {
     margin: 0;
 }
 .product_info_body{
