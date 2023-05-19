@@ -3,19 +3,19 @@
         <div class="review_whiteBg">
             <div class="modal-header">
                 <h3 class="modal-title"></h3>
-                <button type="button" class="btn-close" id="close_btn" aria-label="Close" @click="$emit('close')"></button>
+                <button type="button" class="btn-close" id="close_btn" aria-label="Close" @click="$emit('close'), state.productOne = false"></button>
             </div>
             <div class="modal_body">
                 <div class="left_wrap">
-                    <div id="carouselExampleIndicators1" class="carousel slide" data-bs-ride="false">
+                    <div id="carouselExampleIndicators1" class="carousel slide" data-bs-ride="true">
                         <div class="carousel-indicators">
                             <button v-for="(tmp, i) in state.reviewRows" :key="i" type="button" data-bs-target="#carouselExampleIndicators1" 
-                                :data-bs-slide-to="i" :class="{ active: i === 0 }" :aria-current="i === 0" :aria-label="'Slide ' + (i+1)">
+                                :data-bs-slide-to="i" :class="{ active: i === 0 }">
                             </button>
                         </div>
                         <div class="carousel-inner">
                             <div v-for="(tmp, i) in state.reviewRows" :key="i" :class="['carousel-item', { active: i === 0 }]">
-                                <img :src="tmp.imagePath" class="d-block w-100" alt="...">
+                                <img :src="tmp.imagePath" :data-bs-slide-to="i" class="d-block w-100">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide="prev">
@@ -63,6 +63,10 @@ export default {
             type: Number,
             required: true,
         },
+        productOne: {
+            type: Boolean,
+            default: false
+        }
     },
     setup(props) {
         const router = useRouter(); 
@@ -70,7 +74,7 @@ export default {
         const state = reactive({
             reviewId: 0,
             productId: 0,
-            index: 0,
+            productOne: false,
             reviewRows: [],
             productRows: [],
         });
@@ -78,15 +82,20 @@ export default {
         watchEffect(()=> {
             state.reviewId = props.reviewId
             state.productId = props.productId
+            state.productOne = props.productOne
         })
 
         const handleRight = async() => {
             try {    
-                const res = await axios.get(`/api/get/review/right?reviewId=${state.reviewId}`);
+                let res;
+                if(state.productOne) {
+                    res = await axios.get(`/api/get/review/right?reviewId=${state.reviewId}&productId=${state.productId}`);    
+                } else {
+                    res = await axios.get(`/api/get/review/right?reviewId=${state.reviewId}`);
+                }
                 state.reviewId = res.data.review.reviewId;
                 state.productId = res.data.review.productId;
                 
-                state.index = 0;
                 receiveReview();
                 handleData();
             } catch (err) {
@@ -100,7 +109,12 @@ export default {
 
         const handleLeft = async() => {
             try {    
-                const res = await axios.get(`/api/get/review/left?reviewId=${state.reviewId}`);
+                let res;
+                if(state.productOne) {
+                    res = await axios.get(`/api/get/review/left?reviewId=${state.reviewId}&productId=${state.productId}`);
+                } else {
+                    res = await axios.get(`/api/get/review/left?reviewId=${state.reviewId}`);
+                }
                 state.reviewId = res.data.review.reviewId;
                 state.productId = res.data.review.productId;
                 

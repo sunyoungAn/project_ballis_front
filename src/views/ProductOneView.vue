@@ -107,7 +107,8 @@
             <!-- 모달 영역 -->  
             <review-modal v-if="state.showModal" 
                 :review-id="state.reviewid" 
-                :product-id="state.productid" 
+                :product-id="state.productid"
+                :product-one="true" 
                 @close="state.showModal = false" 
             />
         </div>
