@@ -1,6 +1,6 @@
 <template>
     <!-- 주소 모달 -->
-    <address-modal v-if="showModal" @close="showModal = false"/>
+    <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
     <div class="common_mt160">
         <!-- 즉시판매 -->
@@ -18,7 +18,7 @@
             <p><button @click="showModal = true">계좌 추가</button></p>
             <hr />
             <h4>반송 주소</h4>
-            <p><button @click="showModal = true">주소 추가</button></p>
+            <p><button @click="showAddressAdd = true">주소 추가</button></p>
             <p><button @click="showAddressList = true">+</button></p>
             <div v-if="!state.addressList">
                 <p>주소를 추가하세요</p>
@@ -73,7 +73,7 @@
                 <p><button @click="showModal = true">계좌 추가</button></p>
                 <hr />
                 <h4>반송 주소</h4>
-                <p><button @click="showModal = true">주소 추가</button></p>
+                <p><button @click="showAddressAdd = true">주소 추가</button></p>
                 <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
                 <div v-if="state.addressList.length === 0">
                     <p>주소를 추가하세요</p>
@@ -119,7 +119,7 @@
                 <p><button @click="showModal = true">계좌 추가</button></p>
                 <hr />
                 <h4>반송/회수 주소</h4>
-                <p><button @click="showModal = true">주소 추가</button></p>
+                <p><button @click="showAddressAdd = true">주소 추가</button></p>
                 <p><button @click="showAddressList = true">+</button></p>
                 <div v-if="!state.addressList">
                     <p>주소를 추가하세요</p>
@@ -198,7 +198,7 @@ export default {
         const router = useRouter();
         const store = useStore();
 
-        const showModal = ref(false);
+        const showAddressAdd = ref(false);
         const showAddressList = ref(false);
 
         const state = reactive({
@@ -351,7 +351,7 @@ export default {
 
         return {
             state,
-            showModal,
+            showAddressAdd,
             showAddressList,
             selectAdd,
             handleSellNow,

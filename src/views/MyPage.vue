@@ -1,5 +1,5 @@
 <template>
-    <address-modal v-if="state.isModalViewed"></address-modal>
+    <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
     <div class="container common_mt160 cutomer_wrap">
       
         <section>
@@ -33,7 +33,7 @@
                 
                 <div class="p_tag_box_2">
                     <p class="p_title" style="float: left;">배송지</p>
-                    <button type="button" style="float: right;" class="btn btn-success" @click="clickModal()">+새 배송지 추가</button>
+                    <button type="button" style="float: right;" class="btn btn-success" @click="showAddressAdd = true">+새 배송지 추가</button>
                 </div>
 
                 <div  v-for="tmp of state.address" :key="tmp">
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import axios from 'axios';
 import MyPageMenu from '../components/MyPageMenu.vue';
 import AddressModal from '../components/AddressModal.vue';
@@ -78,15 +78,15 @@ export default {
         });
 
 
+        const showAddressAdd = ref(false);
 
-
-        const clickModal = () =>{
-            if(state.isModalViewed === true) {
-                state.isModalViewed = false;
-            } else {
-                state.isModalViewed = true;
-            }
-        }
+        // const clickModal = () =>{
+        //     if(state.isModalViewed === true) {
+        //         state.isModalViewed = false;
+        //     } else {
+        //         state.isModalViewed = true;
+        //     }
+        // }
 
         const handleData = async()=> {
             const url = `/api/get/member/${state.token}`;
@@ -124,7 +124,8 @@ export default {
 
         return {
             state,
-            clickModal,
+            showAddressAdd,
+            // clickModal,
         }
     },
 

@@ -1,6 +1,6 @@
 <template>
     <!-- 모달영역 -->
-    <address-modal v-if="showModal" @close="showModal = false"/>
+    <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
     <div class="common_mt160">
         <!-- 빠른배송, 즉시구매 -->
@@ -22,7 +22,7 @@
             </div>
 
             <h4>배송 주소</h4>
-            <p><button @click="showModal = true">주소 추가</button></p>
+            <p><button @click="showAddressAdd = true">주소 추가</button></p>
             <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
             <div v-if="state.addressList.length === 0">
                 <p>주소를 추가하세요</p>
@@ -98,7 +98,7 @@
             </div>
 
             <h4>배송 주소</h4>
-            <p><button @click="showModal = true">주소 추가</button></p>
+            <p><button @click="showAddressAdd = true">주소 추가</button></p>
             <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
             <div v-if="state.addressList.length === 0">
                 <p>주소를 추가하세요</p>
@@ -164,7 +164,7 @@ export default {
         const router = useRouter();
         const store = useStore();
 
-        const showModal = ref(false);
+        const showAddressAdd = ref(false);
         const showAddressList = ref(false);
 
         const state = reactive({
@@ -200,6 +200,10 @@ export default {
             state.bidDays = store.getters.getSelectedDays;
         });
 
+        // 주소 추가 모달
+        const clickModal = () => {
+            state.isModalViewed = true;
+        }
 
         // 주소 리스트
         const handleAddressList = async() => {
@@ -235,7 +239,6 @@ export default {
             console.log("전달되니컨트랙트", state.contractDto)
         }
             
-
         // 구매입찰
         const handleBid = async() => {
             // 유효성 검사 통과 > 구매 조건 확인 all check
@@ -291,8 +294,9 @@ export default {
 
         return {
             state,
-            showModal,
+            showAddressAdd,
             showAddressList,
+            clickModal,
             selectAdd,
             handleBid,
         }
