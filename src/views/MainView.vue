@@ -8,10 +8,10 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="../assets/image/mainslide1.png" class="d-block w-100" alt="..." @click="moveProductList(4)">
+                    <img src="../assets/image/mainslide1.png" class="d-block w-100" alt="..." @click="moveProductList(5)">
                 </div>
                 <div class="carousel-item">
-                    <img src="../assets/image/mainslide2.png" class="d-block w-100" alt="..." @click="moveProductList(32)">
+                    <img src="../assets/image/mainslide2.png" class="d-block w-100" alt="..." @click="moveProductList(33)">
                 </div>
                 <div class="carousel-item">
                     <router-link to="/notice/content?id=3">
