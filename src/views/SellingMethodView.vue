@@ -132,7 +132,6 @@ export default {
             size : Number(route.query.size),
             type : route.query.type,
             row : [],
-            // item : '',
             sellNow : false,
 
             inputValue : '',
@@ -141,18 +140,15 @@ export default {
             days : 30,
             date : null,
             formattedDate : null,
-
         })
 
         watchEffect(() => {
-            // state.item = store.getters.getSelectedItem;
             if(state.type === "normal") {
                 state.inputValue = '';
                 state.errorMessage = '';
             }
         });
 
-        
         const handleDate = (days) => {
             state.days = days;
             const now = new Date();
@@ -184,9 +180,7 @@ export default {
                 state.inputValue = input.replace(/[^\d]/g, '')
                 state.errorMessage = '숫자만 입력 가능합니다.';
             }
-
         };
-
 
         const handleNext = (type) => {
             // 유효성 검사 통과
@@ -223,6 +217,7 @@ export default {
                     state.row = res.data;
                     console.log("구매입찰, 보관판매", state.row)
                 }
+                state.row[0].imagePath = `/api/product/display?name=${state.row[0].imagePath}`;
             
             } catch (err) {
                 console.error(err);

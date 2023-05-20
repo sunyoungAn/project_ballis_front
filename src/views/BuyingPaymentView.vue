@@ -99,6 +99,15 @@
 
             <h4>배송 주소</h4>
             <p><button @click="showModal = true">주소 추가</button></p>
+            <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
+            <div v-if="state.addressList.length === 0">
+                <p>주소를 추가하세요</p>
+            </div>
+            <div v-if="state.selectedAddress">
+                <p>{{ state.selectedAddress.name }}</p>
+                <p>{{ state.selectedAddress.phoneNumber }}</p>
+                <p>{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</p>
+            </div>
             <hr />
 
             <h4>배송 방법</h4>
@@ -182,6 +191,9 @@ export default {
 
         watchEffect(() => {
             state.item = store.getters.getSelectedItem;
+            if(state.item) {
+                state.item.imagePath = `/api/product/display?name=${state.item.imagePath}`;
+            }
             state.bidPrice = Number(store.getters.getSelectedPrice);
             state.bidDate = store.getters.getSelectedDate;
             state.bidFormattedDate = store.getters.getSelectedFormattedDate;
@@ -261,6 +273,7 @@ export default {
                 try {
                     const res = await axios.get(`/api/get/product/one?productid=${state.productid}`);
                     state.row = res.data;
+                    state.row[0].imagePath = `/api/product/display?name=${state.row[0].imagePath}`;
                     console.log("구매입찰", state.row)
                 } catch (err) {
                     console.error(err);

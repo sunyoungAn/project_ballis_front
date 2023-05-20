@@ -1,12 +1,12 @@
 <template>
     <div class="common_mt160">
-        <div class="container" id="wrap" v-if="state.forInfo">
+        <div class="container" id="wrap" v-if="state.row">
             <div class="head d-flex align-items-center">
-                <img :src="state.forInfo.imagePath" class="head_img">
+                <img :src="state.row.imagePath" class="head_img">
                 <div class="d-flex flex-column ml-3">
-                    <p style="font-weight: bold;">{{ state.forInfo.modelNumber }}</p>
-                    <p>{{ state.forInfo.productEngName }}</p>
-                    <p style="color: #aeaeae;">{{ state.forInfo.productKorName }}</p>
+                    <p style="font-weight: bold;">{{ state.row.modelNumber }}</p>
+                    <p>{{ state.row.productEngName }}</p>
+                    <p style="color: #aeaeae;">{{ state.row.productKorName }}</p>
                     <p v-if="state.rowFast.length > 0">
                         <button class="fast_small">
                             <img src="@/assets/image/lightning.png" class="lightning"/>
@@ -94,12 +94,12 @@ export default {
 
         const state = reactive({
             productid : Number(route.query.productid),
+            row : {},
+            sizes : [],
             rowFast : [],
             rowNormal : [],
             rowBoth : [],
             rowCheaper : [],
-            forInfo : '',
-            sizes : [],
             showMethod : false,
             methodSelect : 0,
             size : 0,
@@ -131,25 +131,37 @@ export default {
             })
         }
 
+        // 상품 정보 데이터 -> 판매 데이터 없을때도 출력할수있도록
+        const handleInfo = async() => {
+            try{
+                const res = await axios.get(`/api/get/product/one?productid=${state.productid}`);
+                state.row = res.data[0];
+                console.log("출력용 데이터", state.row);
+                state.row.imagePath = `/api/product/display?name=${state.row.imagePath}`;
+            
+                // 전체 사이즈 나열
+                for(let i = state.row.sizeMin; i <= state.row.sizeMax; i += state.row.sizeUnit) {
+                    state.sizes.push(i);
+                }
+            }catch(err){
+                console.error(err);
+            }
+        }
+
+        // 판매 데이터
         const handleData = async() => {
             try {
                 const res = await axios.get(`/api/get/product/buy?productid=${state.productid}`);
-                console.log('상품한개', res.data);
+                console.log('판매용 데이터', res.data);
+                
                 state.rowFast = res.data.fast; // 빠른배송
                 state.rowNormal = res.data.normal; // 일반배송
                 state.rowBoth = res.data.both; // 둘 중 더 저렴한 데이터
                 state.rowCheaper = res.data.cheaper; // 둘 중 더 저렴한 데이터, 둘 중 하나만 존재시 그 데이터
-                console.log("빠른배송", state.rowFast)
-                console.log("일반배송", state.rowNormal)
-                console.log("둘중 저렴", state.rowBoth)
-                console.log("사이즈별 가장 저렴", state.rowCheaper)
-                state.forInfo = state.rowCheaper[0] // 항상 존재 -> 대표 정보 출력
-                // console.log("인포용",state.forInfo);
-                
-                // 전체 사이즈 나열
-                for(let i = state.forInfo.sizeMin; i <= state.forInfo.sizeMax; i += state.forInfo.sizeUnit) {
-                    state.sizes.push(i);
-                }
+                // console.log("빠른배송", state.rowFast)
+                // console.log("일반배송", state.rowNormal)
+                // console.log("둘중 저렴", state.rowBoth)
+                // console.log("사이즈별 가장 저렴", state.rowCheaper)
             } catch (err) {
                 console.error(err);
             }
@@ -158,7 +170,7 @@ export default {
         const handleMethod = (size, index) => {
             // css 전환
             activeIndex.value = index;
-
+            
             let hasMatchingSize = false;
             // 빠른배송, 일반배송 모두 존재
             if(state.rowBoth) {                
@@ -206,6 +218,7 @@ export default {
         }
 
         onMounted (()=> {
+            handleInfo();
             handleData();
         })
 

@@ -86,13 +86,10 @@ export default {
             
             days : 30,
             date : null,
-            formattedDate : null,
-
-            // item : ''
+            formattedDate : null
         })
 
         watchEffect(() => {
-            // state.item = store.getters.getSelectedItem;
             if(state.type === "normal") {
                 state.inputValue = '';
                 state.errorMessage = '';
@@ -125,14 +122,11 @@ export default {
                 } else {
                     state.errorMessage = '';
                 }
-
             } else {
                 state.inputValue = input.replace(/[^\d]/g, '')
                 state.errorMessage = '숫자만 입력 가능합니다.';
             }
-
         };
-
 
         const handleNext = (type) => {
             // 유효성 검사 통과
@@ -167,7 +161,8 @@ export default {
                     state.onlyBid = true;
                     console.log("구매입찰", state.row)
                 }
-            
+                state.row[0].imagePath = `/api/product/display?name=${state.row[0].imagePath}`;
+
             } catch (err) {
                 console.error(err);
             }

@@ -138,6 +138,9 @@ export default {
 
         watchEffect(() => {
             state.item = store.getters.getSelectedItem;
+            if(state.item) {
+                state.item.imagePath = `/api/product/display?name=${state.item.imagePath}`;
+            }
             state.bidPrice = Number(store.getters.getSelectedPrice);
             state.bidFormattedDate = store.getters.getSelectedFormattedDate;
             state.bidDays = store.getters.getSelectedDays;
@@ -150,6 +153,7 @@ export default {
                     const res = await axios.get(`/api/get/product/one?productid=${state.productid}`);
                     state.row = res.data;
                     console.log("구매입찰", state.row)
+                    state.row[0].imagePath = `/api/product/display?name=${state.row[0].imagePath}`;
                 } catch (err) {
                     console.error(err);
                 }
