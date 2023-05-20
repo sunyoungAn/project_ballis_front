@@ -68,7 +68,7 @@ export default {
         }
 
         const handleContent = (no) =>{
-            router.push({path:'/noitce/content', query:{id:no}})
+            router.push({path:'/notice/content', query:{id:no}})
         };
 
         onMounted(()=>{

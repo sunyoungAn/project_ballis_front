@@ -112,7 +112,7 @@ const routes = [
   {path: '/email/find', component: UserFind},
   {path: '/password/find', component: PasswordFind},
   {path: '/notice', component: Notice},
-  {path: '/noitce/content', component: NoticeContent},
+  {path: '/notice/content', component: NoticeContent},
   {path: '/mypage', component: MyPage},
   {path: '/mypage/inquiry', component: MyPageInquiry},
   {path: '/mypage/inquiry/content', component: MyPageInquiryContent},
