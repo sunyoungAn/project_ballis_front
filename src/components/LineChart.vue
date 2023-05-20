@@ -28,7 +28,7 @@
                     <li class="info_box">{{ tmp.contractDate }}</li>
                 </ul>
                 <div v-show="this.row.length > 5" class="row mt-3 mx-auto">
-                    <button type="button" class="btn btn-outline-primary" @click="showMore('con')">더보기</button>
+                    <button type="button" class="btn btn-outline-primary" @click="showMore('con')">체결 내역 더보기</button>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
@@ -44,7 +44,7 @@
                     <li class="info_box">{{ tmp.cnt }}</li>
                 </ul>
                 <div v-show="this.sellRow.length > 5" class="row mt-3 mx-auto">
-                    <button type="button" class="btn btn-outline-primary" @click="showMore('sell')">더보기</button>
+                    <button type="button" class="btn btn-outline-primary" @click="showMore('sell')">입찰 내역 더보기</button>
                 </div>
             </div>
 
@@ -61,19 +61,38 @@
                     <li class="info_box">{{ tmp.cnt }}</li>
                 </ul> 
                 <div v-show="this.buyRow.length > 5" class="row mt-3 mx-auto">
-                    <button type="button" class="btn btn-outline-primary" @click="showMore('buy')">더보기</button>
+                    <button type="button" class="btn btn-outline-primary" @click="showMore('buy')">입찰 내역 더보기</button>
                 </div>
             </div>
         </div>
+        <!-- 더보기 모달 -->
+        <recent-price-modal v-if="this.showModal" 
+            :product-id="productId" 
+            :type="type" 
+            :conRow="row"
+            :buyRow="buyRow"
+            :sellRow="sellRow"
+            @close="this.showModal = false"
+        />
     </div>
 </template>
 
 <script>
+import RecentPriceModal from '@/components/RecentPriceModal.vue'
 import { defineComponent } from 'vue';
 import Chart from 'chart.js/auto';
 import axios from 'axios';
 
 export default defineComponent({
+    components: {
+        RecentPriceModal
+    },
+    props: {
+        productId: {
+            type: Number,
+            require: true
+        }
+    },
     data() {
         return {
             buyRow:[],
@@ -85,18 +104,16 @@ export default defineComponent({
             
             displayedBuy: [],
             displayedSell: [],
-            displayedCon: []
+            displayedCon: [],
+
+            showModal: false,
+            type: '',
         };
     },
-    props: {
-        productId: {
-            type: Number,
-            require: true
-        }
-    },
     methods: {
-        showMore() {
-
+        showMore(type) {
+            this.type = type;
+            this.showModal = true;
         },
 
         handleDataBuy() {
