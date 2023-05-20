@@ -8,13 +8,15 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                <img src="../assets/image/mainslide1.png" class="d-block w-100" alt="...">
+                    <img src="../assets/image/mainslide1.png" class="d-block w-100" alt="..." @click="moveProductList(4)">
                 </div>
                 <div class="carousel-item">
-                <img src="../assets/image/mainslide2.png" class="d-block w-100" alt="...">
+                    <img src="../assets/image/mainslide2.png" class="d-block w-100" alt="..." @click="moveProductList(32)">
                 </div>
                 <div class="carousel-item">
-                <img src="../assets/image/mainslide3.png" class="d-block w-100" alt="...">
+                    <router-link to="/notice/content?id=3">
+                        <img src="../assets/image/mainslide3.png" class="d-block w-100" alt="...">
+                    </router-link>
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -244,6 +246,10 @@ export default {
                 });
         }
 
+        const moveProductList = (brandId) => {
+            router.push({path:'/product/list', query:{brandId : brandId}});
+        }
+
         onMounted(()=>{
             handleDataNew();
             handleDataPop();
@@ -255,7 +261,8 @@ export default {
             showMoreNew,
             showMorePop,
             showModal,
-            handleProductOne
+            handleProductOne,
+            moveProductList
         }
     }
 }

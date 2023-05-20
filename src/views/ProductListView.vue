@@ -77,6 +77,7 @@
                     <label v-for="(tmp, i) in state.brandRows" :key="i">
                         <input  type="checkbox" name="brand" 
                             :value="tmp.brandId" 
+                            :checked="tmp.brandId === state.mainSelectBrand"
                             @click="handleBrandIdList(tmp.brandId)"
                         > {{ tmp.brandName }} 
                     </label>
@@ -150,12 +151,13 @@
 <script>
 import axios from 'axios';
 import { computed, onMounted, reactive, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
 
     setup () {
         const router = useRouter();
+        const route = useRoute();
 
         const state = reactive({
             sizes : [],
@@ -169,6 +171,8 @@ export default {
             sizeList : [],
             wishPriceList : [],
             isChecked : false,
+            fromMainBrandId : Number(route.query.brandId),
+            mainSelectBrand : 0
         })
 
         // 가격대 나열
@@ -282,6 +286,15 @@ export default {
         }
 
         const handleData = async () => {
+
+            // 메인에서 이미지 클릭해서 이동한 경우 처리
+            if(state.fromMainBrandId !== null && state.fromMainBrandId >= 0) {
+                state.mainSelectBrand = state.fromMainBrandId;
+                handleBrandIdList(state.fromMainBrandId); // 두번 불려지는 문제가 있긴 함
+                state.fromMainBrandId = null; // 초기화
+                router.replace({'query': null}); //url의 쿼리 제거
+            }
+
             try {
                 const url = `/api/get/product/all?sort=${state.sort}`;
                 const headers = {"Content-Type":"application/json"};
