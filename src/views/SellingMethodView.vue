@@ -12,15 +12,29 @@
                 <hr />
             </div>
             <div class="body">
-                <p>즉시 구매가</p>
-                <p v-if="state.row[0].sellWishPrice">{{ state.row[0].sellWishPrice }}원</p>
-                <p v-else>- 원</p> 
-                <p>즉시 판매가</p>
-                <p v-if="state.row[0].buyWishPrice">{{ state.row[0].buyWishPrice }}원</p>
-                <p v-else>- 원</p> 
-                <button @click="state.type = 'keep'">보관 판매</button>
-                <button @click="state.type = 'bid'">판매 입찰</button>
-                <button :disabled="!state.sellNow" @click="state.type = 'normal'">즉시 판매</button>
+                <div class="d-flex align-items-center justify-content-center">
+                    <div class="price_box d-flex flex-column align-items-center text-center" id="price_box1">
+                        <p class="price_name">즉시 구매가</p>
+                        <p v-if="state.row[0].sellWishPrice" class="fs-5">{{ state.row[0].sellWishPrice }}원</p>
+                        <p v-else class="fs-5">- 원</p> 
+                    </div>
+                    <div class="price_box d-flex flex-column align-items-center text-center"> 
+                        <p class="price_name">즉시 판매가</p>
+                        <p v-if="state.row[0].buyWishPrice" class="fs-5">{{ state.row[0].buyWishPrice }}원</p>
+                        <p v-else class="fs-5">- 원</p> 
+                    </div>
+                </div>
+
+                <div class="btn-group w-100 my-4" role="group" data-toggle="buttons">
+                    <input type="radio" class="btn-check" id="keep" name="price" :checked="state.type === 'keep'">
+                    <label class="btn btn-outline-info p-3" for="keep" @click="state.type = 'keep'">보관 판매</label>
+
+                    <input type="radio" class="btn-check" id="bid" name="price" :checked="state.type === 'bid'">
+                    <label class="btn btn-outline-info p-3" for="bid" @click="state.type = 'bid'">판매 입찰</label>
+
+                    <input type="radio" class="btn-check" id="normal" name="price" :checked="state.type === 'normal'" :disabled="!state.sellNow">
+                    <label class="btn btn-outline-info p-3" for="normal" @click="state.type = 'normal'">즉시 판매</label>
+                </div>
                 
                 <!-- 즉시 판매 -->
                 <div v-show="state.type === 'normal'">
@@ -255,6 +269,16 @@ export default {
 .head p{
     margin: 1px 8px;
 }
-
+.price_box{
+    flex: 1;
+    padding: 10px 20px 10px 10px;
+}
+#price_box1{
+    border-right: 1px solid #cecece;
+}
+.price_name{
+    color: #8d8d8d;
+    margin: 0;
+}
 
 </style>

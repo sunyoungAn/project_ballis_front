@@ -44,7 +44,7 @@
                         <span class="float-end fs-4 fw-bold">{{ tmp.price }}원</span>
                     </div>
 
-                    <div class="product d-flex align-items-center justify-content-around gap-2 mx-auto " id="product_wish_price">
+                    <div class="product d-flex align-items-center justify-content-around gap-2 mx-auto" id="product_wish_price">
                         <button class="btn btn-lg flex-grow-1 left_wish_price_button" type="button" @click="handleBuying(state.productid)">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>구매</div>

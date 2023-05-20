@@ -28,30 +28,42 @@
                     </button>
                 </div>
 
-                <div class="shipping_method" v-show="state.showMethod">
+                <div v-show="state.showMethod">
                     <hr />
 
-                    <div class="shipping_method_body" v-show="state.methodSelect === 1">
-                        <div>
-                            <button @click="handleType(state.size, 'keep')">
-                                <p>보관 신청</p>
+                    <div v-show="state.methodSelect === 1">
+                        <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button"
+                            @click="handleType(state.size, 'keep')">
+                                <p class="fs-5 fw-bold">보관 신청</p>
+                                <p>선불발송</p>
                             </button>
-                        </div>  
-                        <div v-for="(tmp, i) in state.rowSell" :key="i">
-                            <button v-if="tmp.buyProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
-                                <p>{{ tmp.buyWishPrice }}</p>
-                                <p>즉시 판매</p>
+                            
+                            <button class="del_button btn btn-info flex-grow-1 mx-1 mb-3" type="button">
+                                <div v-for="(tmp, i) in state.rowSell" :key="i">
+                                    <div v-if="tmp.buyProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
+                                        <p class="fs-5 fw-bold">{{ tmp.buyWishPrice }}</p>
+                                        <p>선불발송</p>
+                                    </div>
+                                </div>
                             </button>
                         </div>
                     </div>
 
-                    <div class="shipping_method_body" v-show="state.methodSelect === 2">
-                        <button @click="handleType(state.size, 'keep')">
-                            <p>보관 신청</p>
-                        </button>
-                        <button @click="handleType(state.size, 'bid')">
-                            <p>판매 입찰</p>
-                        </button>
+                    <div v-show="state.methodSelect === 2">
+                        <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button"
+                            @click="handleType(state.size, 'keep')">
+                                <p class="fs-5 fw-bold">보관 신청</p>
+                                <p>선불발송</p>
+                            </button>
+
+                            <button class="del_button btn btn-info flex-grow-1 mx-1 mb-3" type="button"
+                            @click="handleType(state.size, 'bid')">
+                                <p class="fs-5 fw-bold">판매 입찰</p>
+                                <p>선불발송</p>
+                            </button>
+                        </div>
                     </div>
 
                 </div>
@@ -207,5 +219,8 @@ export default {
 }
 .button_size_body1.active, .button_size_body3.active {
     font-weight: bold;
+}
+.del_button p{
+    margin: 0;
 }
 </style>

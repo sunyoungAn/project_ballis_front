@@ -35,44 +35,65 @@
                     </button>
                 </div>
 
-                <div class="shipping_method" v-show="state.showMethod">
+                <div v-show="state.showMethod">
                     <hr />
 
-                    <div class="shipping_method_body" v-show="state.methodSelect === 1">
-                        <div v-for="(tmp, i) in state.rowFast" :key="i">
-                            <button v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
-                                <p>{{ tmp.sellWishPrice }}</p>
-                                <p>빠른배송</p>
+                    <div v-show="state.methodSelect === 1">
+                        <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
+                            <button class="del_button btn btn-warning flex-grow-1 mx-1 mb-3" type="button">
+                                <div v-for="(tmp, i) in state.rowFast" :key="i">
+                                    <div v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
+                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p>빠른배송(1-2일 소요)</p>
+                                    </div>
+                                </div>
                             </button>
-                        </div>  
-                        <div v-for="(tmp, i) in state.rowNormal" :key="i">
-                            <button v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
-                                <p>{{ tmp.sellWishPrice }}</p>
-                                <p>일반배송</p>
+                            
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button">
+                                <div v-for="(tmp, i) in state.rowNormal" :key="i">
+                                    <div v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
+                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p>일반배송(5-7일 소요)</p>
+                                    </div>
+                                </div>
                             </button>
                         </div>
                     </div>
 
-                    <div class="shipping_method_body" v-show="state.methodSelect === 2">
-                        <div v-for="(tmp, i) in state.rowFast" :key="i">
-                            <button v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
-                                <p>{{ tmp.sellWishPrice }}</p>
-                                <p>빠른배송</p>
+                    <div v-show="state.methodSelect === 2">    
+                        <div class="d-flex align-items-center justify-content-around mx-auto w-100">
+                            <button class="del_button btn btn-warning flex-grow-1 mx-1 mb-3" type="button">
+                                <div v-for="(tmp, i) in state.rowFast" :key="i">
+                                    <div v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
+                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p>빠른배송(1-2일 소요)</p>
+                                    </div>
+                                </div>
                             </button>
                         </div>
                     </div>
-                    <div class="shipping_method_body" v-show="state.methodSelect === 3">
-                        <div v-for="(tmp, i) in state.rowNormal" :key="i">
-                            <button v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
-                                <p>{{ tmp.sellWishPrice }}</p>
-                                <p>일반배송</p>
+
+                    <div v-show="state.methodSelect === 3">
+                        <div class="d-flex align-items-center justify-content-around mx-auto w-100">
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button">
+                                <div v-for="(tmp, i) in state.rowNormal" :key="i">
+                                    <div v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
+                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p>일반배송(5-7일 소요)</p>
+                                    </div>
+                                </div>
                             </button>
                         </div>
                     </div>
-                    <div class="shipping_method_body" v-show="state.methodSelect === 4">
-                        <button @click="handleType(state.size, 'bid')">
-                            <p>구매입찰</p>
-                        </button>                        
+
+                    <div v-show="state.methodSelect === 4">
+                        <div class="d-flex align-items-center justify-content-around mx-auto w-100">
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button" 
+                            @click="handleType(state.size, 'bid')">
+                                <p class="fs-5 fw-bold">구매입찰</p>
+                                <p>일반배송(5-7일 소요)</p>
+                            </button>
+                        </div>                        
                     </div>
                 </div>
             </div>
@@ -236,10 +257,9 @@ export default {
 <style lang="css" scoped>
 @import "../assets/css/common.css";
 #wrap {
-    border: 1px solid #cccccc;
+    /* border: 1px solid #cccccc; */
     width: 800px;
 }
-
 .head_img{
     width: 150px;
     height: 150px;
@@ -271,5 +291,8 @@ export default {
 }
 .button_size_body1.active, .button_size_body3.active {
     font-weight: bold;
+}
+.del_button p{
+    margin: 0;
 }
 </style>

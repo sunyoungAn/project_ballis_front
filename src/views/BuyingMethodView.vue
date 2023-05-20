@@ -9,53 +9,85 @@
                     <p style="color: #aeaeae;">{{ state.row[0].productKorName }}</p>
                     <p>{{ state.size }}</p>
                 </div>
-                <hr />
             </div>
+            <hr />
             <div class="body">
-                <p>즉시 구매가</p>
-                <p v-if="state.row[0].sellWishPrice">{{ state.row[0].sellWishPrice }}원</p>
-                <p v-else>- 원</p> 
-                <p>즉시 판매가</p>
-                <p v-if="state.row[0].buyWishPrice">{{ state.row[0].buyWishPrice }}원</p>
-                <p v-else>- 원</p> 
-                <button @click="state.type = 'bid'">구매 입찰</button>
-                <button :disabled="state.onlyBid" @click="state.type = 'normal'">즉시 구매</button>
-                
+                <div class="d-flex align-items-center justify-content-center">
+                    <div class="price_box d-flex flex-column align-items-center text-center" id="price_box1">
+                        <p class="price_name">즉시 구매가</p>
+                        <p v-if="state.row[0].sellWishPrice" class="fs-5">{{ state.row[0].sellWishPrice }}원</p>
+                        <p v-else class="fs-5">- 원</p> 
+                    </div>
+                    <div class="price_box d-flex flex-column align-items-center text-center"> 
+                        <p class="price_name">즉시 판매가</p>
+                        <p v-if="state.row[0].buyWishPrice" class="fs-5">{{ state.row[0].buyWishPrice }}원</p>
+                        <p v-else class="fs-5">- 원</p> 
+                    </div>
+                </div>
+
+
+                <div class="btn-group w-100 my-4" role="group" data-toggle="buttons">
+                    <input type="radio" class="btn-check" id="bid" name="price" :checked="state.type === 'bid'">
+                    <label class="btn btn-outline-warning p-3" for="bid" @click="state.type = 'bid'">구매 입찰</label>
+
+                    <input type="radio" class="btn-check" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
+                    <label class="btn btn-outline-warning p-3" for="normal" @click="state.type = 'normal'">즉시 구매</label>
+                </div>
+
                 <!-- 즉시 구매 -->
                 <div v-show="state.type === 'normal'">
-                    <p>즉시 구매가</p>
-                    <p>{{ state.row[0].sellWishPrice }}원</p>
-                    <p>총 결제금액은 다음 화면에서 계산됩니다.</p> 
+                    <p class="fw-bold">즉시 구매가</p>
+                    <p class="fs-4 fw-bold text-end">{{ state.row[0].sellWishPrice }}원</p>
+                    <p style="color: #8d8d8d;">총 결제금액은 다음 화면에서 계산됩니다.</p> 
                     <hr />
-                    <p>총 결제 금액</p>
-                    <p>다음 화면에서 확인</p>
-                    <p><button @click="handleNext('normal')">즉시 구매 계속</button></p>
+                    <div class="d-flex justify-content-between mt-5">   
+                        <span class="fw-bold">총 결제 금액</span>
+                        <span class="text-end fs-5" style="color: #8d8d8d;">다음 화면에서 확인</span>
+                    </div>
+                    <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
+                    @click="handleNext('normal')">
+                    즉시 구매 계속</button>
                 </div>      
 
                 <!-- 구매 입찰 -->
                 <div v-show="state.type === 'bid'">
-                    <p>구매 희망가</p>
-                    <div>
-                        <input type="text" v-model="state.inputValue" @input="handleInput" />
-                        <p v-if="state.errorMessage">{{ state.errorMessage }}</p>
+                    <p class="fw-bold">구매 희망가</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-lg text-end" v-model="state.inputValue" @input="handleInput">
+                        <div class="input-group-append">
+                            <span class="fs-4 fw-bold mx-2">원</span>
+                        </div>
                     </div>
-
-                    <p>총 결제금액은 다음 화면에서 계산됩니다.</p> 
-                    <hr />
-                    <p>입찰 마감기한</p>
-                    <p>
-                        {{ state.days }}일 ({{ state.formattedDate }}마감)
-                        <button @click="handleDate(1)">1일</button>
-                        <button @click="handleDate(3)">3일</button>
-                        <button @click="handleDate(7)">7일</button>
-                        <button @click="handleDate(30)">30일</button>
-                        <button @click="handleDate(60)">60일</button>
+    
+                    <p v-if="state.errorMessage" class="mt-3" style="color: #e25d5d;">
+                        {{ state.errorMessage }}
                     </p>
+
+                    <p class="my-3" style="color: #8d8d8d;">총 결제금액은 다음 화면에서 계산됩니다.</p> 
                     <hr />
-                    <p>총 결제 금액</p>
-                    <p>다음 화면에서 확인</p>
-                    <p><button :disabled="!state.inputValue || state.errorMessage.length > 0"
-                        @click="handleNext('bid')">구매 입찰 계속</button></p>
+                    <p class="fw-bold mt-5">입찰 마감기한</p>
+                    <p>{{ state.days }}일 ({{ state.formattedDate }}마감)</p>
+                    <div class="btn-group w-100 mb-2" role="group" data-toggle="buttons">
+                        <input type="radio" class="btn-check" id="1" autocomplete="off" name="date" :checked="state.days === 1">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="1" @click="handleDate(1)">1일</label>
+                        <input type="radio" class="btn-check" id="3" autocomplete="off" name="date" :checked="state.days === 3">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="3" @click="handleDate(3)">3일</label>
+                        <input type="radio" class="btn-check" id="7" autocomplete="off" name="date" :checked="state.days === 7">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="7" @click="handleDate(7)">7일</label>
+                        <input type="radio" class="btn-check" id="30" autocomplete="off" name="date" :checked="state.days === 30">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="30" @click="handleDate(30)">30일</label>
+                        <input type="radio" class="btn-check" id="60" autocomplete="off" name="date" :checked="state.days === 60">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="60" @click="handleDate(60)">60일</label>
+                    </div>
+                    <hr />
+
+                    <div class="d-flex justify-content-between mt-5">   
+                        <span class="fw-bold">총 결제 금액</span>
+                        <span class="text-end fs-5" style="color: #8d8d8d;">다음 화면에서 확인</span>
+                    </div>
+                    <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
+                    :disabled="!state.inputValue || state.errorMessage.length > 0"
+                    @click="handleNext('bid')">구매 입찰 계속</button>
                 </div>
             </div>
         </div>
@@ -93,6 +125,7 @@ export default {
             if(state.type === "normal") {
                 state.inputValue = '';
                 state.errorMessage = '';
+                state.days = 30;
             }
         });
         
@@ -187,7 +220,7 @@ export default {
 @import "../assets/css/common.css";
 
 #wrap {
-    border: 1px solid #cccccc;
+    /* border: 1px solid #cccccc; */
     width: 800px;
 }
 .head_img{
@@ -198,6 +231,17 @@ export default {
 }
 .head p{
     margin: 1px 8px;
+}
+.price_box{
+    flex: 1;
+    padding: 10px 20px 10px 10px;
+}
+#price_box1{
+    border-right: 1px solid #cecece;
+}
+.price_name{
+    color: #8d8d8d;
+    margin: 0;
 }
 
 </style>
