@@ -13,7 +13,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">추천</a>
+                            <!-- <a class="nav-link active" aria-current="page" href="#">홈</a> -->
+                            <router-link class="nav-link" to="/">홈</router-link>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">브랜드</a>
@@ -33,7 +34,8 @@
                             <router-link class="nav-link" to="/notice">고객센터</router-link>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/mypage/wish">관심상품</a>
+                            <!-- <a class="nav-link" href="/mypage/wish">관심상품</a> -->
+                            <router-link class="nav-link" to="/mypage/wish">관심상품</router-link>
                         </li>
                         <li class="nav-item" v-if="state.logged===false">
                             <!-- <a class="nav-link" href="/member/login">로그인</a> -->
@@ -52,10 +54,10 @@
                             <router-link class="nav-link" to="/mypage">마이페이지</router-link>
                         </li>
                         <li class="nav-item me-2">
-                            <input class="form-control" placeholder="Search" aria-label="Search">
+                            <input class="form-control" v-model="state.searchWord" placeholder="Search" aria-label="Search">
                         </li>
                         <li class="nav-item">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
+                            <button class="btn btn-outline-success" @click="search()">Search</button>
                         </li>
                     </ul>
                 </div>
@@ -67,18 +69,31 @@
 <script>
 import { computed, reactive } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 export default {
     setup () {
+
+        const router = useRouter();
+
         const store = useStore();
 
         const state = reactive({
+            searchWord : '',
             logged : computed(()=>store.state.logged),
             memberStatus : computed(()=>store.state.memberStatus)
         })
 
+        const search = () => {
+            const word = state.searchWord;
+            state.searchWord = ''; // 초기화
+            router.push({path:'/product/list', query:{search : word}});
+
+        }
+
         return {
-            state
+            state,
+            search
         }
     }
 }
@@ -98,5 +113,9 @@ export default {
 #header_logo {
     width: 200px;
     margin: 10px auto;
+}
+
+a:hover{
+  font-weight: bold;
 }
 </style>
