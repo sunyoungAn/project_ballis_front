@@ -64,7 +64,7 @@
                     </div>
 
                     <div class="product d-grid gap-2 col-13" id="product_wish">
-                        <button type="button" class="btn btn-outline-success btn-lg">관심 상품</button>
+                        <button type="button" class="btn btn-outline-success btn-lg" @click="handleWish()">관심 상품</button>
                     </div>
 
                     <div class="product" id="product_info">
@@ -160,7 +160,9 @@ export default {
         const state = reactive({
             productid : Number(route.query.productid),
             row : [],
-            showModal : false
+            showModal : false,
+            token : sessionStorage.getItem("TOKEN"),
+            productId : [],
         })
 
         const handleBuying = (id) => {
@@ -190,6 +192,8 @@ export default {
             axios.get(`/api/get/product/one/images?productid=${state.productid}`).then((res)=> {
                 console.log("상품정보,이미지", res.data);
                 state.row = res.data;
+                state.productId = res.data.product;
+                console.log(state.productId);
                 for(let i = 0; i<state.row.images.length; i++){
                     state.row.images[i].imagePath = `/api/product/display?name=${state.row.images[i].imagePath}`;
                 }
@@ -197,6 +201,20 @@ export default {
                 console.log(err);
             })
         }
+
+        //404오류...(관심상품등록)
+        // const handleWish = async () => {
+        //     if(confirm("관심상품으로 등록하시겠습니까?")){
+        //         const url = `/api/add/wish/${state.token}`;
+        //         const headers = {"Content-Type":"application/json"};
+        //         const body = new FormData();
+        //         body.append("memberNumber", state.token);
+        //         body.append("productid", state.productId.id);
+        //         const {data} = await axios.post(url,body,{headers});
+        //         console.log(data);
+        //         window.alert("등록되었습니다");
+        //     }
+        // }
 
         onMounted(()=>{
             handleDataReview();
@@ -206,7 +224,8 @@ export default {
         return {
             state,
             handleBuying,
-            handleSelling
+            handleSelling,
+
         }
     }
 }

@@ -25,16 +25,20 @@
                     </select>
                 </div>
 
+                <div class="p_tag_box">
+                    <hr>
+                </div>
+
                 <div class="item_box">
                     <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
-                      <li>이미지</li>
-                      <li>{{ tmp.productName }}</li>
-                      <li>{{
+                      <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" class="item_img main_img_background"></li>
+                      <li style="margin-top: 15px;">{{ tmp.productName }}</li>
+                      <li style="margin-top: 15px;">{{
                           tmp.contract.buyingStatus === 60 ? '배송완료' :
                           tmp.contract.buyingStatus === 61 ? '취소완료' :
                           tmp.contract.buyingStatus === 62 ? '반품완료' : '교환완료'
                           }}</li>
-                      <button @click="handleReview(tmp.productId)">리뷰작성</button>
+                      <button @click="handleReview(tmp.productId)" style="width: 90px; height: 30px; margin-top: 15px;">리뷰작성</button>
                     </ul>
                     
                 </div>
@@ -148,8 +152,17 @@ export default {
     width: 1100px;
     height: 600px;
     margin: 0px auto;
-    border: 1px solid black;
     display: inline-block;
 }
+
+.item_img{
+    width: 70px;
+    height: 70px;
+ }
+ .main_img_background {
+    width:100px;
+    background-color: #E0E0E0;
+}
+ 
 
 </style>

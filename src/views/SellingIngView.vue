@@ -24,11 +24,15 @@
                     </select>
                 </div>
 
+                <div class="p_tag_box">
+                    <hr>
+                </div>
+
                 <div class="item_box">
                     <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
-                        <li>이미지</li>
-                        <li>{{tmp.productName}}</li>
-                        <li>{{ 
+                        <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" class="item_img main_img_background"></li>
+                        <li style="margin-top: 15px;">{{tmp.productName}}</li>
+                        <li style="margin-top: 15px;">{{ 
                             tmp.contract.sellingStatus === 21 ? '발송요청' :
                             tmp.contract.sellingStatus === 22 ? '발송완료' :
                             tmp.contract.sellingStatus === 23 ? '입고대기' :
@@ -145,8 +149,17 @@ export default {
     width: 1100px;
     height: 600px;
     margin: 0px auto;
-    border: 1px solid black;
     display: inline-block;
 }
+
+.item_img{
+    width: 70px;
+    height: 70px;
+ }
+ .main_img_background {
+    width:100px;
+    background-color: #E0E0E0;
+}
+ 
 
 </style>

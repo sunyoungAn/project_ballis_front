@@ -11,8 +11,8 @@
                 </div>
                  <div class="item_box">
                      <ul class="ul_item_box" v-for="tmp of state.list" :key="tmp">
-                         <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" style="width: 70px; height: 70px;"></li>
-                         <li>{{tmp.productName}}</li>
+                         <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" class="item_img main_img_background"></li>
+                         <li style="margin-top: 15px;">{{tmp.productName}}</li>
                          <div class="button-group">
                              <button type="button" class="btn btn-outline-success" @click="handleBuying(tmp.productId)">구매하기</button>
                              <button type="button" class="btn btn-outline-success" @click="handleDelete(index, tmp.wish.id)">삭제하기</button>
@@ -87,7 +87,6 @@ import { useRouter } from 'vue-router'
  section{
    display: grid;
    grid-template-columns: 200px auto;
-   border: 2px solid gray;
  }
  
  article {
@@ -115,5 +114,14 @@ import { useRouter } from 'vue-router'
    flex-direction: column;
    align-items: center;
  }
+
+ .item_img{
+    width: 70px;
+    height: 70px;
+ }
+ .main_img_background {
+    width:100px;
+    background-color: #E0E0E0;
+}
  
  </style>
