@@ -122,7 +122,7 @@
                 {{ state.wishPriceList }}
                 <div class="card card-body">
                     <label v-for="price in prices" :key="price.id">
-                        <input type="checkbox" :id="price.id" @change="handleWishPriceList(price)"> {{ price.label }}
+                        <input type="checkbox" :id="price.id" :checked="state.checkedPriceId === price.id" @change="handleWishPriceList(price)"> {{ price.label }}
                     </label>
                 </div>
             </div>
@@ -178,11 +178,10 @@ export default {
             inventoryDivList : [],
             sizeList : [],
             wishPriceList : [],
-            isChecked : false,
+            checkedPriceId : '',
             fromMainBrandId : Number(route.query.brandId),
             mainSelectBrand : 0,
             searchWord : route.query.search,
-            // beforSearchWord : '' // 이전 검색 단어
         })
 
         // 가격대 나열
@@ -265,19 +264,33 @@ export default {
 
         // 가격대
         const handleWishPriceList = (price) => {
-            const newPriceList = [...state.wishPriceList];
-            const foundPrices = newPriceList.filter((p) => p === price.range[0] || p === price.range[1]);
 
-            if (foundPrices.length > 0) {
-                foundPrices.forEach((p) => {
-                    const index = newPriceList.indexOf(p);
-                    newPriceList.splice(index, 1);
-                });
+            state.wishPriceList = []; // 가격리스트 초기화
+
+            // 체크제어
+            if(state.checkedPriceId === price.id) {
+                // 클릭한 금액과 이전에 클릭한 금액이 같은 경우
+                state.checkedPriceId = ''; // 체크 해제를 위해 초기화
+            
             } else {
-                newPriceList.push(price.range[0], price.range[1]);
-            }
+                // 클릭한 금액과 이전에 클릭한 금액이 다른 경우
+                state.checkedPriceId = price.id; // 체크를 위해 아이디를 저장
 
-            state.wishPriceList = newPriceList;
+                // 가격 리스트 설정
+                const newPriceList = [...state.wishPriceList];
+                const foundPrices = newPriceList.filter((p) => p === price.range[0] || p === price.range[1]);
+
+                if (foundPrices.length > 0) {
+                    foundPrices.forEach((p) => {
+                        const index = newPriceList.indexOf(p);
+                        newPriceList.splice(index, 1);
+                    });
+                } else {
+                    newPriceList.push(price.range[0], price.range[1]);
+                }
+
+                state.wishPriceList = newPriceList;
+            }
         };
 
         // 사이즈 생성
