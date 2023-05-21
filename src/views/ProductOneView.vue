@@ -45,18 +45,18 @@
                     </div>
 
                     <div class="product d-flex align-items-center justify-content-around gap-2 mx-auto" id="product_wish_price">
-                        <button class="btn btn-lg flex-grow-1 left_wish_price_button" type="button" @click="handleBuying(state.productid)">
+                        <button class="btn btn-lg flex-grow-1 buy_button" type="button" @click="handleBuying(state.productid)">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>구매</div>
+                                <p>구매</p>
                                 <div v-if="tmp.sellWishPrice" class="text-end">
                                     <p>{{ tmp.sellWishPrice }}원</p>
                                     <p style="font-size: 15px;">즉시 구매가</p>
                                 </div>
                             </div>
                         </button>
-                        <button class="btn btn-lg flex-grow-1 right_wish_price_button" type="button" @click="handleSelling(state.productid)">
+                        <button class="btn btn-lg flex-grow-1 sell_button" type="button" @click="handleSelling(state.productid)">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div>판매</div>
+                                <p>판매</p>
                                 <div v-if="tmp.buyWishPrice" class="text-end">
                                     <p>{{ tmp.buyWishPrice }}원</p>
                                     <p style="font-size: 15px;">즉시 판매가</p>
@@ -237,24 +237,13 @@ export default {
     width: 96%;
     margin-top: 30px;
 }
-.left_wish_price_button, .right_wish_price_button {
+.buy_button, .sell_button {
   height: 70px;
   margin: 5x;
 }
-.left_wish_price_button {
-    background-color: #bcf780;
-}
-.left_wish_price_button:hover {
-    background-color: #deffbd;
-}
-.right_wish_price_button {
-    background-color: #80ebf7;
-}
-.right_wish_price_button:hover {
-    background-color: #b7f2f9;
-}
-.left_wish_price_button p, .right_wish_price_button p {
+.buy_button p, .sell_button p {
     margin: 0;
+    color: #ffffff;
 }
 .product_info_body{
     display: flex;

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button @click="requestPay">결제하기</button>
+        <button class="btn btn-secondary w-100 fs-5 fw-bold p-3" @click="requestPay">결제하기</button>
     </div>
 </template>
 
@@ -27,6 +27,10 @@ export default {
         sellingDto : {
             type : Object,
             default : null
+        },
+        showPayment: {
+            type: Boolean,
+            required: true
         }
     },
     setup (props) {
@@ -200,19 +204,19 @@ export default {
                     } 
                 )
             }
-            
         }
 
 
-
-
         onMounted(()=>{
+            if(props.showPayment){
+                requestPay();
+            }
             setMerchantUid();
         })
 
         return {
             state,
-            requestPay,
+            requestPay
         }
     }
 }
