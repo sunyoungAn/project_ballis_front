@@ -7,13 +7,13 @@
                 <buying-tab></buying-tab>
                 <div>
                   <ul style=" list-style-type: none;">
-                      <div>
+                      <div style=" display: flex; text-align: center;">
                           <input type="date" v-model="state.startDate" @change="setMinDate"/> ~ <input type="date" v-model="state.endDate" :min="state.minDate"/>
-                          <button @click="searchDate">검색</button>
-                          {{ state.startDate }} {{ state.endDate }}
+                          <button type="button" class="btn btn-outline-dark search_button" @click="searchDate" >조회</button>
                       </div>
                       <li style="color: gray;">
-                          한 번에 조회 가능한 기간은 최대 6개월입니다.
+                          한 번에 조회 가능한 기간은 최대 6개월입니다.<br>
+                          기간별 조회 결과는 입찰일 기준으로 노출됩니다.
                       </li>
                   </ul>
                 </div>
@@ -31,9 +31,11 @@
 
                 <div class="item_box">
                     <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
-                        <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" class="item_img main_img_background"></li>
-                        <li style="margin-top: 15px;">{{tmp.productName}}</li>
-                        <li style="margin-top: 15px;">{{ 
+                        <li><img :src="getImagePath(tmp)" class="item_img main_img_background"></li>
+                        <p class="fw-bolder product_name">{{ tmp.productName }}</p>
+                        <li style="margin-top: 20px;">{{ formatDate(tmp.contract.registDate) }}</li>
+                        <span class="badge rounded-pill text-bg-success item_badge">
+                            {{ 
                             tmp.contract.buyingStatus === 31 ? '대기중' :
                             tmp.contract.buyingStatus === 32 ? '발송완료' :
                             tmp.contract.buyingStatus === 33 ? '입고대기' :
@@ -49,7 +51,7 @@
                             tmp.contract.buyingStatus === 43 ? '회수완료' :
                             tmp.contract.buyingStatus === 44 ? '교환신청' : '교환중'
                             }}
-                        </li>
+                        </span>
                     </ul>
                 </div>
             </article>
@@ -71,7 +73,9 @@ export default {
         const state = reactive({
             list:[],
             token : sessionStorage.getItem("TOKEN"),
-            selectedStatus: ""
+            selectedStatus: "",
+            startDate:'',
+            endDate:''
         })
 
         //거래진행리스트 전체 출력
@@ -90,15 +94,17 @@ export default {
         
        //날짜 검색
        const searchDate = async () => {
-            const startDate = new Date(state.startDate + 'T00:00:00').toISOString().split('T')[0];
-            const endDate = new Date(state.endDate + 'T00:00:00').toISOString().split('T')[0];
-            const url = `/api/buyinging/date/${state.token}`;
-            const headers = {"Content-Type": "application/json", "auth": state.token};
-            const params = { startDate, endDate };
-            const {data} = await axios.get(url, {headers, params});
-            console.log("date=>", data);
-            state.list = data;
-        }
+        const startDate = new Date(state.startDate + 'T00:00:00').toISOString().split('T')[0];
+        const endDate = new Date(state.endDate + 'T00:00:00');
+        endDate.setDate(endDate.getDate() + 1);
+        const endDateISO = endDate.toISOString().split('T')[0];
+        const url = `/api/buyingend/date/${state.token}`;
+        const headers = {"Content-Type": "application/json", "auth": state.token};
+        const params = { startDate, endDate: endDateISO };
+        const {data} = await axios.get(url, {headers, params});
+        console.log("date=>", data);
+        state.list = data;
+      }
 
         //상태 검색
         const filteredList = computed(() => {
@@ -109,6 +115,16 @@ export default {
                 return state.list.filter(product => product.contract.buyingStatus === status);
             }
         });
+
+        //이미지 불러오기
+        const getImagePath = (tmp) => {
+            if (tmp.imagelist && tmp.imagelist.length > 0) {
+            return `http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`;
+            } else {
+            // 이미지 리스트가 없는 경우에는 null을 반환하여 아무 항목도 출력되지 않도록 함
+            return null;
+            }
+        };
 
         //셀렉박스
         const statusOptions = computed(() => {
@@ -133,6 +149,15 @@ export default {
             return options;
         });
 
+         //날짜설정
+        const formatDate = (dateString) => {
+                const date = new Date(dateString);
+                const year = date.getFullYear();
+                const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                const day = ('0' + date.getDate()).slice(-2);
+                return `${year}-${month}-${day}`;
+        };
+
         onMounted(()=>{
             handleData();
         })
@@ -142,7 +167,9 @@ export default {
             statusOptions,
             filteredList,
             setMinDate,
-            searchDate
+            searchDate,
+            getImagePath,
+            formatDate,
         }
     }
 }
@@ -152,11 +179,15 @@ export default {
 @import "../assets/css/common.css";
 
 .ul_item_box{
-    text-align: center;
     padding: 15px;
     display: grid;
-    grid-template-columns: auto 60% auto;
+    grid-template-columns: 15% 55% 15% 15%;
     list-style-type: none;
+}
+.product_name{
+  font-size: large;
+  margin-top:20px;
+  font-weight: bold;
 }
 
 .item_box{
@@ -174,6 +205,20 @@ export default {
     width:100px;
     background-color: #E0E0E0;
 }
- 
+
+.item_badge{
+  margin-top: 20px; 
+  width:70px; 
+  height: 25px;
+}
+
+.search_button{
+  margin-left: 5px; 
+  border-radius: 0; 
+  justify-content: center;
+  align-items: center;
+  height: 100%; 
+}
+
 
 </style>

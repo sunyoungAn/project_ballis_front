@@ -21,6 +21,7 @@
                 </div>
             </div>
 
+<<<<<<< Updated upstream
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">배송 주소</span>
                 <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+ 새 주소 추가</span>
@@ -28,6 +29,12 @@
             <button v-show="state.selectedAddress" class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
             
             <div v-show="state.addressList.length === 0">
+=======
+            <h4>배송 주소</h4>
+            <p><button @click="showAddressAdd = true">주소 추가</button></p>
+            <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
+            <div v-if="state.addressList.length === 0">
+>>>>>>> Stashed changes
                 <p>주소를 추가하세요</p>
             </div>
 
@@ -162,6 +169,7 @@
                 </div>
             </div>
 
+<<<<<<< Updated upstream
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">배송 주소</span>
                 <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+ 새 주소 추가</span>
@@ -185,6 +193,18 @@
                     <span class="col-2" style="color: #8d8d8d;">배송 주소</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
                 </div>
+=======
+            <h4>배송 주소</h4>
+            <p><button @click="showAddressAdd = true">주소 추가</button></p>
+            <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
+            <div v-if="state.addressList.length === 0">
+                <p>주소를 추가하세요</p>
+            </div>
+            <div v-if="state.selectedAddress">
+                <p>{{ state.selectedAddress.name }}</p>
+                <p>{{ state.selectedAddress.phoneNumber }}</p>
+                <p>{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</p>
+>>>>>>> Stashed changes
             </div>
             <hr />
 
@@ -281,11 +301,14 @@ export default {
             state.bidDays = store.getters.getSelectedDays;
         });
 
+<<<<<<< Updated upstream
         // 결제 방법 선택
         const handlePay = (payMethod) => {
             state.payMethod = payMethod;
         }
 
+=======
+>>>>>>> Stashed changes
         // 주소 추가 모달
         const clickModal = () => {
             state.isModalViewed = true;
@@ -380,7 +403,10 @@ export default {
 
         return {
             state,
+<<<<<<< Updated upstream
             handlePay,
+=======
+>>>>>>> Stashed changes
             showAddressAdd,
             showAddressList,
             clickModal,

@@ -40,7 +40,11 @@
 
                     <div v-show="state.methodSelect === 1">
                         <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
+<<<<<<< Updated upstream
                             <button class="del_button btn flex-grow-1 mx-1 mb-3 sell_button" type="button">
+=======
+                            <button class="del_button btn btn-warning flex-grow-1 mx-1 mb-3" type="button">
+>>>>>>> Stashed changes
                                 <div v-for="(tmp, i) in state.rowFast" :key="i">
                                     <div v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
                                         <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
@@ -75,7 +79,11 @@
 
                     <div v-show="state.methodSelect === 3">
                         <div class="d-flex align-items-center justify-content-around mx-auto w-100">
+<<<<<<< Updated upstream
                             <button class="buy_button btn btn-lg flex-grow-1 mx-1 mb-3" type="button">
+=======
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button">
+>>>>>>> Stashed changes
                                 <div v-for="(tmp, i) in state.rowNormal" :key="i">
                                     <div v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
                                         <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>

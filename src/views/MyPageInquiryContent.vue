@@ -22,7 +22,7 @@
                     <div class="button_box3">
                         <button type="button" class="btn btn-outline-dark" style="margin-right: 20px;">수정</button>
                         <button type="button" class="btn btn-outline-dark" style="margin-right: 20px;" @click="handleDelete()">삭제</button>
-                        <button type="button" class="btn btn-outline-dark" style="margin-right: 20px;"><a href="/mypage/inquiry">목록</a> </button>
+                        <button type="button" class="btn btn-outline-dark" style="margin-right: 20px;"><router-link to="/mypage/inquiry">목록</router-link></button>
                     </div>
                 </div>
 

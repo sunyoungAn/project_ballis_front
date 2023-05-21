@@ -65,7 +65,10 @@
 
                     <p class="my-3" style="color: #8d8d8d;">총 결제금액은 다음 화면에서 계산됩니다.</p> 
                     <hr />
+<<<<<<< Updated upstream
                     
+=======
+>>>>>>> Stashed changes
                     <p class="fw-bold mt-5">입찰 마감기한</p>
                     <p>{{ state.days }}일 ({{ state.formattedDate }}마감)</p>
                     <div class="btn-group w-100 mb-2" role="group" data-toggle="buttons">
@@ -244,8 +247,11 @@ export default {
     color: #8d8d8d;
     margin: 0;
 }
+<<<<<<< Updated upstream
 .btn-group, .btn-outline-warning[disabled] {
     cursor: not-allowed;
 } 
+=======
+>>>>>>> Stashed changes
 
 </style>

@@ -19,9 +19,9 @@
      </div>
 
      <div class="button_box2">
-        <button type="button" style="margin-right: 15px;" class="btn btn-outline-success"><a href="/join">회원가입</a></button>
-        <button type="button" style="margin-right: 15px;" class="btn btn-outline-success"><a href="/email/find">아이디찾기</a></button>
-        <button type="button" style="margin-right: 15px;" class="btn btn-outline-success"><a href="/password/find">비밀번호찾기</a></button>
+        <button type="button" style="margin-right: 15px;" class="btn btn-outline-success"><router-link to="/member/join">회원가입</router-link></button>
+        <button type="button" style="margin-right: 15px;" class="btn btn-outline-success"><router-link to="/email/find">아이디찾기</router-link></button>
+        <button type="button" style="margin-right: 15px;" class="btn btn-outline-success"><router-link to="/password/find">비밀번호찾기</router-link></button>
      </div>
     </body>
  </template>

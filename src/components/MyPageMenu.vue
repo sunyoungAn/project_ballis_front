@@ -8,16 +8,16 @@
                 <ul class="nav flex-column">
                     <h4>쇼핑정보</h4>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/mypage/buying">구매내역</a>
+                        <router-link to="/mypage/buying">구매내역</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/mypage/selling">판매내역</a>
+                        <router-link to="/mypage/selling">판매내역</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/mypage/inventory">보관판매</a>
+                        <router-link to="/mypage/inventory">보관판매</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/mypage/wish">관심상품</a>
+                        <router-link to="/mypage/wish">관심상품</router-link>
                     </li>
                 </ul>
                 
@@ -26,10 +26,10 @@
                 <ul class="nav flex-column">
                     <h4>내정보</h4>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/mypage">프로필정보</a>
+                        <router-link to="/mypage">프로필정보</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/mypage/inquiry">일대일문의</a>
+                        <router-link to="/mypage/inquiry">일대일문의</router-link>
                     </li>
                 </ul>
             </nav>
@@ -63,9 +63,6 @@ a:hover{
   color: black;
   font-weight: bold;
 }
-
-
- 
 
 .p_tag_box{
   text-align: center;

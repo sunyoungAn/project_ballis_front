@@ -23,8 +23,9 @@
           <div class="item_box">
             <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
               <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" class="item_img main_img_background"></li>
-              <li style="margin-top: 15px;">{{ tmp.productName }}</li>
-              <li style="margin-top: 15px;">{{ 
+              <p class="fw-bolder product_name">{{ tmp.productName }}</p>
+              <span class="badge rounded-pill text-bg-success item_badge">
+                {{ 
                   tmp.selling.sellingStatus === 11 ? '발송요청' :
                   tmp.selling.sellingStatus === 12 ? '입고대기' :
                   tmp.selling.sellingStatus === 13 ? '입고완료' :
@@ -33,8 +34,8 @@
                   tmp.selling.sellingStatus === 16 ? '창고이동' :
                   tmp.selling.sellingStatus === 17 ? '판매중' :
                   tmp.selling.sellingStatus === 18 ? '판매완료' : '보관만료'
-                  }}
-              </li>
+                }}
+              </span>
             </ul>
           </div>
         </article>
@@ -105,14 +106,12 @@ export default {
 @import "../assets/css/common.css";
 
 .ul_box {
-    text-align: center;
     list-style-type: none;
     color: gray;
     list-style-type: none;
 }
 
 .ul_item_box{
-    text-align: center;
     padding: 15px;
     display: grid;
     grid-template-columns: 20% 60% 20%;
@@ -133,5 +132,17 @@ export default {
  .main_img_background {
     width:100px;
     background-color: #E0E0E0;
+}
+
+.product_name{
+  font-size: large;
+  margin-top:20px;
+  font-weight: bold;
+}
+
+.item_badge{
+  margin-top: 20px; 
+  width:70px; 
+  height: 25px;
 }
 </style>
