@@ -8,13 +8,15 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                <img src="../assets/image/mainSlide01.jpg" class="d-block w-100" alt="...">
+                    <img src="../assets/image/mainslide1.png" class="d-block w-100" alt="..." style="cursor: pointer;" @click="moveProductList(5)">
                 </div>
                 <div class="carousel-item">
-                <img src="../assets/image/mainSlide02.jpg" class="d-block w-100" alt="...">
+                    <img src="../assets/image/mainslide2.png" class="d-block w-100" alt="..." style="cursor: pointer;" @click="moveProductList(33)">
                 </div>
                 <div class="carousel-item">
-                <img src="../assets/image/mainSlide03.jpg" class="d-block w-100" alt="...">
+                    <router-link to="/notice/content?id=3">
+                        <img src="../assets/image/mainslide3.png" class="d-block w-100" alt="...">
+                    </router-link>
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -27,12 +29,16 @@
             </button>
         </div>
         <div class="main_body">
+            <div class="new_item_title">
+                <h4 style="font-weight: bold;">Popular Brand</h4>
+                <h5 style="color: #aeaeae;">인기 브랜드</h5>
+            </div>
             <div class="shortcut_list">
-                <img src="../assets/image/mainSlide01.jpg" class="shortcut_item">
-                <img src="../assets/image/mainSlide02.jpg" class="shortcut_item">
-                <img src="../assets/image/mainSlide03.jpg" class="shortcut_item">
-                <img src="../assets/image/mainSlide01.jpg" class="shortcut_item">
-                <img src="../assets/image/mainSlide01.jpg" class="shortcut_item">
+                <img src="../assets/image/newbalancelogo.png" style="cursor: pointer;" class="shortcut_item" @click="moveProductList(85)">
+                <img src="../assets/image/asicslogo.png" style="cursor: pointer;" class="shortcut_item" @click="moveProductList(10)">
+                <img src="../assets/image/reeboklogo.png" style="cursor: pointer;" class="shortcut_item" @click="moveProductList(102)">
+                <img src="../assets/image/nikelogo.png" style="cursor: pointer;" class="shortcut_item" @click="moveProductList(86)">
+                <img src="../assets/image/adidaslogo.png" style="cursor: pointer;" class="shortcut_item" @click="moveProductList(5)">
             </div>
             <hr />
 
@@ -244,6 +250,11 @@ export default {
                 });
         }
 
+        // 이미지슬라이드, 숏컷이미지를 클릭해서 상품리스트페이지로 이동
+        const moveProductList = (brandId) => {
+            router.push({path:'/product/list', query:{brandId : brandId}});
+        }
+
         onMounted(()=>{
             handleDataNew();
             handleDataPop();
@@ -255,7 +266,8 @@ export default {
             showMoreNew,
             showMorePop,
             showModal,
-            handleProductOne
+            handleProductOne,
+            moveProductList
         }
     }
 }
@@ -285,7 +297,7 @@ export default {
 .shortcut_item{
     width: 200px;
     height: 100px;
-    margin: 50px 8px;
+    margin: 10px 8px 50px 8px;
     border-radius: 10px;
 }
 .sec_new, .sec_pop, .sec_review{
