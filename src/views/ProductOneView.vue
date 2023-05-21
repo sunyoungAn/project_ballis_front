@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="product d-flex align-items-center justify-content-around gap-2 mx-auto" id="product_wish_price">
-                        <button class="btn btn-lg flex-grow-1 buy_button" type="button" @click="handleBuying(state.productid)">
+                        <button class="btn btn-lg flex-grow-1 green_button green_button_size" type="button" @click="handleBuying(state.productid)">
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>구매</p>
                                 <div v-if="tmp.sellWishPrice" class="text-end">
@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                         </button>
-                        <button class="btn btn-lg flex-grow-1 sell_button" type="button" @click="handleSelling(state.productid)">
+                        <button class="btn btn-lg flex-grow-1 blue_button blue_button_size" type="button" @click="handleSelling(state.productid)">
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>판매</p>
                                 <div v-if="tmp.buyWishPrice" class="text-end">
@@ -222,6 +222,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+@import "../assets/css/common.css";
 .left_wrap, .right_wrap{
     width: 550px;
     margin: 10px;
@@ -237,11 +238,25 @@ export default {
     width: 96%;
     margin-top: 30px;
 }
-.buy_button, .sell_button {
+/* 구매 관련 버튼 */
+.green_button {
+  background-color: rgb(103, 194, 58);
+}
+.green_button:hover {
+  background-color: rgb(149, 212, 117);
+}
+/* 판매 관련 버튼 */
+.blue_button {
+  background-color: rgb(64, 158, 255);
+}
+.blue_button:hover {
+  background-color: rgb(121, 187, 255);
+}
+.green_button_size, .blue_button_size {
   height: 70px;
   margin: 5x;
 }
-.buy_button p, .sell_button p {
+.green_button p, .blue_button p {
     margin: 0;
     color: #ffffff;
 }
