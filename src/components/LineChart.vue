@@ -21,12 +21,15 @@
                     <li class="info_box">거래일</li>
                 </ul>
                 <hr />
-                <ul v-for="(tmp, i) in this.row.slice().reverse()" :key="i" class="info_body">
+                <ul v-for="(tmp, i) in this.displayedCon.slice().reverse()" :key="i" class="info_body">
                     <li class="info_box" v-if="tmp.sellSize">{{ tmp.sellSize }}</li>
                     <li class="info_box" v-else>{{ tmp.buySize }}</li>
                     <li class="info_box">{{ tmp.price }}원</li>
                     <li class="info_box">{{ tmp.contractDate }}</li>
                 </ul>
+                <div v-show="this.row.length > 5" class="row mt-3 mx-auto">
+                    <button type="button" class="btn btn-outline-primary" @click="showMore('con')">체결 내역 더보기</button>
+                </div>
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
                 <ul class="info_head">
@@ -35,11 +38,14 @@
                     <li class="info_box">수량</li>
                 </ul>
                 <hr />
-                <ul v-for="(tmp, i) in this.sellRow" :key="i" class="info_body">
+                <ul v-for="(tmp, i) in this.displayedSell" :key="i" class="info_body">
                     <li class="info_box">{{ tmp.productSize }}</li>
                     <li class="info_box">{{ tmp.wishPrice }}원</li>
                     <li class="info_box">{{ tmp.cnt }}</li>
                 </ul>
+                <div v-show="this.sellRow.length > 5" class="row mt-3 mx-auto">
+                    <button type="button" class="btn btn-outline-primary" @click="showMore('sell')">입찰 내역 더보기</button>
+                </div>
             </div>
 
             <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
@@ -49,31 +55,37 @@
                     <li class="info_box">수량</li>
                 </ul>
                 <hr />
-                <ul v-for="(tmp, i) in this.buyRow" :key="i" class="info_body">
+                <ul v-for="(tmp, i) in this.displayedBuy" :key="i" class="info_body">
                     <li class="info_box">{{ tmp.productSize }}</li>
                     <li class="info_box">{{ tmp.wishPrice }}원</li>
                     <li class="info_box">{{ tmp.cnt }}</li>
                 </ul> 
+                <div v-show="this.buyRow.length > 5" class="row mt-3 mx-auto">
+                    <button type="button" class="btn btn-outline-primary" @click="showMore('buy')">입찰 내역 더보기</button>
+                </div>
             </div>
         </div>
+        <!-- 더보기 모달 -->
+        <recent-price-modal v-if="this.showModal" 
+            :product-id="productId" 
+            :type="type" 
+            :conRow="row"
+            :buyRow="buyRow"
+            :sellRow="sellRow"
+            @close="this.showModal = false"
+        />
     </div>
 </template>
 
 <script>
+import RecentPriceModal from '@/components/RecentPriceModal.vue'
 import { defineComponent } from 'vue';
 import Chart from 'chart.js/auto';
 import axios from 'axios';
 
 export default defineComponent({
-    data() {
-        return {
-            buyRow:[],
-            sellRow:[],
-            row: [],
-            sizes: [],
-            prices: [],
-            dates: [] 
-        };
+    components: {
+        RecentPriceModal
     },
     props: {
         productId: {
@@ -81,11 +93,37 @@ export default defineComponent({
             require: true
         }
     },
+    data() {
+        return {
+            buyRow:[],
+            sellRow:[],
+            row: [],
+            sizes: [],
+            prices: [],
+            dates: [],
+            
+            displayedBuy: [],
+            displayedSell: [],
+            displayedCon: [],
+
+            showModal: false,
+            type: '',
+        };
+    },
     methods: {
+        showMore(type) {
+            this.type = type;
+            this.showModal = true;
+        },
+
         handleDataBuy() {
             axios.get(`/api/get/buy/chart?productid=${this.productId}`).then((res)=>{
                 this.buyRow = res.data;
                 console.log("구매입찰 데이터", this.buyRow);
+                
+                // 5개씩 출력
+                this.displayedBuy = this.buyRow.slice(0, 5);
+                console.log("5개 구매입찰", this.displayedBuy)
             })
         },
 
@@ -93,6 +131,10 @@ export default defineComponent({
             axios.get(`/api/get/sell/chart?productid=${this.productId}`).then((res)=>{
                 this.sellRow = res.data;
                 console.log("판매입찰 데이터", this.sellRow);
+
+                // 5개씩 출력
+                this.displayedSell = this.sellRow.slice(0, 5);
+                console.log("5개 판매입찰", this.displayedSell)
             })
         },
 
@@ -102,6 +144,12 @@ export default defineComponent({
                 .then(res => {
                     this.row = res.data;
                     console.log("체결거래 데이터", this.row);
+
+                    // 5개씩 출력
+                    this.displayedCon = this.row.slice(0, 5);
+                    console.log("5개 체결거래", this.displayedCon)
+
+
                     ////////////////////////////////// 차트 ///////////////////////////////////////
                     const chartPrices = [];
                     const chartDates = [];
@@ -144,7 +192,6 @@ export default defineComponent({
                     labels: chartDates,
                     datasets: [
                         {
-                            // label: 'Price',
                             data: chartPrices,
                             backgroundColor: 'rgba(255, 99, 132, 0.2)',
                             borderColor: 'rgba(255, 99, 132, 1)',

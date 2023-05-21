@@ -152,6 +152,7 @@ export default {
                 const res = await axios.get(`/api/get/product/one?productid=${state.productId}`);
                 console.log('리뷰내 한개상품', res.data);
                 state.productRows = res.data;
+                state.productRows[0].imagePath = `/api/product/display?name=${state.productRows[0].imagePath}`;
             } catch (err) {
                 console.error(err);
             }

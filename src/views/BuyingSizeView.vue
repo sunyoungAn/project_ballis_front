@@ -1,12 +1,12 @@
 <template>
     <div class="common_mt160">
-        <div class="container" id="wrap" v-if="state.forInfo">
+        <div class="container" id="wrap" v-if="state.row">
             <div class="head d-flex align-items-center">
-                <img :src="state.forInfo.imagePath" class="head_img">
+                <img :src="state.row.imagePath" class="head_img">
                 <div class="d-flex flex-column ml-3">
-                    <p style="font-weight: bold;">{{ state.forInfo.modelNumber }}</p>
-                    <p>{{ state.forInfo.productEngName }}</p>
-                    <p style="color: #aeaeae;">{{ state.forInfo.productKorName }}</p>
+                    <p style="font-weight: bold;">{{ state.row.modelNumber }}</p>
+                    <p>{{ state.row.productEngName }}</p>
+                    <p style="color: #aeaeae;">{{ state.row.productKorName }}</p>
                     <p v-if="state.rowFast.length > 0">
                         <button class="fast_small">
                             <img src="@/assets/image/lightning.png" class="lightning"/>
@@ -35,44 +35,65 @@
                     </button>
                 </div>
 
-                <div class="shipping_method" v-show="state.showMethod">
+                <div v-show="state.showMethod">
                     <hr />
 
-                    <div class="shipping_method_body" v-show="state.methodSelect === 1">
-                        <div v-for="(tmp, i) in state.rowFast" :key="i">
-                            <button v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
-                                <p>{{ tmp.sellWishPrice }}</p>
-                                <p>빠른배송</p>
+                    <div v-show="state.methodSelect === 1">
+                        <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
+                            <button class="del_button btn flex-grow-1 mx-1 mb-3 sell_button" type="button">
+                                <div v-for="(tmp, i) in state.rowFast" :key="i">
+                                    <div v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
+                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p>빠른배송(1-2일 소요)</p>
+                                    </div>
+                                </div>
                             </button>
-                        </div>  
-                        <div v-for="(tmp, i) in state.rowNormal" :key="i">
-                            <button v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
-                                <p>{{ tmp.sellWishPrice }}</p>
-                                <p>일반배송</p>
+                            
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button">
+                                <div v-for="(tmp, i) in state.rowNormal" :key="i">
+                                    <div v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
+                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p>일반배송(5-7일 소요)</p>
+                                    </div>
+                                </div>
                             </button>
                         </div>
                     </div>
 
-                    <div class="shipping_method_body" v-show="state.methodSelect === 2">
-                        <div v-for="(tmp, i) in state.rowFast" :key="i">
-                            <button v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
-                                <p>{{ tmp.sellWishPrice }}</p>
-                                <p>빠른배송</p>
+                    <div v-show="state.methodSelect === 2">    
+                        <div class="d-flex align-items-center justify-content-around mx-auto w-100">
+                            <button class="del_button btn btn-warning flex-grow-1 mx-1 mb-3" type="button">
+                                <div v-for="(tmp, i) in state.rowFast" :key="i">
+                                    <div v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
+                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p>빠른배송(1-2일 소요)</p>
+                                    </div>
+                                </div>
                             </button>
                         </div>
                     </div>
-                    <div class="shipping_method_body" v-show="state.methodSelect === 3">
-                        <div v-for="(tmp, i) in state.rowNormal" :key="i">
-                            <button v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
-                                <p>{{ tmp.sellWishPrice }}</p>
-                                <p>일반배송</p>
+
+                    <div v-show="state.methodSelect === 3">
+                        <div class="d-flex align-items-center justify-content-around mx-auto w-100">
+                            <button class="buy_button btn btn-lg flex-grow-1 mx-1 mb-3" type="button">
+                                <div v-for="(tmp, i) in state.rowNormal" :key="i">
+                                    <div v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
+                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p>일반배송(5-7일 소요)</p>
+                                    </div>
+                                </div>
                             </button>
                         </div>
                     </div>
-                    <div class="shipping_method_body" v-show="state.methodSelect === 4">
-                        <button @click="handleType(state.size, 'bid')">
-                            <p>구매입찰</p>
-                        </button>                        
+
+                    <div v-show="state.methodSelect === 4">
+                        <div class="d-flex align-items-center justify-content-around mx-auto w-100">
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button" 
+                            @click="handleType(state.size, 'bid')">
+                                <p class="fs-5 fw-bold">구매입찰</p>
+                                <p>일반배송(5-7일 소요)</p>
+                            </button>
+                        </div>                        
                     </div>
                 </div>
             </div>
@@ -94,12 +115,12 @@ export default {
 
         const state = reactive({
             productid : Number(route.query.productid),
+            row : {},
+            sizes : [],
             rowFast : [],
             rowNormal : [],
             rowBoth : [],
             rowCheaper : [],
-            forInfo : '',
-            sizes : [],
             showMethod : false,
             methodSelect : 0,
             size : 0,
@@ -131,25 +152,37 @@ export default {
             })
         }
 
+        // 상품 정보 데이터 -> 판매 데이터 없을때도 출력할수있도록
+        const handleInfo = async() => {
+            try{
+                const res = await axios.get(`/api/get/product/one?productid=${state.productid}`);
+                state.row = res.data[0];
+                console.log("출력용 데이터", state.row);
+                state.row.imagePath = `/api/product/display?name=${state.row.imagePath}`;
+            
+                // 전체 사이즈 나열
+                for(let i = state.row.sizeMin; i <= state.row.sizeMax; i += state.row.sizeUnit) {
+                    state.sizes.push(i);
+                }
+            }catch(err){
+                console.error(err);
+            }
+        }
+
+        // 판매 데이터
         const handleData = async() => {
             try {
                 const res = await axios.get(`/api/get/product/buy?productid=${state.productid}`);
-                console.log('상품한개', res.data);
+                console.log('판매용 데이터', res.data);
+                
                 state.rowFast = res.data.fast; // 빠른배송
                 state.rowNormal = res.data.normal; // 일반배송
                 state.rowBoth = res.data.both; // 둘 중 더 저렴한 데이터
                 state.rowCheaper = res.data.cheaper; // 둘 중 더 저렴한 데이터, 둘 중 하나만 존재시 그 데이터
-                console.log("빠른배송", state.rowFast)
-                console.log("일반배송", state.rowNormal)
-                console.log("둘중 저렴", state.rowBoth)
-                console.log("사이즈별 가장 저렴", state.rowCheaper)
-                state.forInfo = state.rowCheaper[0] // 항상 존재 -> 대표 정보 출력
-                // console.log("인포용",state.forInfo);
-                
-                // 전체 사이즈 나열
-                for(let i = state.forInfo.sizeMin; i <= state.forInfo.sizeMax; i += state.forInfo.sizeUnit) {
-                    state.sizes.push(i);
-                }
+                // console.log("빠른배송", state.rowFast)
+                // console.log("일반배송", state.rowNormal)
+                // console.log("둘중 저렴", state.rowBoth)
+                // console.log("사이즈별 가장 저렴", state.rowCheaper)
             } catch (err) {
                 console.error(err);
             }
@@ -158,7 +191,7 @@ export default {
         const handleMethod = (size, index) => {
             // css 전환
             activeIndex.value = index;
-
+            
             let hasMatchingSize = false;
             // 빠른배송, 일반배송 모두 존재
             if(state.rowBoth) {                
@@ -206,6 +239,7 @@ export default {
         }
 
         onMounted (()=> {
+            handleInfo();
             handleData();
         })
 
@@ -223,10 +257,9 @@ export default {
 <style lang="css" scoped>
 @import "../assets/css/common.css";
 #wrap {
-    border: 1px solid #cccccc;
+    /* border: 1px solid #cccccc; */
     width: 800px;
 }
-
 .head_img{
     width: 150px;
     height: 150px;
@@ -258,5 +291,8 @@ export default {
 }
 .button_size_body1.active, .button_size_body3.active {
     font-weight: bold;
+}
+.del_button p{
+    margin: 0;
 }
 </style>

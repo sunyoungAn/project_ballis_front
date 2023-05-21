@@ -1,10 +1,10 @@
 <template>
     <!-- 모달영역 -->
-    <address-modal v-if="showModal" @close="showModal = false"/>
+    <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
     <div class="common_mt160">
         <!-- 빠른배송, 즉시구매 -->
-        <div class="container" id="wrap" v-if="state.type === 'fast' || state.type === 'normal'">
+        <div class="container" id="wrap" v-if="state.type === 'fast' || state.type === 'normal' && state.item">
             <div class="head d-flex align-items-center">
                 <img :src="state.item.imagePath" class="head_img">
                 <div class="d-flex flex-column ml-3">
@@ -21,62 +21,127 @@
                 </div>
             </div>
 
-            <h4>배송 주소</h4>
-            <p><button @click="showModal = true">주소 추가</button></p>
-            <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
-            <div v-if="state.addressList.length === 0">
+            <div class="d-flex justify-content-between mt-5 flex-wrap">
+                <span class="fw-bold fs-4">배송 주소</span>
+                <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+ 새 주소 추가</span>
+            </div>
+            <button v-show="state.selectedAddress" class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
+            
+            <div v-show="state.addressList.length === 0">
                 <p>주소를 추가하세요</p>
             </div>
-            <div v-if="state.selectedAddress">
-                <p>{{ state.selectedAddress.name }}</p>
-                <p>{{ state.selectedAddress.phoneNumber }}</p>
-                <p>{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</p>
+
+            <div v-show="state.selectedAddress">
+                <div class="d-flex mt-5">
+                    <span class="col-2" style="color: #8d8d8d;">받는 분</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2" style="color: #8d8d8d;">연락처</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.phoneNumber }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2" style="color: #8d8d8d;">배송 주소</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
+                </div>
             </div>
             <hr />
 
-            <h4>배송 방법</h4>
-            <div v-if="state.type === 'fast'">
-                <p>빠른배송</p>
+            <p class="fw-bold fs-4 mt-5">배송 방법</p>
+            <div class="d-flex justify-content-between flex-wrap" v-if="state.type === 'fast'">
+                <p class="text-start">빠른배송 5,000원</p>
+                <p class="text-end" style="color: #8d8d8d;">지금 결제시 1-2일 내 도착예정</p>
             </div>
-            <div v-else>
-                <p>일반배송</p>
+            <div class="d-flex justify-content-between flex-wrap" v-else>
+                <p class="text-start">일반배송 3,000원</p>
+                <p class="text-end" style="color: #8d8d8d;">검수 후 배송, 5-7일 내 도착예정</p>
             </div>
+
             <hr />
             
-            <h4>최종 주문 정보</h4>
-            <h5>총 결제 금액</h5>
+            <p class="fw-bold fs-4 mt-5">최종 주문 정보</p>
             <div v-if="state.type === 'fast'">
-                <h5>{{ Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 5000) }}원</h5>
+                <div class="d-flex justify-content-between flex-wrap">
+                    <p class="text-start fw-bold">총 결제금액</p>
+                    <p class="text-end fs-4 fw-bold" style="color: #ffc340;">
+                        {{ Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 5000) }}원
+                    </p>
+                </div>
                 <hr />
-                <p>구매가</p>
-                <p>{{ state.item.sellWishPrice }}</p>
-                <p>검수비</p>
-                <p>무료</p>
-                <p>수수료</p>
-                <p>{{ Math.floor(state.item.sellWishPrice*0.015) }}</p>
-                <p>배송비</p>
-                <p>5,000원</p>
+
+                <div class="d-flex justify-content-between mt-3">   
+                    <span class="fw-bold">구매가</span>
+                    <span class="text-end fw-bold">{{ state.item.sellWishPrice }}원</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span style="color: #8d8d8d;">검수비</span>
+                    <span class="text-end">무료</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span style="color: #8d8d8d;">수수료</span>
+                    <span class="text-end">{{ Math.floor(state.item.sellWishPrice*0.015) }}원</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span style="color: #8d8d8d;">배송비</span>
+                    <span class="text-end">5,000원</span>
+                </div>
+                <hr />
             </div>
+
             <div v-if="state.type === 'normal'">
-                <h5>{{ Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 3000) }}원</h5>
+                <div class="d-flex justify-content-between flex-wrap">
+                    <p class="text-start fw-bold">총 결제금액</p>
+                    <p class="text-end fs-4 fw-bold" style="color: #ffc340;">
+                        {{ Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 3000) }}원
+                    </p>
+                </div>
                 <hr />
-                <p>즉시 구매가</p>
-                <p>{{ state.item.sellWishPrice }}</p>
-                <p>검수비</p>
-                <p>무료</p>
-                <p>수수료</p>
-                <p>{{ Math.floor(state.item.sellWishPrice*0.015) }}</p>
-                <p>배송비</p>
-                <p>3,000원</p>
+
+                <div class="d-flex justify-content-between mt-3">   
+                    <span class="fw-bold">즉시 구매가</span>
+                    <span class="text-end fw-bold">{{ state.item.sellWishPrice }}원</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span style="color: #8d8d8d;">검수비</span>
+                    <span class="text-end">무료</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span style="color: #8d8d8d;">수수료</span>
+                    <span class="text-end">{{ Math.floor(state.item.sellWishPrice*0.015) }}원</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span style="color: #8d8d8d;">배송비</span>
+                    <span class="text-end">3,000원</span>
+                </div>
+                <hr />
+            </div>
+
+            <p class="fw-bold fs-4 mt-5">결제 방법</p>
+            <div class="d-flex justify-content-between flex-wrap">
+                <span class="fw-bold">카드 간편 결제</span>
+                <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+새 카드 추가</span>
+            </div>
+
+            <div> 
+                <p class="mt-2">카드를 추가하세요</p>
+            </div>
+
+            <div class="mt-3">
+                <p class="fw-bold">일반 결제</p>
+                <div class="btn-group mb-2" role="group" data-toggle="buttons">
+                    <input type="radio" class="btn-check" id="3" autocomplete="off" name="pay" :checked="state.payMethod === 3">
+                    <label class="btn btn-outline-warning rounded mx-1" for="3" @click="handlePay(3)">카카오 페이</label>
+                </div>
             </div>
             <hr />
-
-            <h4>결제 방법</h4>
-            <hr />
             
-            <h4>구매 조건 확인</h4>
+            <p class="fw-bold fs-4 mt-5">구매 조건 확인</p>
             <!-- 결제 컴포넌트 -->
-            <payment-component :address="state.selectedAddress" :type="state.type" :contractDto="state.contractDto"/>
+            <payment-component 
+            :address="state.selectedAddress" 
+            :type="state.type" 
+            :contractDto="state.contractDto"
+            />
         </div>
 
         <!-- 구매입찰 -->
@@ -97,8 +162,30 @@
                 </div>
             </div>
 
-            <h4>배송 주소</h4>
-            <p><button @click="showModal = true">주소 추가</button></p>
+            <div class="d-flex justify-content-between mt-5 flex-wrap">
+                <span class="fw-bold fs-4">배송 주소</span>
+                <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+ 새 주소 추가</span>
+            </div>
+            <button v-show="state.selectedAddress" class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
+            
+            <div v-show="state.addressList.length === 0">
+                <p>주소를 추가하세요</p>
+            </div>
+
+            <div v-show="state.selectedAddress">
+                <div class="d-flex mt-5">
+                    <span class="col-2" style="color: #8d8d8d;">받는 분</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2" style="color: #8d8d8d;">연락처</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.phoneNumber }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2" style="color: #8d8d8d;">배송 주소</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
+                </div>
+            </div>
             <hr />
 
             <h4>배송 방법</h4>
@@ -155,7 +242,7 @@ export default {
         const router = useRouter();
         const store = useStore();
 
-        const showModal = ref(false);
+        const showAddressAdd = ref(false);
         const showAddressList = ref(false);
 
         const state = reactive({
@@ -163,6 +250,7 @@ export default {
             size : Number(route.query.size),
             type : route.query.type,
             item : '',
+            itemImagePath : '',
             addressList : [],
             selectedAddress : {},
             memberNumber : sessionStorage.getItem("TOKEN"),
@@ -176,18 +264,32 @@ export default {
             bidFormattedDate : '',
             bidDays : '',
 
-            contractDto : {}
+            contractDto : {},
+
+            payMethod : 0
         })
         
 
         watchEffect(() => {
             state.item = store.getters.getSelectedItem;
+            if(state.item) {
+                state.item.imagePath = `/api/product/display?name=${state.item.imagePath}`;
+            }
             state.bidPrice = Number(store.getters.getSelectedPrice);
             state.bidDate = store.getters.getSelectedDate;
             state.bidFormattedDate = store.getters.getSelectedFormattedDate;
             state.bidDays = store.getters.getSelectedDays;
         });
 
+        // 결제 방법 선택
+        const handlePay = (payMethod) => {
+            state.payMethod = payMethod;
+        }
+
+        // 주소 추가 모달
+        const clickModal = () => {
+            state.isModalViewed = true;
+        }
 
         // 주소 리스트
         const handleAddressList = async() => {
@@ -223,7 +325,6 @@ export default {
             console.log("전달되니컨트랙트", state.contractDto)
         }
             
-
         // 구매입찰
         const handleBid = async() => {
             // 유효성 검사 통과 > 구매 조건 확인 all check
@@ -261,6 +362,7 @@ export default {
                 try {
                     const res = await axios.get(`/api/get/product/one?productid=${state.productid}`);
                     state.row = res.data;
+                    state.row[0].imagePath = `/api/product/display?name=${state.row[0].imagePath}`;
                     console.log("구매입찰", state.row)
                 } catch (err) {
                     console.error(err);
@@ -278,8 +380,10 @@ export default {
 
         return {
             state,
-            showModal,
+            handlePay,
+            showAddressAdd,
             showAddressList,
+            clickModal,
             selectAdd,
             handleBid,
         }

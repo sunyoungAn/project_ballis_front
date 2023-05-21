@@ -1,5 +1,5 @@
 <template>
- <div class="black_bg_box" v-if="state.isModalViewed">
+ <div class="black_bg_box">
     <div class="white_bg_box">
        <div style="text-align: center;">
          <h4>주소 찾기</h4>
@@ -26,7 +26,7 @@
 
        <div style="text-align: center;">
         <button type="button" class="btn btn-outline-success" @click="submit()">등록</button>
-        <button type="button" class="btn btn-outline-success" @click="state.isModalViewed = false;">닫기</button>
+        <button type="button" class="btn btn-outline-success" @click="$emit('close')">닫기</button>
        </div>
       
     </div>
@@ -37,9 +37,9 @@ import axios from 'axios';
 import { reactive } from 'vue';
 
 export default {
-  setup() {
+  setup(props, { emit }) {
         const state = reactive({
-            isModalViewed:true,
+            // isModalViewed:true,
             form:{
                 name:"",
                 zipCode: "",
@@ -71,15 +71,11 @@ export default {
         }
 
         const submit=()=> {
+            emit('close');
             const headers = {"Content-Type":"application/json"};
             axios.post(`/api/add/address/${state.form.memberNumber}`, state.form,{headers}).then((res)=>{
                 console.log(res);
                 alert("주소가 등록되었습니다.");
-                if(state.isModalViewed === false) {
-                    state.isModalViewed = true;
-                } else {
-                    state.isModalViewed = false;
-                }
             })
         }
 
@@ -135,6 +131,9 @@ export default {
     height: 100%;
     background: rgba(0, 0, 0, 0.3);
     position: fixed;
+    z-index: 9999999;
+    top:0;
+    left: 0;
 }
 
 .white_bg_box{

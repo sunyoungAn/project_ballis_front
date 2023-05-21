@@ -1,6 +1,14 @@
 <template>
     <div class="common_mt160">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 " id="side_bar">
+            <li v-if="state.searchWord !== '' && state.searchWord !== undefined" class="nav-item">
+                <a class="nav-link active fs-5">검색어</a>
+            </li>
+            <li v-if="state.searchWord !== '' && state.searchWord !== undefined">
+                <button class="fast_big" @click="removeSearchWord()">{{ state.searchWord }}&nbsp;&nbsp;×</button>
+            </li>
+            <hr v-if="state.searchWord !== '' && state.searchWord !== undefined" />
+
             <li class="nav-item">
                 <a class="nav-link active fs-5">필터</a>
             </li>{{ state.inventoryDivList }}
@@ -77,6 +85,7 @@
                     <label v-for="(tmp, i) in state.brandRows" :key="i">
                         <input  type="checkbox" name="brand" 
                             :value="tmp.brandId" 
+                            :checked="tmp.brandId === state.mainSelectBrand"
                             @click="handleBrandIdList(tmp.brandId)"
                         > {{ tmp.brandName }} 
                     </label>
@@ -150,12 +159,13 @@
 <script>
 import axios from 'axios';
 import { computed, onMounted, reactive, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 
 export default {
 
     setup () {
         const router = useRouter();
+        const route = useRoute();
 
         const state = reactive({
             sizes : [],
@@ -169,6 +179,10 @@ export default {
             sizeList : [],
             wishPriceList : [],
             isChecked : false,
+            fromMainBrandId : Number(route.query.brandId),
+            mainSelectBrand : 0,
+            searchWord : route.query.search,
+            // beforSearchWord : '' // 이전 검색 단어
         })
 
         // 가격대 나열
@@ -282,8 +296,27 @@ export default {
         }
 
         const handleData = async () => {
+
+            let url = '';
+
+            if(state.searchWord !== undefined && state.searchWord !== '') { 
+                // 검색되어 상품리스트페이지로 이동한 경우
+                url = `/api/get/product/all?sort=${state.sort}&&searchword=${state.searchWord}`;
+            } else {
+                // 그 외의 경우
+                url = `/api/get/product/all?sort=${state.sort}`;
+            }
+
+            // 메인에서 이미지 클릭해서 이동한 경우 처리
+            if(state.fromMainBrandId !== null && state.fromMainBrandId >= 0) {
+                 state.mainSelectBrand = state.fromMainBrandId;
+                handleBrandIdList(state.fromMainBrandId); // 두번 불려지는 문제가 있긴 함
+                state.fromMainBrandId = null; // 초기화
+                router.replace({'query': null}); //url의 쿼리 제거
+            }
+
             try {
-                const url = `/api/get/product/all?sort=${state.sort}`;
+                // const url = `/api/get/product/all?sort=${state.sort}`;
                 const headers = {"Content-Type":"application/json"};
                 const body = {
                     categoryList : state.categoryList,
@@ -294,7 +327,7 @@ export default {
                     wishPriceList : state.wishPriceList       
                 }
                 const res = await axios.post(url, body, {headers});
-                
+                    
                 console.log('상품전체리스트', res.data.productAllList);
                 state.rows = res.data.productAllList;
 
@@ -302,7 +335,7 @@ export default {
                 for(let i = 0; i<state.rows.length; i++){
                     state.rows[i].imagePath = `/api/product/display?name=${state.rows[i].imagePath}`;
                 }
-            
+                
             } catch (err) {
                 console.error(err);
             }
@@ -313,6 +346,13 @@ export default {
                 path: '/product/one',
                 query: { productid: id }
             });
+        }
+
+        // 검색단어 삭제
+        const removeSearchWord = () => {
+            router.replace({'query': null}); //url의 쿼리 제거
+            //state.beforSearchWord = '' ;
+            state.searchWord = '';
         }
 
         watch([ 
@@ -331,6 +371,15 @@ export default {
             generateSizes();
         })
 
+        // url 변화 감지
+        onBeforeRouteUpdate((to, from, next)=> {
+            console.log(to);
+            console.log(to.query.search);
+            state.searchWord = to.query.search;
+            next();
+            handleData();
+        })
+
         return {
             state,
             prices,
@@ -342,6 +391,7 @@ export default {
             handleSizeList,
             handleWishPriceList,
             handleProductOne,
+            removeSearchWord
         }
     }
 }
