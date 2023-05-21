@@ -300,60 +300,12 @@ export default {
             let url = '';
 
             if(state.searchWord !== undefined && state.searchWord !== '') { 
-                //&& state.beforSearchWord !== state.searchWord
                 // 검색되어 상품리스트페이지로 이동한 경우
-                // await axios.get(`/api/search/product?name=${state.searchWord}`).then((res)=>{
-                //     console.log('상품전체리스트', res.data.productAllList);
-                //     state.rows = res.data.productAllList;
-
-                //     // 이미지 url설정
-                //     for(let i = 0; i<state.rows.length; i++){
-                //         state.rows[i].imagePath = `/api/product/display?name=${state.rows[i].imagePath}`;
-                //     }
-
-                //     // 이전 검색 단어를 보관
-                //     state.beforSearchWord = state.searchWord;
-
-                // }).catch((err)=>{
-                //     console.error(err);
-                // })
-
                 url = `/api/get/product/all?sort=${state.sort}&&searchword=${state.searchWord}`;
-
-                // 여기만 하면 됌
-                // try {
-                //     const url = `/api/search/product?name=${state.searchWord}&&sort=${state.sort}`;
-                //     const headers = {"Content-Type":"application/json"};
-                //     const body = {
-                //         categoryList : state.categoryList,
-                //         genderList : state.genderList,
-                //         brandIdList : state.brandIdList,
-                //         inventoryDivList : state.inventoryDivList,
-                //         sizeList : state.sizeList,
-                //         wishPriceList : state.wishPriceList       
-                //     }
-                //     const res = await axios.post(url, body, {headers});
-                    
-                //     console.log('상품전체리스트', res.data.productAllList);
-                //     state.rows = res.data.productAllList;
-
-                //     // 이미지 url설정
-                //     for(let i = 0; i<state.rows.length; i++){
-                //         state.rows[i].imagePath = `/api/product/display?name=${state.rows[i].imagePath}`;
-                //     }
-
-                //     // 이전 검색 단어를 보관
-                //     // state.beforSearchWord = state.searchWord;
-                
-                // } catch (err) {
-                //     console.error(err);
-                // }
-
             } else {
+                // 그 외의 경우
                 url = `/api/get/product/all?sort=${state.sort}`;
             }
-
-            // 그 외의 경우
 
             // 메인에서 이미지 클릭해서 이동한 경우 처리
             if(state.fromMainBrandId !== null && state.fromMainBrandId >= 0) {
