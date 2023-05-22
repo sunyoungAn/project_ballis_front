@@ -54,6 +54,14 @@ nav {
   /* border: 1px solid green; */
 }
 
+ul > li {
+    margin-top: 15px;
+    font-weight: bolder;
+}
+
+h4 {
+    font-weight: bold;
+}
 a{
   text-decoration: none;
   color: gray;

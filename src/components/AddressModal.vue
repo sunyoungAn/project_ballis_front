@@ -36,8 +36,11 @@
 import axios from 'axios';
 import { reactive } from 'vue';
 
+
 export default {
   setup(props, { emit }) {
+
+        
         const state = reactive({
             // isModalViewed:true,
             form:{
@@ -70,43 +73,45 @@ export default {
             }).open();
         }
 
-        const submit=()=> {
-            emit('close');
-            const headers = {"Content-Type":"application/json"};
-            axios.post(`/api/add/address/${state.form.memberNumber}`, state.form,{headers}).then((res)=>{
-                console.log(res);
-                alert("주소가 등록되었습니다.");
-            })
-        }
-
-        // const submit = async () => {
-           
-        //     const url = `/api/add/address/${state.form.memberNumber}`;
+        // const submit=()=> {
+        //     emit('close');
         //     const headers = {"Content-Type":"application/json"};
-        //     const data = {
-        //         name: state.form.name,
-        //         zipCode: state.form.zipCode,
-        //         address: state.form.address,
-        //         subAddress: state.form.subAddress,
-        //         phoneNumber: state.form.phoneNumber,
-        //         memberNumber: state.form.memberNumber,
-        //         defaultAddress: state.form.defaultAddress,
-        //     };
-
-        //     try {
-        //         await axios.post(url, data, { headers });
+        //     axios.post(`/api/add/address/${state.form.memberNumber}`, state.form,{headers}).then((res)=>{
+        //         console.log(res);
         //         alert("주소가 등록되었습니다.");
-        //         state.isModalViewed = false;
-        //     } catch (error) {
-        //         if (error.response && error.response.status === 400) {
-        //             alert("주소는 3개까지만 등록 가능합니다.");
-        //         } else {
-        //             alert("주소 등록에 실패했습니다.");
-        //         }
-        //     }
+        //         router.push({path:"/mypage", query:{memberNumber:state.token}});
+        //     })
+        // }
+
+        const submit = async () => {
+            emit('close');
+            const url = `/api/add/address/${state.form.memberNumber}`;
+            const headers = {"Content-Type":"application/json"};
+            const data = {
+                name: state.form.name,
+                zipCode: state.form.zipCode,
+                address: state.form.address,
+                subAddress: state.form.subAddress,
+                phoneNumber: state.form.phoneNumber,
+                memberNumber: state.form.memberNumber,
+                defaultAddress: state.form.defaultAddress,
+            };
+
+            try {
+                await axios.post(url, data, { headers });
+                alert("주소가 등록되었습니다.");
+                state.isModalViewed = false;
+                location.reload();
+            } catch (error) {
+                if (error.response && error.response.status === 400) {
+                    alert("주소는 3개까지만 등록 가능합니다.");
+                } else {
+                    alert("주소 등록에 실패했습니다.");
+                }
+            }
             
            
-        // }
+        }
 
         return { state, execDaumPostcode,submit };
     },

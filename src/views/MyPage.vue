@@ -1,6 +1,6 @@
 <template>
     <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
-    <div class="container common_mt160 cutomer_wrap">
+    <div class="container common_mt160">
       
         <section>
             <my-page-menu></my-page-menu>
@@ -33,18 +33,25 @@
                 
                 <div class="p_tag_box_2">
                     <p class="p_title" style="float: left;">배송지</p>
-                    <button type="button" style="float: right;" class="btn btn-success" @click="showAddressAdd = true">+새 배송지 추가</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="showAddressAdd = true">+새 배송지 추가</button>
                 </div>
 
                 <div  v-for="tmp of state.address" :key="tmp">
                     <br>
-                    <div  v-if="tmp.defaultAddress===1">
+                    <br>
+                    <div  v-show="tmp.defaultAddress===1">
+                        <span>{{ tmp.name }}  {{ tmp.phoneNumber }}</span><span class="badge rounded-pill bg-secondary">기본배송지</span><br>
+                        <span>({{ tmp.zipCode }}){{ tmp.address }}  {{ tmp.subAddress }}</span>
+                    </div>
+                    <div  v-show="tmp.defaultAddress===2">
                         <span>{{ tmp.name }}  {{ tmp.phoneNumber }}</span><br>
                         <span>({{ tmp.zipCode }}){{ tmp.address }}  {{ tmp.subAddress }}</span>
+                        <button type="button" class="btn btn-outline-dark search_button" @click="handleDelete(index, tmp.id)" >삭제</button>
+                        <button type="button" class="btn btn-outline-dark search_button" @click="setDefaultAddress">기본배송지등록</button>
                     </div>
                 </div>
 
-              
+
 
                 <hr>
                 
@@ -66,48 +73,40 @@ import axios from 'axios';
 import MyPageMenu from '../components/MyPageMenu.vue';
 import AddressModal from '../components/AddressModal.vue';
 
+
 export default {
   components: { MyPageMenu, AddressModal },
     setup () {
-
         const state = reactive({
             token : sessionStorage.getItem("TOKEN"),
             member : '',
             isModalViewed:false,
-            address:'',
+            address:[],
+            defaultAddress:2,
         });
 
 
         const showAddressAdd = ref(false);
 
-        // const clickModal = () =>{
-        //     if(state.isModalViewed === true) {
-        //         state.isModalViewed = false;
-        //     } else {
-        //         state.isModalViewed = true;
-        //     }
-        // }
 
+
+
+
+        //멤버 정보 불러오기
         const handleData = async()=> {
-            const url = `/api/get/member/${state.token}`;
+            const url = `/api/get/member?memberNumber=${state.token}`;
             const headers = {"Content-Type":"application/json", "auth" : state.token};
             const { data } = await axios.get(url,{headers});
             state.member = data;
             console.log(state.member);
+          
+
+
             
-            // try {
-            //     const response = await axios.get(url, { headers });
-            //     const data = response.data;
-            //     console.log(data);
-            //     state.member = data;
-            // } catch (error) {
-            //     console.log(error);
-            // }
-            
-            
-            
+
         };
 
+        //주소 불러오기
         const handleData1 = async()=> {
             const url = `/api/get/address/${state.token}`;
             const headers = {"Content-Type":"application/json", "auth" : state.token};
@@ -115,6 +114,17 @@ export default {
             console.log(data);
             state.address = data;
             console.log(state.address);
+        }
+        
+        const handleDelete= async (index, id)=>{
+           if(confirm('삭제하시겠습니까?')){
+            const url = `/api/delete/address/${id}`;
+            const headers = {"Content-Type":"application/json"};
+            const body={};
+            const {data} = await axios.delete(url, {headers:headers, data:body});
+            console.log(data);
+            state.address.splice(index, 1);
+           } 
         }
 
         onMounted(()=>{
@@ -125,7 +135,7 @@ export default {
         return {
             state,
             showAddressAdd,
-            // clickModal,
+            handleDelete
         }
     },
 
@@ -141,11 +151,17 @@ export default {
 section{
   display: grid;
   grid-template-columns: 200px auto;
-  border: 2px solid gray;
+
 }
 
 article {
   padding:20px;
   /* border: 1px solid blue; */
+}
+
+.search_button{
+  float: right;
+  border-radius: 0;
+  margin-right : 5px
 }
 </style>
