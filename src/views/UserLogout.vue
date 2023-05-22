@@ -18,7 +18,8 @@ export default {
         onMounted(()=>{
             if(confirm('로그아웃 하시겠습니까?')) {
                 axios.post("/api/logout/member").then(()=>{
-                store.commit('setLogged',false);
+                    sessionStorage.removeItem("TOKEN");
+                    store.commit('setLogged',false);
                });
             }
             router.push({path:'/'})

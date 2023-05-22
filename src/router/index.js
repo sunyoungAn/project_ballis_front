@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
+import store from '../store/index';
+
 import MainView from '../views/MainView.vue'
 import ProductListView from '../views/ProductListView'
 import ProductOneView from '../views/ProductOneView'
@@ -212,6 +215,36 @@ const router = createRouter({
       top:0
      }
   }
+})
+
+// 로그인제어
+router.beforeEach((to, from, next)=>{
+  console.log(to, from);
+
+  // 로그인, 로그아웃이 아닌경우에만
+  if(to.path !== '/member/login' && to.path !== '/member/logout') {
+
+    // 로그인 되어 있어야 하는 페이지들체크
+    if(to.path !== '/' && to.path !== '/product/list'
+    && to.path !== '/product/one' && to.path !== '/member/join'
+    && to.path !== '/email/find' && to.path !== '/notice'
+    && to.path !== '/notice/content') {
+      
+      const logged = store.getters.getLogged;
+      console.log(logged);
+
+      // 로그인이 안되어 있다면 로그인페이지로 보냄
+      if(logged === false) {
+        window.alert('로그인 후 이용해주세요');
+        next({path:'/member/login'}); // 강제로 로그인페이지로 변경
+        return; // 함수종료, 아래쪽 next를 수행하지 않기 위해서
+      }
+    }
+
+  }
+
+  next();
+
 })
 
 export default router
