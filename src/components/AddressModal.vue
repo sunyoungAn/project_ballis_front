@@ -25,8 +25,8 @@
        </div>
 
        <div style="text-align: center;">
-        <button type="button" class="btn btn-outline-success" @click="submit()">등록</button>
-        <button type="button" class="btn btn-outline-success" @click="$emit('close')">닫기</button>
+        <button type="button" class="green_button btn btn-outline-success mx-1" @click="submit()">등록</button>
+        <button type="button" class="green_button btn btn-outline-success" @click="$emit('close')">닫기</button>
        </div>
       
     </div>
@@ -39,10 +39,7 @@ import { reactive } from 'vue';
 
 export default {
   setup(props, { emit }) {
-
-        
         const state = reactive({
-            // isModalViewed:true,
             form:{
                 name:"",
                 zipCode: "",
@@ -73,16 +70,6 @@ export default {
             }).open();
         }
 
-        // const submit=()=> {
-        //     emit('close');
-        //     const headers = {"Content-Type":"application/json"};
-        //     axios.post(`/api/add/address/${state.form.memberNumber}`, state.form,{headers}).then((res)=>{
-        //         console.log(res);
-        //         alert("주소가 등록되었습니다.");
-        //         router.push({path:"/mypage", query:{memberNumber:state.token}});
-        //     })
-        // }
-
         const submit = async () => {
             emit('close');
             const url = `/api/add/address/${state.form.memberNumber}`;
@@ -109,11 +96,12 @@ export default {
                     alert("주소 등록에 실패했습니다.");
                 }
             }
-            
-           
         }
 
-        return { state, execDaumPostcode,submit };
+        return { 
+            state, 
+            execDaumPostcode,
+            submit };
     },
 
     watch: {
@@ -125,12 +113,10 @@ export default {
             }
         }    
     }
-    
 }
 
 </script>
 <style lang="css" scoped>
-
 .black_bg_box{
     width:100%;
     height: 100%;
@@ -140,17 +126,23 @@ export default {
     top:0;
     left: 0;
 }
-
 .white_bg_box{
-    width: 50%;
+    width: 500px;
     margin: 80px auto;
     background: white;
     border-radius: 10px;
     padding: 20px 0;
 }
-
 .address_input_box{
     margin: 0px auto;
     padding: 20px;
+}
+.green_button {
+  background-color: rgb(103, 194, 58);
+  color: #ffffff;
+}
+.green_button:hover {
+  background-color: rgb(149, 212, 117);
+  color: #ffffff;
 }
 </style>

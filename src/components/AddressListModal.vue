@@ -1,21 +1,21 @@
 <template>
     <div class="black_bg_box">
         <div class="white_bg_box">
-            <button type="button" class="btn-close" id="close_btn" aria-label="Close" @click="$emit('close')"></button>
+            <button type="button" class="btn-close float-end mx-3" @click="$emit('close')"></button>
             <div style="text-align: center;">
                 <h4>주소록</h4>
             </div>
    
-            <div style="text-align: center;">
-                <div class="addressList" v-for="(tmp, i) in state.addressList" :key="i">
-                    <div @click="$emit('select',tmp), $emit('close')">
-                        <div v-if="tmp.defaultAddress === 1">기본배송지</div>
-                        <p>{{ tmp.name }}</p>
-                        <p>{{ tmp.phoneNumber }}</p>
-                        <p>({{ tmp.zipCode }}) {{ tmp.address }} {{ tmp.subAddress }}</p>
-                    </div>
+            <div class="addressList" v-for="(tmp, i) in state.addressList" :key="i">
+                <div @click="$emit('select',tmp), $emit('close')">
+                    <hr />
+                    <button v-if="tmp.defaultAddress === 1" class="btn btn-sm float-end mx-5">기본배송지</button>
+                    <p class="fw-bold mx-3 mt-2">{{ tmp.name }}</p>
+                    <p class="mx-3 my-0">{{ tmp.phoneNumber }}</p>
+                    <p class="mx-3 mb-2">({{ tmp.zipCode }}) {{ tmp.address }} {{ tmp.subAddress }}</p>
                 </div>
             </div>
+            
         </div>
     </div>
 </template>
@@ -44,10 +44,6 @@ export default {
    
 </script>
 <style lang="css" scoped>
-#close_btn{
-    position: relative;
-    left: 800px;
-}
 .black_bg_box{
     width:100%;
     height: 100%;
@@ -57,16 +53,18 @@ export default {
     top:0;
     left: 0;
 }
-
 .white_bg_box{
-    width: 50%;
+    width: 500px;
     margin: 80px auto;
     background: white;
     border-radius: 10px;
     padding: 20px 0;
 }
-
-.addressList {
+.btn {
     border: 1px solid #cccccc
+}
+hr{
+    width: 90%;
+    margin: 15px auto;
 }
 </style>

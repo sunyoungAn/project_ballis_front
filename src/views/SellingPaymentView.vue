@@ -42,8 +42,8 @@
                 <span class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
             </div>
 
-            <div v-if="!state.addressList">
-                <p>주소를 추가하세요</p>
+            <div v-if="state.addressList.length === 0">
+                <p class="mt-3">주소를 추가하세요</p>
             </div>
 
             <div v-else>
@@ -393,11 +393,14 @@ export default {
         const handleAddressList = async() => {
             try {
                 const res = await axios.get(`/api/get/address?member=${state.memberNumber}`)
-                console.log("주소목록", res.data)
                 state.addressList = res.data
+                // console.log("주소목록", state.addressList)
+
                 const defaultAddress = state.addressList.find(address => address.defaultAddress === 1)
                 if(defaultAddress) {
                     state.selectedAddress = defaultAddress
+                }else if(state.addressList.length === 1) {
+                    state.selectedAddress = state.addressList[0]
                 }
             } catch(err) {
                 console.error(err);
