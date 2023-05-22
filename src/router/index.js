@@ -239,8 +239,24 @@ router.beforeEach((to, from, next)=>{
         next({path:'/member/login'}); // 강제로 로그인페이지로 변경
         return; // 함수종료, 아래쪽 next를 수행하지 않기 위해서
       }
-    }
 
+      // 관리자 체크
+      if(to.path === '/admin/product/list' || to.path === '/admin/member/list'
+        || to.path === '/admin/product/register' || to.path === '/admin/member/edit'
+        || to.path === '/admin/inquiry/list' || to.path === '/admin/inquiry/reply'
+        || to.path === '/admin/notice/list' || to.path === '/admin/review/list'
+        || to.path === '/admin/selling/list' || to.path === '/admin/buying/list'
+        || to.path === '/admin/inventory/list' || to.path === '/admin/contract/list'
+        || to.path === '/admin/notice/register' || to.path === '/admin/notice/edit'
+        || to.path === '/admin/product/edit') {
+        const memberStatus = store.getters.getMemberStatus;
+        if(memberStatus !== 1) { // 로그인 유저가 관리자가 아닌경우
+          window.alert('이용권한이 없습니다.');
+          next({path:'/'}); // 강제로 메인페이지로 이동
+          return; // 함수종료, 아래쪽 next를 수행하지 않기 위해서
+        }
+      }
+    }
   }
 
   next();

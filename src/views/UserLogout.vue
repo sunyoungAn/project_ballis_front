@@ -20,6 +20,7 @@ export default {
                 axios.post("/api/logout/member").then(()=>{
                     sessionStorage.removeItem("TOKEN");
                     store.commit('setLogged',false);
+                    store.commit('setMemberStatus', 0);
                });
             }
             router.push({path:'/'})

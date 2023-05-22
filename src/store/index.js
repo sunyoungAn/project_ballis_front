@@ -33,6 +33,9 @@ const store = createStore({
     getLogged(state) {
       return state.logged;
     },
+    getMemberStatus(state) {
+      return state.memberStatus;
+    },
   },
 
   mutations: {
