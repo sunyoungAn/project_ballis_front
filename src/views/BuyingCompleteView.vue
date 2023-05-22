@@ -1,6 +1,6 @@
 <template>
     <div class="common_mt160">
-        <div v-if="state.type === 'fast'" class="container" id="wrap">
+        <div v-if="state.type === 'fast' && state.item" class="container" id="wrap">
             <div class="top d-flex flex-column align-items-center justify-content-center">
                 <div class="top_info">
                     <h3>구매가 완료되었습니다.</h3>
@@ -35,7 +35,7 @@
                 <hr />
             </div>
         </div>
-        <div v-if="state.type === 'normal'" class="container" id="wrap">
+        <div v-if="state.type === 'normal' && state.item" class="container" id="wrap">
             <div class="top d-flex flex-column align-items-center justify-content-center">
                 <div class="top_info">
                     <h3>즉시 구매가 완료되었습니다.</h3>
@@ -132,15 +132,10 @@ export default {
             bidPrice : 0,
             bidFormattedDate : '',
             bidDays : ''
-
-
         })
 
         watchEffect(() => {
             state.item = store.getters.getSelectedItem;
-            if(state.item) {
-                state.item.imagePath = `/api/product/display?name=${state.item.imagePath}`;
-            }
             state.bidPrice = Number(store.getters.getSelectedPrice);
             state.bidFormattedDate = store.getters.getSelectedFormattedDate;
             state.bidDays = store.getters.getSelectedDays;

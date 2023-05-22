@@ -1,6 +1,6 @@
 <template>
-    <!-- 주소 추가 모달 -->
-    <address-modal v-if="showModal" @close="showModal = false"/>
+    <!-- 주소 모달 -->
+    <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
     <div class="common_mt160">
         <!-- 즉시판매 -->
@@ -18,7 +18,7 @@
             <p><button @click="showModal = true">계좌 추가</button></p>
             <hr />
             <h4>반송 주소</h4>
-            <p><button @click="showModal = true">주소 추가</button></p>
+            <p><button @click="showAddressAdd = true">주소 추가</button></p>
             <p><button @click="showAddressList = true">+</button></p>
             <div v-if="!state.addressList">
                 <p>주소를 추가하세요</p>
@@ -73,7 +73,7 @@
                 <p><button @click="showModal = true">계좌 추가</button></p>
                 <hr />
                 <h4>반송 주소</h4>
-                <p><button @click="showModal = true">주소 추가</button></p>
+                <p><button @click="showAddressAdd = true">주소 추가</button></p>
                 <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
                 <div v-if="state.addressList.length === 0">
                     <p>주소를 추가하세요</p>
@@ -119,7 +119,7 @@
                 <p><button @click="showModal = true">계좌 추가</button></p>
                 <hr />
                 <h4>반송/회수 주소</h4>
-                <p><button @click="showModal = true">주소 추가</button></p>
+                <p><button @click="showAddressAdd = true">주소 추가</button></p>
                 <p><button @click="showAddressList = true">+</button></p>
                 <div v-if="!state.addressList">
                     <p>주소를 추가하세요</p>
@@ -198,7 +198,7 @@ export default {
         const router = useRouter();
         const store = useStore();
 
-        const showModal = ref(false);
+        const showAddressAdd = ref(false);
         const showAddressList = ref(false);
 
         const state = reactive({
@@ -220,12 +220,13 @@ export default {
             bidDays : '',
 
             sellingDto : {}
-
         })
-        
 
         watchEffect(() => {
             state.item = store.getters.getSelectedItem;
+            if(state.item) {
+                state.item.imagePath = `/api/product/display?name=${state.item.imagePath}`;
+            }
             state.bidPrice = Number(store.getters.getSelectedPrice);
             state.bidDate = store.getters.getSelectedDate;
             state.bidFormattedDate = store.getters.getSelectedFormattedDate;
@@ -252,7 +253,6 @@ export default {
             console.log("선택주소",selectedAddress)
         }
 
-
         // 보관판매시 결제 컴포넌트에 데이터 전달
         if(state.type ==='keep') {
             state.sellingDto = {                
@@ -263,7 +263,6 @@ export default {
                 expiryDate : state.bidDate,
             }
         }
-        
 
         // 즉시판매 - 결제테이블
         const handleSellNow = async() => {
@@ -298,12 +297,10 @@ export default {
             // }
         }
 
-
         // 판매입찰 - 판매테이블
         const handleSellLater = async() => {
             // 유효성 검사 통과 > 구매 조건 확인 all check
             // if(state.errorMessage.length === 0) { 
-    
                 try {
                     const url = `/api/post/sell?type=${state.type}`;
                     const headers = {"Content-Type":"application/json"};
@@ -330,14 +327,14 @@ export default {
             // }
         }
 
-
         // 판매 입찰, 보관 판매 시 데이터 필요
         if(state.type === 'bid' || state.type === 'keep') {
             const handleData = async() => {
                 try {
                     const res = await axios.get(`/api/get/product/one?productid=${state.productid}`);
                     state.row = res.data;
-                    console.log("판매입찰이나 보관판매", state.row)
+                    console.log("판매입찰이나 보관판매", state.row)                
+                    state.row[0].imagePath = `/api/product/display?name=${state.row[0].imagePath}`;
                 } catch (err) {
                     console.error(err);
                 }
@@ -352,11 +349,9 @@ export default {
             handleAddressList();
         })
 
-
-
         return {
             state,
-            showModal,
+            showAddressAdd,
             showAddressList,
             selectAdd,
             handleSellNow,

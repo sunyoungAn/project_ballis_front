@@ -9,106 +9,176 @@
                     <p style="color: #aeaeae;">{{ state.row[0].productKorName }}</p>
                     <p>{{ state.size }}</p>
                 </div>
-                <hr />
             </div>
+            <hr />
             <div class="body">
-                <p>즉시 구매가</p>
-                <p v-if="state.row[0].sellWishPrice">{{ state.row[0].sellWishPrice }}원</p>
-                <p v-else>- 원</p> 
-                <p>즉시 판매가</p>
-                <p v-if="state.row[0].buyWishPrice">{{ state.row[0].buyWishPrice }}원</p>
-                <p v-else>- 원</p> 
-                <button @click="state.type = 'keep'">보관 판매</button>
-                <button @click="state.type = 'bid'">판매 입찰</button>
-                <button :disabled="!state.sellNow" @click="state.type = 'normal'">즉시 판매</button>
+                <div class="d-flex align-items-center justify-content-center">
+                    <div class="price_box d-flex flex-column align-items-center text-center" id="price_box1">
+                        <p class="price_name">즉시 구매가</p>
+                        <p v-if="state.row[0].sellWishPrice" class="fs-5">{{ state.row[0].sellWishPrice }}원</p>
+                        <p v-else class="fs-5">- 원</p> 
+                    </div>
+                    <div class="price_box d-flex flex-column align-items-center text-center"> 
+                        <p class="price_name">즉시 판매가</p>
+                        <p v-if="state.row[0].buyWishPrice" class="fs-5">{{ state.row[0].buyWishPrice }}원</p>
+                        <p v-else class="fs-5">- 원</p> 
+                    </div>
+                </div>
+
+                <div class="btn-group w-100 my-4" role="group" data-toggle="buttons">
+                    <input type="radio" class="btn-check" id="keep" name="price" :checked="state.type === 'keep'">
+                    <label class="btn btn-outline-info p-3" for="keep" @click="state.type = 'keep'">보관 판매</label>
+
+                    <input type="radio" class="btn-check" id="bid" name="price" :checked="state.type === 'bid'">
+                    <label class="btn btn-outline-info p-3" for="bid" @click="state.type = 'bid'">판매 입찰</label>
+
+                    <input type="radio" class="btn-check" id="normal" name="price" :checked="state.type === 'normal'" :disabled="!state.sellNow">
+                    <label class="btn btn-outline-info p-3" for="normal" @click="state.type = 'normal'">즉시 판매</label>
+                </div>
                 
                 <!-- 즉시 판매 -->
                 <div v-show="state.type === 'normal'">
-                    <p>즉시 판매가</p>
-                    <p>{{ state.row[0].buyWishPrice }}원</p>
+                    <p class="fw-bold">즉시 판매가</p>
+                    <p class="fs-4 fw-bold text-end">{{ state.row[0].buyWishPrice }}원</p>
                     <hr />
 
-                    <p>검수비</p>
-                    <p>무료</p>
-                    <p>수수료</p>
-                    <p>{{ -Math.floor(Number(state.row[0].buyWishPrice)*0.02) }}원</p>
-                    <p>배송비</p>
-                    <p>선불, 판매자 부담</p> 
+                    <div class="d-flex justify-content-between mt-2">   
+                        <span style="color: #8d8d8d;">검수비</span>
+                        <span class="text-end">무료</span>
+                    </div>
+                    <div class="d-flex justify-content-between">   
+                        <span style="color: #8d8d8d;">수수료</span>
+                        <span class="text-end">{{ -Math.floor(Number(state.row[0].buyWishPrice)*0.02) }}원</span>
+                    </div>
+                    <div class="d-flex justify-content-between">   
+                        <span style="color: #8d8d8d;">배송비</span>
+                        <span class="text-end">선불, 판매자 부담</span>
+                    </div>
                     <hr />
 
-                    <p>정산 금액</p>
-                    <p>{{ Math.floor(Number(state.row[0].buyWishPrice) - Number(state.row[0].buyWishPrice)*0.02) }}원</p>
-                    <p><button @click="handleNext('normal')">즉시 판매 계속</button></p>
+                    <div class="d-flex justify-content-between mt-5"> 
+                        <p class="fw-bold">정산 금액</p>
+                        <p class="fs-4 fw-bold text-end" style="color: #00e1ff;">{{ Math.floor(Number(state.row[0].buyWishPrice) - Number(state.row[0].buyWishPrice)*0.02) }}원</p>
+                    </div>
+
+                    <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
+                    @click="handleNext('normal')">
+                    즉시 판매 계속</button>
                 </div>      
 
                 <!-- 판매 입찰 -->
                 <div v-show="state.type === 'bid'">
-                    <p>판매 희망가</p>
-                    <div>
-                        <input type="text" v-model="state.inputValue" @input="handleInput" />
-                        <p v-if="state.errorMessage">{{ state.errorMessage }}</p>
+                    <p class="fw-bold">판매 희망가</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-lg text-end" v-model="state.inputValue" @input="handleInput">
+                        <div class="input-group-append">
+                            <span class="fs-4 fw-bold mx-2">원</span>
+                        </div>
+                    </div>
+
+                    <p v-if="state.errorMessage" class="mt-3" style="color: #e25d5d;">
+                        {{ state.errorMessage }}
+                    </p>
+
+                    <div class="d-flex justify-content-between mt-5">   
+                        <span style="color: #8d8d8d;">검수비</span>
+                        <span class="text-end">무료</span>
+                    </div>
+                    <div class="d-flex justify-content-between">   
+                        <span style="color: #8d8d8d;">수수료</span>
+                        <span class="text-end">{{ -Math.floor(Number(state.inputValue)*0.02) }}원</span>
+                    </div>
+                    <div class="d-flex justify-content-between">   
+                        <span style="color: #8d8d8d;">배송비</span>
+                        <span class="text-end">선불, 판매자 부담</span>
                     </div>
                     <hr />
 
-                    <p>검수비</p>
-                    <p>무료</p>
-                    <p>수수료</p>
-                    <p>{{ -Math.floor(Number(state.inputValue)*0.02) }}원</p>
-                    <p>배송비</p>
-                    <p>선불, 판매자 부담</p> 
+                    <p class="fw-bold mt-5">입찰 마감기한</p>
+                    <p>{{ state.days }}일 ({{ state.formattedDate }}마감)</p>
+                    <div class="btn-group w-100 mb-2" role="group" data-toggle="buttons">
+                        <input type="radio" class="btn-check" id="1" autocomplete="off" name="date" :checked="state.days === 1">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="1" @click="handleDate(1)">1일</label>
+                        <input type="radio" class="btn-check" id="3" autocomplete="off" name="date" :checked="state.days === 3">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="3" @click="handleDate(3)">3일</label>
+                        <input type="radio" class="btn-check" id="7" autocomplete="off" name="date" :checked="state.days === 7">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="7" @click="handleDate(7)">7일</label>
+                        <input type="radio" class="btn-check" id="30" autocomplete="off" name="date" :checked="state.days === 30">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="30" @click="handleDate(30)">30일</label>
+                        <input type="radio" class="btn-check" id="60" autocomplete="off" name="date" :checked="state.days === 60">
+                        <label class="btn btn-outline-secondary rounded p-3 mx-1" for="60" @click="handleDate(60)">60일</label>
+                    </div>
                     <hr />
 
-                    <p>입찰 마감기한</p>
-                    <p>
-                        {{ state.days }}일 ({{ state.formattedDate }}마감)
-                        <button @click="handleDate(1)">1일</button>
-                        <button @click="handleDate(3)">3일</button>
-                        <button @click="handleDate(7)">7일</button>
-                        <button @click="handleDate(30)">30일</button>
-                        <button @click="handleDate(60)">60일</button>
-                    </p>
-                    <hr />
-
-                    <p>정산 금액</p>
-                    <p>{{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원</p>
-                    <p><button :disabled="!state.inputValue || state.errorMessage.length > 0"
-                        @click="handleNext('bid')">판매 입찰 계속</button></p>
+                    <div class="d-flex justify-content-between mt-5"> 
+                        <p class="fw-bold">정산 금액</p>
+                        <p class="fs-4 fw-bold text-end" style="color: #00e1ff;">{{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원</p>
+                    </div>
+                    
+                    <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
+                    :disabled="!state.inputValue || state.errorMessage.length > 0"
+                    @click="handleNext('bid')">
+                    판매 입찰 계속</button>
                 </div>
 
                 <!-- 보관 판매 -->
                 <div v-show="state.type === 'keep'">
-                    <p>판매 희망가</p>
-                    <div>
-                        <input type="text" v-model="state.inputValue" @input="handleInput" />
-                        <p v-if="state.errorMessage">{{ state.errorMessage }}</p>
+                    <p class="fw-bold">판매 희망가</p>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-lg text-end" v-model="state.inputValue" @input="handleInput">
+                        <div class="input-group-append">
+                            <span class="fs-4 fw-bold mx-2">원</span>
+                        </div>
+                    </div>
+
+                    <p v-if="state.errorMessage" class="mt-3" style="color: #e25d5d;">
+                        {{ state.errorMessage }}
+                    </p>                      
+
+                    <div class="d-flex justify-content-between mt-5">   
+                        <span style="color: #8d8d8d;">검수비</span>
+                        <span class="text-end">무료</span>
+                    </div>
+                    <div class="d-flex justify-content-between">   
+                        <span style="color: #8d8d8d;">수수료</span>
+                        <span class="text-end">{{ -Math.floor(Number(state.inputValue)*0.02) }}원</span>
+                    </div>
+                    <div class="d-flex justify-content-between">   
+                        <span style="color: #8d8d8d;">배송비</span>
+                        <span class="text-end">선불, 판매자 부담</span>
                     </div>
                     <hr />
 
-                    <p>정산 금액</p>
-                    <p>{{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원</p>
-                    <hr />                                
+                    <div class="d-flex justify-content-between mt-2">   
+                        <span style="color: #8d8d8d;">창고 이용료</span>
+                        <span class="text-end">3,000원</span>
+                    </div>
+                    <div class="d-flex justify-content-between">   
+                        <span style="color: #8d8d8d;">보관 기한</span>
+                        <span class="text-end">기본 {{ state.days }}일 ({{ state.formattedDate }}까지)</span>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <span>이후 월 3,000원/건 자동 결제</span>
+                    </div>
 
-                    <p>검수비</p>
-                    <p>무료</p>
-                    <p>수수료</p>
-                    <p>{{ -Math.floor(Number(state.inputValue)*0.02) }}원</p>
-                    <p>배송비</p>
-                    <p>선불, 판매자 부담</p> 
                     <hr />
 
-                    <p>결제 금액</p>
-                    <p>3000원</p>
-                    <hr />
+                    <div class="d-flex justify-content-between mt-5"> 
+                        <p class="fw-bold">정산 금액</p>
+                        <p class="fs-4 fw-bold text-end" style="color: #00e1ff;">{{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원</p>
+                    </div>
+                    <hr />    
 
-                    <p>창고 이용료</p>
-                    <p>3000원</p>
-                    <p>보관 기한</p>
-                    <p>기본 {{ state.days }}일 ({{ state.formattedDate }}까지)</p>
-                    <p>이후 월 3000원/건 자동 결제</p>
+                    <div class="d-flex justify-content-between mt-5">
+                        <p class="fw-bold">결제 금액</p>
+                        <p class="fs-4 fw-bold text-end">3,000원</p>
+                    </div>
                     <hr />
                     
-                    <p><button :disabled="!state.inputValue || state.errorMessage.length > 0"
-                        @click="handleNext('keep')">보관 판매 계속</button></p>
+                    <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
+                    :disabled="!state.inputValue || state.errorMessage.length > 0"
+                    @click="handleNext('keep')">
+                    보관 판매 계속</button>
                 </div>
             </div>
         </div>
@@ -132,7 +202,6 @@ export default {
             size : Number(route.query.size),
             type : route.query.type,
             row : [],
-            // item : '',
             sellNow : false,
 
             inputValue : '',
@@ -141,18 +210,15 @@ export default {
             days : 30,
             date : null,
             formattedDate : null,
-
         })
 
         watchEffect(() => {
-            // state.item = store.getters.getSelectedItem;
             if(state.type === "normal") {
                 state.inputValue = '';
                 state.errorMessage = '';
             }
         });
 
-        
         const handleDate = (days) => {
             state.days = days;
             const now = new Date();
@@ -184,9 +250,7 @@ export default {
                 state.inputValue = input.replace(/[^\d]/g, '')
                 state.errorMessage = '숫자만 입력 가능합니다.';
             }
-
         };
-
 
         const handleNext = (type) => {
             // 유효성 검사 통과
@@ -223,6 +287,7 @@ export default {
                     state.row = res.data;
                     console.log("구매입찰, 보관판매", state.row)
                 }
+                state.row[0].imagePath = `/api/product/display?name=${state.row[0].imagePath}`;
             
             } catch (err) {
                 console.error(err);
@@ -248,7 +313,7 @@ export default {
 @import "../assets/css/common.css";
 
 #wrap {
-    border: 1px solid #cccccc;
+    /* border: 1px solid #cccccc; */
     width: 800px;
 }
 .head_img{
@@ -260,6 +325,18 @@ export default {
 .head p{
     margin: 1px 8px;
 }
-
-
+.price_box{
+    flex: 1;
+    padding: 10px 20px 10px 10px;
+}
+#price_box1{
+    border-right: 1px solid #cecece;
+}
+.price_name{
+    color: #8d8d8d;
+    margin: 0;
+}
+.btn-group, .btn-outline-info[disabled] {
+    cursor: not-allowed;
+} 
 </style>

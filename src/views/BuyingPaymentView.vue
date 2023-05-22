@@ -2,7 +2,6 @@
     <!-- 모달영역 -->
     <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
-
     <div class="common_mt160">
         <!-- 빠른배송, 즉시구매 -->
         <div class="container" id="wrap" v-if="state.type === 'fast' || state.type === 'normal' && state.item">
@@ -21,6 +20,7 @@
                     </p>    
                 </div>
             </div>
+
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">배송 주소</span>
                 <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+ 새 주소 추가</span>
@@ -28,11 +28,6 @@
             <button v-show="state.selectedAddress" class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
             
             <div v-show="state.addressList.length === 0">
-
-            <h4>배송 주소</h4>
-            <p><button @click="showAddressAdd = true">주소 추가</button></p>
-            <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
-            <div v-if="state.addressList.length === 0">
                 <p>주소를 추가하세요</p>
             </div>
 
@@ -167,7 +162,6 @@
                 </div>
             </div>
 
-
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">배송 주소</span>
                 <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+ 새 주소 추가</span>
@@ -191,7 +185,6 @@
                     <span class="col-2" style="color: #8d8d8d;">배송 주소</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
                 </div>
-
             </div>
             <hr />
 
@@ -226,7 +219,6 @@
             <h4>구매 조건 확인</h4>
             <button @click="handleBid">구매 입찰하기</button>
         </div>
-    </div>
     </div>
 </template>
 
@@ -289,12 +281,10 @@ export default {
             state.bidDays = store.getters.getSelectedDays;
         });
 
-
         // 결제 방법 선택
         const handlePay = (payMethod) => {
             state.payMethod = payMethod;
         }
-
 
         // 주소 추가 모달
         const clickModal = () => {
@@ -390,9 +380,7 @@ export default {
 
         return {
             state,
-
             handlePay,
-
             showAddressAdd,
             showAddressList,
             clickModal,

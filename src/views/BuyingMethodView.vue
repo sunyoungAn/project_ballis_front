@@ -27,11 +27,11 @@
 
 
                 <div class="btn-group w-100 my-4" role="group" data-toggle="buttons">
-                    <input type="radio" class="btn-check" id="bid" name="price" :checked="state.type === 'bid'">
-                    <label class="btn btn-outline-warning p-3" for="bid" @click="state.type = 'bid'">구매 입찰</label>
+                    <input type="radio" class="green_button d-none" id="bid" name="price" :checked="state.type === 'bid'">
+                    <label class="btn not_checked p-3" for="bid" @click="state.type = 'bid'">구매 입찰</label>
 
-                    <input type="radio" class="btn-check" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
-                    <label class="btn btn-outline-warning p-3" for="normal" @click="state.type = 'normal'">즉시 구매</label>
+                    <input type="radio" class="green_button d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
+                    <label class="btn not_checked p-3" for="normal" @click="state.type = 'normal'">즉시 구매</label>
                 </div>
 
                 <!-- 즉시 구매 -->
@@ -65,8 +65,6 @@
 
                     <p class="my-3" style="color: #8d8d8d;">총 결제금액은 다음 화면에서 계산됩니다.</p> 
                     <hr />
-
-
 
                     <p class="fw-bold mt-5">입찰 마감기한</p>
                     <p>{{ state.days }}일 ({{ state.formattedDate }}마감)</p>
@@ -246,10 +244,19 @@ export default {
     color: #8d8d8d;
     margin: 0;
 }
-
-.btn-group, .btn-outline-warning[disabled] {
+.btn-group, .green_button[disabled] {
     cursor: not-allowed;
 } 
-
+.green_button {
+    background-color: rgb(103, 194, 58);
+    /* color: #ffffff; */
+}
+.green_button:hover {
+    background-color: rgb(149, 212, 117);
+}
+.not_checked {
+    border-color: rgb(103, 194, 58);
+    color: rgb(103, 194, 58);
+}
 
 </style>
