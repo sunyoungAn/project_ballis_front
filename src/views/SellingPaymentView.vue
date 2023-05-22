@@ -4,7 +4,7 @@
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
     <div class="common_mt160">
         <!-- 즉시판매 -->
-        <div class="container" id="wrap" v-if="state.type === 'normal'">
+        <div class="container" id="wrap" v-if="state.type === 'normal' && state.item">
             <div class="head d-flex align-items-center">
                 <img :src="state.item.imagePath" class="head_img">
                 <div class="d-flex flex-column ml-3">
@@ -14,47 +14,117 @@
                     <p>{{ state.size }}</p>  
                 </div>
             </div>
-            <h4>판매 정산 계좌</h4>
-            <p><button @click="showModal = true">계좌 추가</button></p>
+            
+            <div class="d-flex justify-content-between mt-5 flex-wrap">
+                <span class="fw-bold fs-4">판매 정산 계좌</span>
+                <span v-if="!state.member.depositor" class="text-end gray_font" @click="showAccountAdd = true">+ 계좌 추가</span>
+            </div>
+
+            <div v-if="!state.member.depositor">
+                <p>계좌를 추가하세요</p>
+            </div>
+
+            <div v-else>
+                <button class="btn btn-secondary float-end" @click="showAccountList = true">변경</button>
+                <div class="d-flex mt-3">
+                    <span class="col-2 gray_font">계좌</span>
+                    <span class="col-8 text-start">{{ state.member.bankName }}&nbsp;{{ state.member.accountNumber }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2 gray_font">예금주</span>
+                    <span class="col-8 text-start">{{ state.member.depositor }}</span>
+                </div>
+            </div>
             <hr />
-            <h4>반송 주소</h4>
-            <p><button @click="showAddressAdd = true">주소 추가</button></p>
-            <p><button @click="showAddressList = true">+</button></p>
+
+            <div class="d-flex justify-content-between mt-5 flex-wrap">
+                <span class="fw-bold fs-4">반송 주소</span>
+                <span class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
+            </div>
+
             <div v-if="!state.addressList">
                 <p>주소를 추가하세요</p>
             </div>
-            <div v-if="state.selectedAddress">
-                <p>{{ state.selectedAddress.name }}</p>
-                <p>{{ state.selectedAddress.phoneNumber }}</p>
-                <p>{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</p>
+
+            <div v-else>
+                <button class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
+                <div class="d-flex mt-3">
+                    <span class="col-2 gray_font">받는 분</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2 gray_font">연락처</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.phoneNumber }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2 gray_font">반송 주소</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
+                </div>
             </div>
             <hr />
-            <h4>발송 방법</h4>
-            <div>
-                <p>택배발송 선불</p>
+
+            <p class="fw-bold fs-4 mt-5">발송 방법</p>
+            <div class="d-flex justify-content-between flex-wrap">
+                <p class="text-start">택배발송 선불</p>
+                <p class="text-end gray_font">착불 발송시 정산금액에서 차감</p>
             </div>
             <hr />
-            <h4>최종 주문 정보</h4>
-            <h5>총 정산 금액</h5>
-            <div>
-                <h5>{{ Math.floor(Number(state.item.buyWishPrice) - Number(state.item.buyWishPrice*0.02)) }}원</h5>
-                <hr />
-                <p>즉시 판매가</p>
-                <p>{{ Number(state.item.buyWishPrice) }}원</p>
-                <p>검수비</p>
-                <p>무료</p>
-                <p>수수료</p>
-                <p>{{ -Math.floor(Number(state.item.buyWishPrice*0.02)) }}원</p>
-                <p>배송비</p>
-                <p>선불, 판매자 부담</p>
+
+            <p class="fw-bold fs-4 mt-5">최종 주문 정보</p>
+            <div class="d-flex justify-content-between flex-wrap">
+                <p class="text-start fw-bold">총 정산 금액</p>
+                <p class="text-end fs-4 fw-bold" style="color: rgb(64, 158, 255);">
+                    {{ Math.floor(Number(state.item.buyWishPrice) - Number(state.item.buyWishPrice*0.02)) }}원
+                </p>
             </div>
             <hr />
-            <h4>결제 방법</h4>
+
+            <div class="d-flex justify-content-between mt-3">   
+                <span class="fw-bold">즉시 판매가</span>
+                <span class="text-end fw-bold">{{ Number(state.item.buyWishPrice) }}원</span>
+            </div>
+            <div class="d-flex justify-content-between">   
+                <span class="gray_font">검수비</span>
+                <span class="text-end">무료</span>
+            </div>
+            <div class="d-flex justify-content-between">   
+                <span class="gray_font">수수료</span>
+                <span class="text-end">{{ -Math.floor(Number(state.item.buyWishPrice*0.02)) }}원</span>
+            </div>
+            <div class="d-flex justify-content-between">   
+                <span class="gray_font">배송비</span>
+                <span class="text-end">선불, 판매자 부담</span>
+            </div>
             <hr />
-            <h4>현금영수증 정보?</h4>
+
+            <p class="fw-bold fs-4 mt-5">결제 방법</p>
+            <div class="d-flex justify-content-between mt-5 flex-wrap">
+                <span class="fw-bold">카드 간편 결제</span>
+                <span v-if="!state.cards" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
+            </div>
+
+            <div v-if="!state.cards">
+                <p>카드를 추가하세요</p>
+            </div>
+
+            <div v-else>
+                <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
+                <div v-for="tmp of state.cards" :key="tmp" class="mt-3">
+                    <div class="d-flex">
+                        <span class="col-2 gray_font">카드번호</span>
+                        <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                    </div>
+                    <div class="d-flex">
+                        <span class="col-2 gray_font">유효일</span>
+                        <span class="col-8 text-start">{{ tmp.expiryMonth }} / {{ tmp.expiryYear }}</span>
+                    </div>
+                </div>
+            </div>
             <hr />
-            <h4>판매 조건 확인</h4>
-            <button @click="handleSellNow">즉시 판매하기</button>
+
+            <p class="fw-bold fs-4 mt-5">판매 조건 확인</p>
+
+            <button class="btn btn-secondary w-100 fs-5 fw-bold p-3" @click="handleSellNow">즉시 판매하기</button>
         </div>
 
         <!-- 판매입찰, 보관판매 -->
@@ -68,112 +138,196 @@
                     <p>{{ state.size }}</p>
                 </div>
             </div>
-            <div v-if="state.type === 'bid'">
-                <h4>판매 정산 계좌</h4>
-                <p><button @click="showModal = true">계좌 추가</button></p>
-                <hr />
-                <h4>반송 주소</h4>
-                <p><button @click="showAddressAdd = true">주소 추가</button></p>
-                <p v-show="state.addressList"><button @click="showAddressList = true">+</button></p>
-                <div v-if="state.addressList.length === 0">
-                    <p>주소를 추가하세요</p>
-                </div>
-                <div v-if="state.selectedAddress">
-                    <p>{{ state.selectedAddress.name }}</p>
-                    <p>{{ state.selectedAddress.phoneNumber }}</p>
-                    <p>{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</p>
-                </div>
-                <hr />
-                <h4>발송 방법</h4>
-                <div>
-                    <p>택배발송 선불</p>
-                </div>
-                <hr />
-                <h4>최종 주문 정보</h4>
-                <h5>총 정산 금액</h5>
-                <div>
-                    <h5>{{ Math.floor(state.bidPrice - state.bidPrice*0.02) }}원</h5>
-                    <hr />
-                    <p>판매 희망가</p>
-                    <p>{{ state.bidPrice }}</p>
-                    <p>검수비</p>
-                    <p>무료</p>
-                    <p>수수료</p>
-                    <p>{{ -Math.floor(state.bidPrice*0.02) }}원</p>
-                    <p>배송비</p>
-                    <p>선불, 판매자 부담</p>
-                    <hr />
-                    <p>입찰 마감 기한</p>
-                    <p>{{ state.bidDays }}일 - {{ state.bidFormattedDate }} 까지</p>
-                </div>
-                <hr />
-                <h4>결제 방법</h4>
-                <hr />
-                <h4>현금영수증 정보?</h4>
-                <hr />
-                <h4>판매 조건 확인</h4>
-                <button @click="handleSellLater">판매 입찰하기</button>
+
+            <div class="d-flex justify-content-between mt-5 flex-wrap">
+                <span class="fw-bold fs-4">판매 정산 계좌</span>
+                <span v-if="!state.member.depositor" class="text-end gray_font" @click="showAccountAdd = true">+ 계좌 추가</span>
             </div>
+
+            <div v-if="!state.member.depositor">
+                <p>계좌를 추가하세요</p>
+            </div>
+
+            <div v-else>
+                <button class="btn btn-secondary float-end" @click="showAccountList = true">변경</button>
+                <div class="d-flex mt-3">
+                    <span class="col-2 gray_font">계좌</span>
+                    <span class="col-8 text-start">{{ state.member.bankName }}&nbsp;{{ state.member.accountNumber }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2 gray_font">예금주</span>
+                    <span class="col-8 text-start">{{ state.member.depositor }}</span>
+                </div>
+            </div>
+            <hr />
+
+            <div class="d-flex justify-content-between mt-5 flex-wrap">
+                <span class="fw-bold fs-4">반송 주소</span>
+                <span class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
+            </div>
+
+            <div v-if="!state.addressList">
+                <p>주소를 추가하세요</p>
+            </div>
+
+            <div v-else>
+                <button class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
+                <div class="d-flex mt-3">
+                    <span class="col-2 gray_font">받는 분</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2 gray_font">연락처</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.phoneNumber }}</span>
+                </div>
+                <div class="d-flex">
+                    <span class="col-2 gray_font">반송 주소</span>
+                    <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
+                </div>
+            </div>
+            <hr />
+
+            <div v-if="state.type === 'bid'">  
+                <p class="fw-bold fs-4 mt-5">최종 주문 정보</p>
+                <div class="d-flex justify-content-between flex-wrap">
+                    <p class="text-start fw-bold">총 정산 금액</p>
+                    <p class="text-end fs-4 fw-bold" style="color: rgb(64, 158, 255);">
+                        {{ Math.floor(state.bidPrice - state.bidPrice*0.02) }}원
+                    </p>
+                </div>
+                <hr />
+
+                <div class="d-flex justify-content-between mt-3">   
+                    <span class="fw-bold">판매 희망가</span>
+                    <span class="text-end fw-bold">{{ state.bidPrice }}원</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span class="gray_font">검수비</span>
+                    <span class="text-end">무료</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span class="gray_font">수수료</span>
+                    <span class="text-end">{{ -Math.floor(state.bidPrice*0.02) }}원</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span class="gray_font">배송비</span>
+                    <span class="text-end">선불, 판매자 부담</span>
+                </div>
+                <hr />
+
+                <div class="d-flex justify-content-between"> 
+                    <span>입찰 마감 기한</span>
+                    <span class="text-end">{{ state.bidDays }}일 - {{ state.bidFormattedDate }} 까지</span>
+                </div>
+                <hr />
+
+                <p class="fw-bold fs-4 mt-5">결제 방법</p>
+                <div class="d-flex justify-content-between mt-5 flex-wrap">
+                    <span class="fw-bold">카드 간편 결제</span>
+                    <span v-if="!state.cards" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
+                </div>
+
+                <div v-if="!state.cards">
+                    <p>카드를 추가하세요</p>
+                </div>
+
+                <div v-else>
+                    <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
+                    <div v-for="tmp of state.cards" :key="tmp" class="mt-3">
+                        <div class="d-flex">
+                            <span class="col-2 gray_font">카드번호</span>
+                            <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                        </div>  
+                        <div class="d-flex">
+                            <span class="col-2 gray_font">유효일</span>
+                            <span class="col-8 text-start">{{ tmp.expiryMonth }} / {{ tmp.expiryYear }}</span>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <p class="fw-bold fs-4 mt-5">판매 조건 확인</p>
+
+                <button class="btn btn-secondary w-100 fs-5 fw-bold p-3" @click="handleSellLater">판매 입찰하기</button>
+            </div>
+
             <div v-if="state.type ==='keep'">
-                <h4>판매 정산 계좌</h4>
-                <p><button @click="showModal = true">계좌 추가</button></p>
-                <hr />
-                <h4>반송/회수 주소</h4>
-                <p><button @click="showAddressAdd = true">주소 추가</button></p>
-                <p><button @click="showAddressList = true">+</button></p>
-                <div v-if="!state.addressList">
-                    <p>주소를 추가하세요</p>
-                </div>
-                <div v-if="state.selectedAddress">
-                    <p>{{ state.selectedAddress.name }}</p>
-                    <p>{{ state.selectedAddress.phoneNumber }}</p>
-                    <p>{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</p>
-                </div>
-                <hr />
-                <h4>발송 방법</h4>
-                <div>
-                    <p>택배발송 선불</p>
-                </div>
-                <hr />
-                <h4>페널티 기준 금액</h4>
-                <div>
-                    <p>신청 직전월의 평균 거래가</p>
+                <p class="fw-bold fs-4 mt-5">최종 신청 정보</p>
+                <div class="d-flex justify-content-between flex-wrap">
+                    <p class="text-start fw-bold">총 정산 금액</p>
+                    <p class="text-end fs-4 fw-bold" style="color: rgb(64, 158, 255);">
+                        {{ Math.floor(state.bidPrice - state.bidPrice*0.02) }}원
+                    </p>
                 </div>
                 <hr />
                 
-                <h4>최종 신청 정보</h4>
-                <h5>총 정산 금액</h5>
-                <div>
-                    <h5>{{ Math.floor(state.bidPrice - state.bidPrice*0.02) }}원</h5>
-                    <hr />
-                    <p>판매 희망가</p>
-                    <p>{{ state.bidPrice }}</p>
-                    <p>검수비</p>
-                    <p>무료</p>
-                    <p>수수료</p>
-                    <p>{{ -Math.floor(state.bidPrice*0.02) }}원</p>
-                    <p>배송비</p>
-                    <p>선불, 판매자 부담</p>
-                    <hr />
+                <div class="d-flex justify-content-between mt-3">   
+                    <span class="fw-bold">판매 희망가</span>
+                    <span class="text-end fw-bold">{{ state.bidPrice }}원</span>
                 </div>
-                <h5>총 결제 금액</h5>
-                <div>
-                    <h5 >3000원</h5>
-                    <hr />
-                    <p>창고 이용료</p>
-                    <p>3000원</p>
-                    <p>30일마다 월 3000원/건 자동 결제</p>
-                    <p>보관 기한</p>
-                    <p>{{ state.bidDays }}일 - {{ state.bidFormattedDate }} 까지</p>
-                </div> 
+                <div class="d-flex justify-content-between">   
+                    <span class="gray_font">검수비</span>
+                    <span class="text-end">무료</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span class="gray_font">수수료</span>
+                    <span class="text-end">{{ -Math.floor(state.bidPrice*0.02) }}원</span>
+                </div>
+                <div class="d-flex justify-content-between">   
+                    <span class="gray_font">배송비</span>
+                    <span class="text-end">선불, 판매자 부담</span>
+                </div>
                 <hr />
-                <h4>결제 방법</h4>
+   
+                <div class="d-flex justify-content-between flex-wrap">
+                    <p class="text-start fw-bold">총 결제 금액</p>
+                    <p class="text-end fs-4 fw-bold" style="color: rgb(103, 194, 58)">3,000원</p>
+                </div>
                 <hr />
-                <h4>보관판매 조건 확인</h4>
+
+                <div class="d-flex justify-content-between mt-3">   
+                    <span class="fw-bold">창고 이용료</span>
+                    <span class="text-end fw-bold">3,000원</span>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <span>30일마다 월 3,000원/건 자동 결제</span>
+                </div>
+                <div class="d-flex justify-content-between mt-3">   
+                    <span class="gray_font">보관 기한</span>
+                    <span class="text-end">{{ state.bidDays }}일 - {{ state.bidFormattedDate }} 까지</span>
+                </div>
+                <hr />
+
+                <p class="fw-bold fs-4 mt-5">결제 방법</p>
+                <div class="d-flex justify-content-between mt-5 flex-wrap">
+                    <span class="fw-bold">카드 간편 결제</span>
+                    <span v-if="!state.cards" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
+                </div>
+
+                <div v-if="!state.cards">
+                    <p>카드를 추가하세요</p>
+                </div>
+
+                <div v-else>
+                    <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
+                    <div v-for="tmp of state.cards" :key="tmp" class="mt-3">
+                        <div class="d-flex">
+                            <span class="col-2 gray_font">카드번호</span>
+                            <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                        </div>
+                        <div class="d-flex">
+                            <span class="col-2 gray_font">유효일</span>
+                            <span class="col-8 text-start">{{ tmp.expiryMonth }} / {{ tmp.expiryYear }}</span>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <p class="fw-bold fs-4 mt-5">보관 판매 조건 확인</p>
+
                 <!-- 결제 컴포넌트-->
                 <payment-component :address="state.selectedAddress" :type="state.type" :sellingDto="state.sellingDto"/>
             </div>
-           
         </div>
     </div>
 </template>
@@ -209,6 +363,8 @@ export default {
             addressList : [],
             selectedAddress : {},
             memberNumber : sessionStorage.getItem("TOKEN"),
+            member : '',
+            cards : '',
             
             row : [],
             sellingStatus : null,
@@ -248,6 +404,7 @@ export default {
             }
         }
 
+        // 선택한 주소 출력
         const selectAdd = (selectedAddress) => {
             state.selectedAddress = selectedAddress;
             console.log("선택주소",selectedAddress)
@@ -327,6 +484,17 @@ export default {
             // }
         }
 
+        // 멤버 정보 읽어오기
+        const handleMember = async()=> {
+            const url = `/api/get/member?memberNumber=${state.memberNumber}`;
+            const headers = {"Content-Type":"application/json", "auth" : state.memberNumber};
+            const { data } = await axios.get(url,{headers});
+            state.member = data;
+            state.cards = data.cards;
+            console.log("회원정보: ", state.member);
+            console.log("카드정보: ", state.cards);
+        };
+
         // 판매 입찰, 보관 판매 시 데이터 필요
         if(state.type === 'bid' || state.type === 'keep') {
             const handleData = async() => {
@@ -346,6 +514,7 @@ export default {
         }
 
         onMounted(()=>{
+            handleMember();
             handleAddressList();
         })
 
@@ -364,7 +533,7 @@ export default {
 <style lang="css" scoped>
 @import "../assets/css/common.css";
 #wrap {
-    border: 1px solid #cccccc;
+    /* border: 1px solid #cccccc; */
     width: 800px;
 }
 .head_img{

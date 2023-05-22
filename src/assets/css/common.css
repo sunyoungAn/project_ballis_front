@@ -181,16 +181,20 @@
 /* 구매 관련 버튼 */
 .green_button {
   background-color: rgb(103, 194, 58);
+  color: #ffffff;
 }
 .green_button:hover {
   background-color: rgb(149, 212, 117);
+  color: #ffffff;
 }
 /* 판매 관련 버튼 */
 .blue_button {
   background-color: rgb(64, 158, 255);
+  color: #ffffff;
 }
 .blue_button:hover {
   background-color: rgb(121, 187, 255);
+  color: #ffffff;
 }
 /* 회색 글씨 */
 .gray_font {

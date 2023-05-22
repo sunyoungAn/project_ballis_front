@@ -25,14 +25,14 @@
                 <span class="fw-bold fs-4">배송 주소</span>
                 <span class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
             </div>
-            <button v-show="state.selectedAddress" class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
             
-            <div v-show="state.addressList.length === 0">
+            <div v-if="!state.addressList">
                 <p>주소를 추가하세요</p>
             </div>
 
-            <div v-show="state.selectedAddress">
-                <div class="d-flex mt-5">
+            <div v-else>
+                <button class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
+                <div class="d-flex mt-3">
                     <span class="col-2 gray_font">받는 분</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
                 </div>
@@ -56,7 +56,6 @@
                 <p class="text-start">일반배송 3,000원</p>
                 <p class="text-end gray_font">검수 후 배송, 5-7일 내 도착예정</p>
             </div>
-
             <hr />
             
             <p class="fw-bold fs-4 mt-5">최종 주문 정보</p>

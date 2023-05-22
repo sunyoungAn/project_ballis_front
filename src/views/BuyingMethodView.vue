@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="btn-group w-100 my-4" role="group" data-toggle="buttons">
-                    <label class="btn p-3" v-bind:class="state.type === 'bid'? 'green_button' : 'not_checked'" for="bid" @click="state.type = 'bid'">
+                    <label class="btn p-3" v-bind:class="state.type === 'bid'? 'green_button' : 'not_checked'" @click="state.type = 'bid'">
                         구매 입찰
                         <input type="radio" class="d-none" id="bid" name="price" :checked="state.type === 'bid'">
                     </label>
@@ -125,7 +125,7 @@ export default {
         })
 
         watchEffect(() => {
-            if(state.type === "normal") {
+            if(state.type) {
                 state.inputValue = '';
                 state.errorMessage = '';
                 state.days = 30;
@@ -252,7 +252,7 @@ export default {
     color: #ffffff;
 }
 .green_button:hover {
-    background-color: rgb(103, 194, 58) !important;
+    background-color: rgb(149, 212, 117) !important;
     color: #ffffff !important;
 }
 .not_checked {
@@ -260,8 +260,8 @@ export default {
     color: rgb(103, 194, 58);
 }
 .not_checked:hover {
-    border-color: rgb(103, 194, 58) !important;
-    color: rgb(103, 194, 58) !important;
+    border-color: rgb(149, 212, 117) !important;
+    color: rgb(149, 212, 117) !important;
 }
 /* 안먹힘 */
 label .not_checked input[type="radio"]:disabled {

@@ -33,13 +33,13 @@
 
                     <div v-show="state.methodSelect === 1">
                         <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
-                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button"
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-0 mb-3"
                             @click="handleType(state.size, 'keep')">
                                 <p class="fs-5 fw-bold">보관 신청</p>
                                 <p>선불발송</p>
                             </button>
                             
-                            <button class="del_button btn btn-info flex-grow-1 mx-1 mb-3" type="button">
+                            <button class="del_button blue_button btn flex-grow-1 mx-0 mb-3">
                                 <div v-for="(tmp, i) in state.rowSell" :key="i">
                                     <div v-if="tmp.buyProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
                                         <p class="fs-5 fw-bold">{{ tmp.buyWishPrice }}</p>
@@ -52,13 +52,13 @@
 
                     <div v-show="state.methodSelect === 2">
                         <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
-                            <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button"
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-0 mb-3"
                             @click="handleType(state.size, 'keep')">
                                 <p class="fs-5 fw-bold">보관 신청</p>
                                 <p>선불발송</p>
                             </button>
 
-                            <button class="del_button btn btn-info flex-grow-1 mx-1 mb-3" type="button"
+                            <button class="del_button blue_button btn flex-grow-1 mx-0 mb-3"
                             @click="handleType(state.size, 'bid')">
                                 <p class="fs-5 fw-bold">판매 입찰</p>
                                 <p>선불발송</p>
@@ -193,7 +193,7 @@ export default {
 <style lang="css" scoped>
 @import "../assets/css/common.css";
 #wrap {
-    border: 1px solid #cccccc;
+    /* border: 1px solid #cccccc; */
     width: 800px;
 }
 
@@ -222,5 +222,14 @@ export default {
 }
 .del_button p{
     margin: 0;
+}
+/* 판매 관련 버튼 */
+.blue_button {
+  background-color: rgb(64, 158, 255);
+  color: #ffffff;
+}
+.blue_button:hover {
+  background-color: rgb(121, 187, 255);
+  color: #ffffff;
 }
 </style>

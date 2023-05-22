@@ -40,7 +40,7 @@
 
                     <div v-show="state.methodSelect === 1">
                         <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
-                            <button class="del_button green_button btn flex-grow-1 mx-0 mb-3" type="button">
+                            <button class="del_button green_button btn flex-grow-1 mx-0 mb-3">
                                 <div v-for="(tmp, i) in state.rowFast" :key="i">
                                     <div v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
                                         <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
@@ -49,7 +49,7 @@
                                 </div>
                             </button>
                             
-                            <button class="del_button btn btn-secondary flex-grow-1 mx-0 mb-3" type="button">
+                            <button class="del_button btn btn-secondary flex-grow-1 mx-0 mb-3">
                                 <div v-for="(tmp, i) in state.rowNormal" :key="i">
                                     <div v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
                                         <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
@@ -297,12 +297,11 @@ export default {
 }
 /* 구매 관련 버튼 */
 .green_button {
-  background-color: rgb(103, 194, 58);
+    background-color: rgb(103, 194, 58);
+    color: #ffffff;
 }
 .green_button:hover {
-  background-color: rgb(149, 212, 117);
-}
-.green_button p {
+    background-color: rgb(149, 212, 117);
     color: #ffffff;
 }
 

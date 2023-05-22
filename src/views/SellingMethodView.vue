@@ -26,16 +26,20 @@
                 </div>
 
                 <div class="btn-group w-100 my-4" role="group" data-toggle="buttons">
-                    <input type="radio" class="btn-check" id="keep" name="price" :checked="state.type === 'keep'">
-                    <label class="btn btn-outline-info p-3" for="keep" @click="state.type = 'keep'">보관 판매</label>
-
-                    <input type="radio" class="btn-check" id="bid" name="price" :checked="state.type === 'bid'">
-                    <label class="btn btn-outline-info p-3" for="bid" @click="state.type = 'bid'">판매 입찰</label>
-
-                    <input type="radio" class="btn-check" id="normal" name="price" :checked="state.type === 'normal'" :disabled="!state.sellNow">
-                    <label class="btn btn-outline-info p-3" for="normal" @click="state.type = 'normal'">즉시 판매</label>
+                    <label class="btn p-3" v-bind:class="state.type === 'keep'? 'blue_button' : 'not_checked'" @click="state.type = 'keep'">
+                        보관 판매
+                        <input type="radio" class="d-none" id="keep" name="price" :checked="state.type === 'keep'">
+                    </label>
+                    <label class="btn p-3" v-bind:class="state.type === 'bid'? 'blue_button' : 'not_checked'" @click="state.type = 'bid'">
+                        판매 입찰
+                        <input type="radio" class="d-none" id="bid" name="price" :checked="state.type === 'bid'">
+                    </label>
+                    <label class="btn p-3" v-bind:class="[state.type === 'normal'? 'blue_button' : 'not_checked']" @click="state.onlyBid === false ? state.type = 'normal' : state.type = 'bid'">
+                        즉시 판매
+                        <input type="radio" class="d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
+                    </label>
                 </div>
-                
+
                 <!-- 즉시 판매 -->
                 <div v-show="state.type === 'normal'">
                     <p class="fw-bold">즉시 판매가</p>
@@ -43,22 +47,22 @@
                     <hr />
 
                     <div class="d-flex justify-content-between mt-2">   
-                        <span style="color: #8d8d8d;">검수비</span>
+                        <span class="gray_font">검수비</span>
                         <span class="text-end">무료</span>
                     </div>
                     <div class="d-flex justify-content-between">   
-                        <span style="color: #8d8d8d;">수수료</span>
+                        <span class="gray_font">수수료</span>
                         <span class="text-end">{{ -Math.floor(Number(state.row[0].buyWishPrice)*0.02) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
-                        <span style="color: #8d8d8d;">배송비</span>
+                        <span class="gray_font">배송비</span>
                         <span class="text-end">선불, 판매자 부담</span>
                     </div>
                     <hr />
 
                     <div class="d-flex justify-content-between mt-5"> 
                         <p class="fw-bold">정산 금액</p>
-                        <p class="fs-4 fw-bold text-end" style="color: #00e1ff;">{{ Math.floor(Number(state.row[0].buyWishPrice) - Number(state.row[0].buyWishPrice)*0.02) }}원</p>
+                        <p class="fs-4 fw-bold text-end" style="color: rgb(64, 158, 255);">{{ Math.floor(Number(state.row[0].buyWishPrice) - Number(state.row[0].buyWishPrice)*0.02) }}원</p>
                     </div>
 
                     <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
@@ -81,15 +85,15 @@
                     </p>
 
                     <div class="d-flex justify-content-between mt-5">   
-                        <span style="color: #8d8d8d;">검수비</span>
+                        <span class="gray_font">검수비</span>
                         <span class="text-end">무료</span>
                     </div>
                     <div class="d-flex justify-content-between">   
-                        <span style="color: #8d8d8d;">수수료</span>
+                        <span class="gray_font">수수료</span>
                         <span class="text-end">{{ -Math.floor(Number(state.inputValue)*0.02) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
-                        <span style="color: #8d8d8d;">배송비</span>
+                        <span class="gray_font">배송비</span>
                         <span class="text-end">선불, 판매자 부담</span>
                     </div>
                     <hr />
@@ -112,7 +116,7 @@
 
                     <div class="d-flex justify-content-between mt-5"> 
                         <p class="fw-bold">정산 금액</p>
-                        <p class="fs-4 fw-bold text-end" style="color: #00e1ff;">{{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원</p>
+                        <p class="fs-4 fw-bold text-end" style="color: rgb(64, 158, 255);">{{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원</p>
                     </div>
                     
                     <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
@@ -136,25 +140,25 @@
                     </p>                      
 
                     <div class="d-flex justify-content-between mt-5">   
-                        <span style="color: #8d8d8d;">검수비</span>
+                        <span class="gray_font">검수비</span>
                         <span class="text-end">무료</span>
                     </div>
                     <div class="d-flex justify-content-between">   
-                        <span style="color: #8d8d8d;">수수료</span>
+                        <span class="gray_font">수수료</span>
                         <span class="text-end">{{ -Math.floor(Number(state.inputValue)*0.02) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
-                        <span style="color: #8d8d8d;">배송비</span>
+                        <span class="gray_font">배송비</span>
                         <span class="text-end">선불, 판매자 부담</span>
                     </div>
                     <hr />
 
                     <div class="d-flex justify-content-between mt-2">   
-                        <span style="color: #8d8d8d;">창고 이용료</span>
+                        <span class="gray_font">창고 이용료</span>
                         <span class="text-end">3,000원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
-                        <span style="color: #8d8d8d;">보관 기한</span>
+                        <span class="gray_font">보관 기한</span>
                         <span class="text-end">기본 {{ state.days }}일 ({{ state.formattedDate }}까지)</span>
                     </div>
                     <div class="d-flex justify-content-end">
@@ -165,13 +169,15 @@
 
                     <div class="d-flex justify-content-between mt-5"> 
                         <p class="fw-bold">정산 금액</p>
-                        <p class="fs-4 fw-bold text-end" style="color: #00e1ff;">{{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원</p>
+                        <p class="fs-4 fw-bold text-end" style="color: rgb(64, 158, 255);">
+                            {{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원
+                        </p>
                     </div>
                     <hr />    
 
                     <div class="d-flex justify-content-between mt-5">
                         <p class="fw-bold">결제 금액</p>
-                        <p class="fs-4 fw-bold text-end">3,000원</p>
+                        <p class="fs-4 fw-bold text-end" style="color: rgb(103, 194, 58)">3,000원</p>
                     </div>
                     <hr />
                     
@@ -213,9 +219,10 @@ export default {
         })
 
         watchEffect(() => {
-            if(state.type === "normal") {
+            if(state.type) {
                 state.inputValue = '';
                 state.errorMessage = '';
+                state.days = 30;
             }
         });
 
@@ -336,7 +343,22 @@ export default {
     color: #8d8d8d;
     margin: 0;
 }
-.btn-group, .btn-outline-info[disabled] {
-    cursor: not-allowed;
-} 
+.blue_button {
+  background-color: rgb(64, 158, 255);
+  height: 60px;
+  color: #ffffff;
+}
+.blue_button:hover {
+  background-color: rgb(121, 187, 255) !important;
+  color: #ffffff !important; 
+}
+.not_checked{
+    border-color:rgb(64, 158, 255);
+    color: rgb(64, 158, 255);
+}
+.not_checked:hover {
+    border-color:rgb(121, 187, 255) !important;
+    color: rgb(121, 187, 255) !important;
+}
+/* disabled 넣기 */
 </style>
