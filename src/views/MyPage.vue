@@ -46,7 +46,7 @@
                     <div  v-show="tmp.defaultAddress===2">
                         <span>{{ tmp.name }}  {{ tmp.phoneNumber }}</span><br>
                         <span>({{ tmp.zipCode }}){{ tmp.address }}  {{ tmp.subAddress }}</span>
-                        <button type="button" class="btn btn-outline-dark search_button" @click="handleDelete(index, tmp.id)" >삭제</button>
+                        <button type="button" class="btn btn-outline-dark search_button" @click="handleDeleteAddress(index, tmp.id)" >삭제</button>
                         <button type="button" class="btn btn-outline-dark search_button" @click="updateDefaultAddress(tmp.id)">기본배송지등록</button>
                     </div>
                 </div>
@@ -54,14 +54,47 @@
 
 
                 <hr>
-                
-                <div class="p_tag_box_2">
-                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="showAddressAdd = true">변경</button>
+                <div class="p_tag_box_2" v-show="state.div1 === 1">
+                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="state.div1 = 2" v-if="!state.cards.length">추가</button>
                     <p class="p_title">결제카드</p>
-                    <p class="p_text">101-124-456-7594</p>
-                    <p class="p_title">정산계좌</p>
-                    <p class="p_text">000-00000-000000-0000</p>
+                    <div v-for="tmp of state.cards" :key="tmp">
+                        <span>{{ tmp.name }}</span> <br> <br>
+                        <span>카드번호 : {{ tmp.cardNumber }} 유효일 : {{ tmp.expiryMonth }} / {{ tmp.expiryYear }} </span>
+                        <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="handleDeletecard(tmp.id)" v-if="state.cards.length">삭제</button>
+                    </div>
+                </div>
 
+                <div class="p_tag_box_2" v-show="state.div1 === 2">
+                    <p class="p_title">카드추가</p>
+                    <div class="input_box_card">
+                        <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.card.cardNumber" placeholder="카드번호 입력(-포함)">
+                        <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.card.expiryYear" placeholder="카드 유효년(YY) 입력">
+                        <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.card.expiryMonth" placeholder="카드 유효월(MM) 입력">
+                        <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.card.name" placeholder="카드 소유주 입력">
+                    </div>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="state.div1 = 1">취소</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click=handleInsertcard()>등록</button>
+                </div>
+                
+                <br>
+
+                <hr>
+                <div class="p_tag_box_2" v-show="state.div === 1">
+                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="state.div = 2" v-if="!state.member.accountNumber">추가</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="handleDeleteAccount(state.member.memberNumber)" v-if="state.member.accountNumber">삭제</button>
+                    <p class="p_title">정산계좌</p>
+                    <span>{{state.member.depositor}} {{state.member.bankName}} {{ state.member.accountNumber }}</span>
+                </div>
+
+                <div class="p_tag_box_2" v-show="state.div === 2">
+                    <p class="p_title">계좌추가</p>
+                    <div class="input_box_card">
+                        <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.account.accountNumber" placeholder="계좌번호 입력(-포함)">
+                        <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.account.bankName" placeholder="은행 입력">
+                        <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.account.depositor" placeholder="계좌주 입력">
+                    </div>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="state.div = 1">취소</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click=handleInsertAccount()>등록</button>
                 </div>
             </article>
         </section>
@@ -81,10 +114,25 @@ export default {
     setup () {
         const state = reactive({
             token : sessionStorage.getItem("TOKEN"),
-            member : '',
+            member : [],
             isModalViewed:false,
             address:[],
             defaultAddress:"",
+            cards:[],
+            div : 1,
+            div1 : 1,
+            accounts:[],
+            account :{
+                accountNumber:"",
+                bankName:"",
+                depositor:""
+            },
+            card : {
+                cardNumber:"",
+                expiryMonth:"",
+                expiryYear:"",
+                name:""
+            }
         });
 
 
@@ -100,12 +148,9 @@ export default {
             const headers = {"Content-Type":"application/json", "auth" : state.token};
             const { data } = await axios.get(url,{headers});
             state.member = data;
-            console.log(state.member);
-          
-
-
-            
-
+            state.cards = data.cards;
+            console.log("회원정보: ", state.member);
+            console.log("카드정보: ", state.cards);
         };
 
         //주소 불러오기
@@ -113,12 +158,12 @@ export default {
             const url = `/api/get/address/${state.token}`;
             const headers = {"Content-Type":"application/json", "auth" : state.token};
             const { data } = await axios.get(url,{headers});
-            console.log(data);
             state.address = data;
-            console.log(state.address);
+            console.log("주소: ", state.address);
         }
         
-        const handleDelete= async (index, id)=>{
+        //배송지 삭제
+        const handleDeleteAddress= async (index, id)=>{
            if(confirm('삭제하시겠습니까?')){
             const url = `/api/delete/address/${id}`;
             const headers = {"Content-Type":"application/json"};
@@ -129,6 +174,7 @@ export default {
            } 
         }
 
+        //기본배송지설정
         const updateDefaultAddress = async (id) => {
             const url = `/api/update/address/${state.token}/${id}`;
             const headers = {"Content-Type":"application/json"};
@@ -139,6 +185,56 @@ export default {
             handleData1();
         }
 
+        //계좌 등록
+        const handleInsertAccount = ()=>{
+           axios.post(`/api/add/account/${state.token}`, state.account).then((res)=>{
+            console.log(res);
+            window.alert("계좌 등록 완료");
+            state.div=1;
+            handleData();
+           }).catch((err)=>{
+            console.log(err);
+            window.alert("등록 실패");
+           })
+        }
+
+        //계좌삭제
+        const handleDeleteAccount = async (id) => {
+            if(confirm('삭제하시겠습니까?')){
+            const url = `/api/delete/account/${id}`;
+            const headers = {"Content-Type":"application/json"};
+            const body={};
+            const {data} = await axios.delete(url, {headers:headers, data:body});
+            console.log(data);
+            state.div=1;
+            handleData();
+           } 
+        }
+
+        //카드 등록
+        const handleInsertcard = () => {
+            axios.post(`/api/add/card/${state.token}`, state.card).then((res)=>{
+            console.log(res);
+            window.alert("카드 등록 완료");
+            state.div1=1;
+            handleData();
+           }).catch((err)=>{
+            console.log(err);
+            window.alert("등록 실패");
+           })
+        }
+
+        const handleDeletecard = async (id) => {
+            if(confirm('삭제하시겠습니까?')){
+            const url = `/api/delete/card/${id}`;
+            const headers = {"Content-Type":"application/json"};
+            const body={};
+            const {data} = await axios.delete(url, {headers:headers, data:body});
+            console.log(data);
+            state.div1=1;
+            handleData();
+           } 
+        }
         onMounted(()=>{
             handleData();
             handleData1();
@@ -147,8 +243,12 @@ export default {
         return {
             state,
             showAddressAdd,
-            handleDelete,
-            updateDefaultAddress
+            handleDeleteAddress,
+            updateDefaultAddress,
+            handleInsertAccount,
+            handleDeleteAccount,
+            handleInsertcard,
+            handleDeletecard
         }
     },
 
@@ -176,5 +276,11 @@ article {
   float: right;
   border-radius: 0;
   margin-right : 5px
+}
+
+.input_box_card{
+  width: 40%;
+  height: 50%;
+  display: inline-block; 
 }
 </style>
