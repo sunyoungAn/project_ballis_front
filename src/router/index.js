@@ -227,8 +227,8 @@ router.beforeEach((to, from, next)=>{
     // 로그인 되어 있어야 하는 페이지들체크
     if(to.path !== '/' && to.path !== '/product/list'
     && to.path !== '/product/one' && to.path !== '/member/join'
-    && to.path !== '/email/find' && to.path !== '/notice'
-    && to.path !== '/notice/content') {
+    && to.path !== '/email/find' && to.path !== '/password/find'
+    && to.path !== '/notice' && to.path !== '/notice/content') {
       
       const logged = store.getters.getLogged;
       console.log(logged);
