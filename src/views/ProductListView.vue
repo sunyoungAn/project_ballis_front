@@ -11,8 +11,12 @@
 
             <li class="nav-item">
                 <a class="nav-link active fs-5">필터</a>
-            </li>{{ state.inventoryDivList }}
-            <li><button class="fast_big" @click="handleInventoryDivList">빠른배송</button></li>
+            </li>
+            <li>
+                <button class="fast_big" @click="handleInventoryDivList">
+                <img src="@/assets/image/lightning.png" class="lightning"/>
+                빠른배송</button>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link fs-5" 
@@ -24,7 +28,6 @@
                 </a>
             </li>
             <div class="collapse" id="collapse1">
-                {{ state.categoryList }}
                 <div class="card card-body">
                     <label>
                         <input type="checkbox" name="category" value="1" v-model="state.categoryList"> 스니커즈
@@ -58,7 +61,6 @@
                 </a>
             </li>
             <div class="collapse" id="collapse2">
-                {{ state.genderList }}
                 <div class="card card-body">
                     <label>
                         <input type="checkbox" name="gender" value="1" v-model="state.genderList" @change="handleGenderList"> 여성
@@ -80,8 +82,7 @@
                 </a>
             </li>
             <div class="collapse" id="collapse3">
-                {{ state.brandIdList }}
-                <div class="card card-body">
+                <div class="card card-body scroll">
                     <label v-for="(tmp, i) in state.brandRows" :key="i">
                         <input  type="checkbox" name="brand" 
                             :value="tmp.brandId" 
@@ -102,9 +103,14 @@
                 </a>
             </li>
             <div class="collapse" id="collapse4">
-                {{ state.sizeList }}
                 <div class="card card-body" id="collapse_size">
-                    <button class="button_size" v-for="size in state.sizes" :key="size" @click="handleSizeList(size)">{{ size }}</button>
+                    <button 
+                    :class="{ 'button_size': true, 'button_active': state.sizeList.includes(size) }"
+                    v-for="size in state.sizes" 
+                    :key="size" 
+                    @click="handleSizeList(size)">
+                    {{ size }}
+                </button>
                 </div>
             </div>
             <hr />
@@ -119,7 +125,6 @@
                 </a>
             </li>
             <div class="collapse" id="collapse5">
-                {{ state.wishPriceList }}
                 <div class="card card-body">
                     <label v-for="price in prices" :key="price.id">
                         <input type="checkbox" :id="price.id" :checked="state.checkedPriceId === price.id" @change="handleWishPriceList(price)"> {{ price.label }}
@@ -145,7 +150,9 @@
                 <p style="font-weight: bold;">{{ tmp.brandName }}</p>
                 <p>{{ tmp.productEngName }}</p>
                 <p style="color: #aeaeae;">{{ tmp.productKorName }}</p>
-                <p v-if="tmp.inventoryDiv === 1"><button class="fast_small">빠른배송</button></p>
+                <p v-if="tmp.inventoryDiv === 1">
+                    <button class="fast_small"><img src="@/assets/image/lightning.png" class="lightning"/>빠른배송</button>
+                </p>
                 <p>&nbsp;</p>
                 <p style="font-weight: bold; font-size: large;">{{ tmp.wishPrice }}원</p>
                 <p v-if="tmp.wishPrice" style="color: #aeaeae;">즉시 구매가</p>
@@ -260,7 +267,8 @@ export default {
                 newArray.push(size); 
             }
             state.sizeList = newArray; 
-        }
+        };
+        
 
         // 가격대
         const handleWishPriceList = (price) => {
@@ -434,14 +442,15 @@ label{
     background-color: #ffffff;
     margin: 2px;
 }
+.button_active{
+    border: 1.5px solid #000000;
+    font-weight: bold;
+}
 .all_item_list{
     width: 1100px;
     padding: 0 5px; 
-    /* background-color: yellow; */
     display: flex;
     position: relative;
-    /* left: 50%;
-    margin-left: -550px; */
     flex-wrap : wrap;
 }
 .all_item{
@@ -458,7 +467,7 @@ label{
     margin: 1px 8px;
 }
 .fast_big{
-    width: 100px;
+    width: 120px;
     height: 40px;
     background-color: white;
     border: 1px solid #cccccc;
@@ -482,5 +491,8 @@ label{
     width: 250px;
     background-color: #E0E0E0;
 }
-
+.scroll {
+    max-height: 250px; 
+    overflow-y: auto;
+}
 </style>
