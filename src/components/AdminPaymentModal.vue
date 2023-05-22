@@ -9,7 +9,10 @@
                 <hr>
                 <div class="mb-3 ms-3">
                     <h4>| 결제수단</h4>
-                    <h5 class="ps-5 py-2">{{state.paymentType}}</h5> <!-- TODO 결제구현 한 것 보고 이름 매칭 해주기-->
+                    <h5 v-if="state.paymentType === 1" class="ps-5 py-2">카드 간편결제</h5>
+                    <h5 v-else-if="state.paymentType === 2" class="ps-5 py-2">일반카드</h5>
+                    <h5 v-else-if="state.paymentType === 3" class="ps-5 py-2">카카오페이</h5>
+                    <h5 v-else class="ps-5 py-2">네이버페이</h5>
                 </div>
                 <div class="mb-3 ms-3">
                     <h4>| 결제금액</h4>
