@@ -3,109 +3,162 @@
         <div v-if="state.type === 'fast' && state.item" class="container" id="wrap">
             <div class="top d-flex flex-column align-items-center justify-content-center">
                 <div class="top_info">
-                    <h3>구매가 완료되었습니다.</h3>
+                    <p class="fw-bold fs-3">구매가 완료되었습니다.</p>
                     <p>구매한 상품은 자정전까지 결제한건에 대하여</p>
                     <p>다음날 즉시 출고될 예정입니다.</p>                
                 </div>
                 <div>
                     <img :src="state.item.imagePath" class="top_img" />
                 </div>
-                <div class="top_btn">
-                    <button>내역 상세보기</button>
-                    <a href="/product/list"><button>SHOP 바로가기</button></a>
+
+                <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
+                    <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
+                        <p><a href="/mypage/buying">내역 상세보기</a></p>
+                    </button>
+                    <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
+                        <p><a href="/product/list">SHOP 바로가기</a></p>
+                    </button>
                 </div>
+
                 <div>
-                    <p>구매는 취소가 불가능합니다.</p>
+                    <p class="gray_font">구매는 취소가 불가능합니다.</p>
                 </div>
             </div>
             <div class="bottom">
-                <h5>총 결제 금액</h5>
-                <div>
-                    <h5>{{ state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 5000 }}원</h5>
-                    <hr />
-                    <p>구매가</p>
-                    <p>{{ state.item.sellWishPrice }}</p>
-                    <p>검수비</p>
-                    <p>무료</p>
-                    <p>수수료</p>
-                    <p>{{ state.item.sellWishPrice*0.015 }}</p>
-                    <p>배송비</p>
-                    <p>5,000원</p>
+                <div class="d-flex justify-content-between flex-wrap mt-5">
+                    <p class="text-start fs-4 fw-bold">총 결제금액</p>
+                    <p class="text-end fs-4 fw-bold" style="color: rgb(103, 194, 58);">
+                        {{ Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 5000) }}원
+                    </p>
                 </div>
                 <hr />
+                
+                <div class="d-flex justify-content-between mt-3">   
+                    <span class="fw-bold">구매가</span>
+                    <span class="text-end fw-bold">{{ state.item.sellWishPrice }}원</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">   
+                    <span class="gray_font">검수비</span>
+                    <span class="text-end">무료</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">   
+                    <span class="gray_font">수수료</span>
+                    <span class="text-end">{{ Math.floor(state.item.sellWishPrice*0.015) }}원</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">   
+                    <span class="gray_font">배송비</span>
+                    <span class="text-end">5,000원</span>
+                </div>
             </div>
         </div>
+
         <div v-if="state.type === 'normal' && state.item" class="container" id="wrap">
             <div class="top d-flex flex-column align-items-center justify-content-center">
                 <div class="top_info">
-                    <h3>즉시 구매가 완료되었습니다.</h3>
+                    <p class="fw-bold fs-3">즉시 구매가 완료되었습니다.</p>
                     <p>구매한 상품은 전문가의 검수 완료 후,</p>
                     <p>안전하게 배송될 예정입니다.</p>
                 </div>
                 <div>
                     <img :src="state.item.imagePath" class="top_img" />
                 </div>
-                <div class="top_btn">
-                    <button>내역 상세보기</button>
-                    <a href="/product/list"><button>SHOP 바로가기</button></a>
+
+                <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
+                    <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
+                        <p><a href="/mypage/buying">내역 상세보기</a></p>
+                    </button>
+                    <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
+                        <p><a href="/product/list">SHOP 바로가기</a></p>
+                    </button>
                 </div>
+
                 <div>
-                    <p>즉시 구매는 취소가 불가능합니다.</p>
+                    <p class="gray_font">즉시 구매는 취소가 불가능합니다.</p>
                 </div>
             </div>
             <div class="bottom">
-                <h5>총 결제 금액</h5>
-                <div>
-                    <h5>{{ state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 3000 }}원</h5>
-                    <hr />
-                    <p>즉시 구매가</p>
-                    <p>{{ state.item.sellWishPrice }}</p>
-                    <p>검수비</p>
-                    <p>무료</p>
-                    <p>수수료</p>
-                    <p>{{ state.item.sellWishPrice*0.015 }}</p>
-                    <p>배송비</p>
-                    <p>3,000원</p>
+                <div class="d-flex justify-content-between flex-wrap mt-5">
+                    <p class="text-start fs-4 fw-bold">총 결제금액</p>
+                    <p class="text-end fs-4 fw-bold" style="color: rgb(103, 194, 58);">
+                        {{ Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 3000) }}원
+                    </p>
                 </div>
                 <hr />
+
+                <div class="d-flex justify-content-between mt-3">   
+                    <span class="fw-bold">즉시 구매가</span>
+                    <span class="text-end fw-bold">{{ state.item.sellWishPrice }}원</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">   
+                    <span class="gray_font">검수비</span>
+                    <span class="text-end">무료</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">   
+                    <span class="gray_font">수수료</span>
+                    <span class="text-end">{{ Math.floor(state.item.sellWishPrice*0.015) }}원</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">   
+                    <span class="gray_font">배송비</span>
+                    <span class="text-end">3,000원</span>
+                </div>
             </div>
         </div>
+
         <div v-if="state.type === 'bid' && state.row[0]" class="container" id="wrap">
             <div class="top d-flex flex-column align-items-center justify-content-center">
                 <div class="top_info">
-                    <h3>구매 입찰이 완료되었습니다.</h3>
+                    <p class="fw-bold fs-3">구매 입찰이 완료되었습니다.</p>
                     <p>결제는 거래가 성사되는 시점에</p>
                     <p>등록하신 결제 정보로 자동 처리 됩니다.</p>                    
                 </div>
                 <div>
                     <img :src="state.row[0].imagePath" class="top_img" />
                 </div>
-                <div class="top_btn">
-                    <button>내역 상세보기</button>
-                    <a href="/product/list"><button>SHOP 바로가기</button></a>
+
+                <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
+                    <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
+                        <p><a href="/mypage/buying">내역 상세보기</a></p>
+                    </button>
+                    <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
+                        <p><a href="/product/list">SHOP 바로가기</a></p>
+                    </button>
                 </div>
+
                 <div>
-                    <p>'구매내역>입찰 중'상태일 때는 입찰 지우기가 가능합니다.</p>
+                    <p class="gray_font">'구매내역>입찰 중'상태일 때는 입찰 지우기가 가능합니다.</p>
                 </div>
             </div>
             <div class="bottom">
-                <h5>총 결제 금액</h5>
-                <div>
-                    <h5 >{{ state.bidPrice + state.bidPrice*0.03 + 3000 }}원</h5>
-                    <hr />
-                    <p>구매 희망가</p>
-                    <p>{{ state.bidPrice }}</p>
-                    <p>검수비</p>
-                    <p>무료</p>
-                    <p>수수료</p>
-                    <p>{{ state.bidPrice*0.03 }}</p>
-                    <p>배송비</p>
-                    <p>3,000원</p>
-                    <hr />
-                    <p>입찰 마감 기한</p>
-                    <p>{{ state.bidDays }}일 - {{ state.bidFormattedDate }} 까지</p>
-                </div> 
+                <div class="d-flex justify-content-between flex-wrap mt-5">
+                    <p class="text-start fw-bold">총 결제금액</p>
+                    <p class="text-end fs-4 fw-bold" style="color: rgb(103, 194, 58);">
+                        {{ Math.floor(state.bidPrice + state.bidPrice*0.03 + 3000) }}원
+                    </p>
+                </div>
                 <hr />
+
+                <div class="d-flex justify-content-between mt-3">   
+                    <span class="fw-bold">구매 희망가</span>
+                    <span class="text-end fw-bold">{{ state.bidPrice }}원</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">   
+                    <span class="gray_font">검수비</span>
+                    <span class="text-end">무료</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">   
+                    <span class="gray_font">수수료</span>
+                    <span class="text-end">{{ Math.floor(state.bidPrice*0.03) }}원</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">   
+                    <span class="gray_font">배송비</span>
+                    <span class="text-end">3,000원</span>
+                </div>
+                <hr />
+
+                <div class="d-flex justify-content-between"> 
+                    <span>입찰 마감 기한</span>
+                    <span class="text-end">{{ state.bidDays }}일 - {{ state.bidFormattedDate }} 까지</span>
+                </div>
             </div>
         </div>
     </div>
@@ -169,8 +222,12 @@ export default {
 <style lang="css" scoped>
 @import "../assets/css/common.css";
 #wrap {
-    border: 1px solid #cccccc;
-    width: 800px;
+    /* border: 1px solid #cccccc; */
+    width: 600px;
+}
+a, a:hover{
+    text-decoration: none;
+    color: inherit;
 }
 .top_info{
     text-align: center;
@@ -184,9 +241,6 @@ export default {
 }
 .top p{
     margin: 1px 8px;
-}
-.top_btn {
-    margin: 10px;
 }
 
 </style>

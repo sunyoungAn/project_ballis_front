@@ -192,3 +192,7 @@
 .blue_button:hover {
   background-color: rgb(121, 187, 255);
 }
+/* 회색 글씨 */
+.gray_font {
+  color: #8d8d8d;
+}

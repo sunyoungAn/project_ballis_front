@@ -25,23 +25,14 @@
                     </div>
                 </div>
 
-                <!-- 수정전 -->
-                <!-- <div class="btn-group w-100 my-4" role="group" data-toggle="buttons"> -->
-                    <!-- <input type="radio" class="green_button d-none" id="bid" name="price" :checked="state.type === 'bid'"> -->
-                    <!-- <label class="btn not_checked p-3" for="bid" @click="state.type = 'bid'">구매 입찰</label> -->
-                    <!-- <label class="btn p-3" v-bind:class="state.type === 'bid'? 'green_button' : 'not_checked' " for="bid" @click="state.type = 'bid'">구매 입찰</label> -->
-
-                    <!-- <input type="radio" class="green_button d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid"> -->
-                    <!-- <label class="btn not_checked p-3" for="normal" @click="state.type = 'normal'">즉시 구매</label> -->
-                    <!-- <label class="btn p-3" v-bind:class="state.type === 'normal'? 'green_button' : 'not_checked' " for="normal" @click="state.type = 'normal'">즉시 구매</label> -->
-                <!-- </div> -->
-
                 <div class="btn-group w-100 my-4" role="group" data-toggle="buttons">
                     <label class="btn p-3" v-bind:class="state.type === 'bid'? 'green_button' : 'not_checked'" for="bid" @click="state.type = 'bid'">
-                        구매 입찰<input type="radio" class="d-none" id="bid" name="price" :checked="state.type === 'bid'">
+                        구매 입찰
+                        <input type="radio" class="d-none" id="bid" name="price" :checked="state.type === 'bid'">
                     </label>
                     <label class="btn p-3" v-bind:class="[state.type === 'normal'? 'green_button' : 'not_checked']" @click="state.onlyBid === false ? state.type = 'normal' : state.type = 'bid'">
-                        즉시 구매<input type="radio" class="d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
+                        즉시 구매
+                        <input type="radio" class="d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
                     </label>
                 </div>
 
@@ -49,11 +40,11 @@
                 <div v-show="state.type === 'normal'">
                     <p class="fw-bold">즉시 구매가</p>
                     <p class="fs-4 fw-bold text-end">{{ state.row[0].sellWishPrice }}원</p>
-                    <p style="color: #8d8d8d;">총 결제금액은 다음 화면에서 계산됩니다.</p> 
+                    <p class="gray_font">총 결제금액은 다음 화면에서 계산됩니다.</p> 
                     <hr />
                     <div class="d-flex justify-content-between mt-5">   
                         <span class="fw-bold">총 결제 금액</span>
-                        <span class="text-end fs-5" style="color: #8d8d8d;">다음 화면에서 확인</span>
+                        <span class="text-end fs-5 gray_font">다음 화면에서 확인</span>
                     </div>
                     <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
                     @click="handleNext('normal')">
@@ -74,7 +65,7 @@
                         {{ state.errorMessage }}
                     </p>
 
-                    <p class="my-3" style="color: #8d8d8d;">총 결제금액은 다음 화면에서 계산됩니다.</p> 
+                    <p class="my-3 gray_font">총 결제금액은 다음 화면에서 계산됩니다.</p> 
                     <hr />
 
                     <p class="fw-bold mt-5">입찰 마감기한</p>
@@ -95,7 +86,7 @@
 
                     <div class="d-flex justify-content-between mt-5">   
                         <span class="fw-bold">총 결제 금액</span>
-                        <span class="text-end fs-5" style="color: #8d8d8d;">다음 화면에서 확인</span>
+                        <span class="text-end fs-5 gray_font">다음 화면에서 확인</span>
                     </div>
                     <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
                     :disabled="!state.inputValue || state.errorMessage.length > 0"
@@ -255,20 +246,27 @@ export default {
     color: #8d8d8d;
     margin: 0;
 }
-.btn-group, .green_button[disabled] {
-    cursor: not-allowed;
-} 
 .green_button {
     background-color: rgb(103, 194, 58);
     height: 60px;
-    /* color: #ffffff; */
+    color: #ffffff;
 }
 .green_button:hover {
-    background-color: rgb(149, 212, 117);
+    background-color: rgb(103, 194, 58) !important;
+    color: #ffffff !important;
 }
 .not_checked {
     border-color: rgb(103, 194, 58);
     color: rgb(103, 194, 58);
 }
-
+.not_checked:hover {
+    border-color: rgb(103, 194, 58) !important;
+    color: rgb(103, 194, 58) !important;
+}
+/* 안먹힘 */
+label .not_checked input[type="radio"]:disabled {
+    border-color: #8d8d8d !important;
+    color: black !important;
+    cursor: not-allowed !important;
+}
 </style>

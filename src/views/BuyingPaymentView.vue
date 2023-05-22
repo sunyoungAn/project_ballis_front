@@ -23,7 +23,7 @@
 
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">배송 주소</span>
-                <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+ 새 주소 추가</span>
+                <span class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
             </div>
             <button v-show="state.selectedAddress" class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
             
@@ -33,15 +33,15 @@
 
             <div v-show="state.selectedAddress">
                 <div class="d-flex mt-5">
-                    <span class="col-2" style="color: #8d8d8d;">받는 분</span>
+                    <span class="col-2 gray_font">받는 분</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
                 </div>
                 <div class="d-flex">
-                    <span class="col-2" style="color: #8d8d8d;">연락처</span>
+                    <span class="col-2 gray_font">연락처</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.phoneNumber }}</span>
                 </div>
                 <div class="d-flex">
-                    <span class="col-2" style="color: #8d8d8d;">배송 주소</span>
+                    <span class="col-2 gray_font">배송 주소</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
                 </div>
             </div>
@@ -50,11 +50,11 @@
             <p class="fw-bold fs-4 mt-5">배송 방법</p>
             <div class="d-flex justify-content-between flex-wrap" v-if="state.type === 'fast'">
                 <p class="text-start">빠른배송 5,000원</p>
-                <p class="text-end" style="color: #8d8d8d;">지금 결제시 1-2일 내 도착예정</p>
+                <p class="text-end gray_font">지금 결제시 1-2일 내 도착예정</p>
             </div>
             <div class="d-flex justify-content-between flex-wrap" v-else>
                 <p class="text-start">일반배송 3,000원</p>
-                <p class="text-end" style="color: #8d8d8d;">검수 후 배송, 5-7일 내 도착예정</p>
+                <p class="text-end gray_font">검수 후 배송, 5-7일 내 도착예정</p>
             </div>
 
             <hr />
@@ -63,7 +63,7 @@
             <div v-if="state.type === 'fast'">
                 <div class="d-flex justify-content-between flex-wrap">
                     <p class="text-start fw-bold">총 결제금액</p>
-                    <p class="text-end fs-4 fw-bold" style="color: #ffc340;">
+                    <p class="text-end fs-4 fw-bold" style="color: rgb(103, 194, 58);">
                         {{ Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 5000) }}원
                     </p>
                 </div>
@@ -74,15 +74,15 @@
                     <span class="text-end fw-bold">{{ state.item.sellWishPrice }}원</span>
                 </div>
                 <div class="d-flex justify-content-between">   
-                    <span style="color: #8d8d8d;">검수비</span>
+                    <span class="gray_font">검수비</span>
                     <span class="text-end">무료</span>
                 </div>
                 <div class="d-flex justify-content-between">   
-                    <span style="color: #8d8d8d;">수수료</span>
+                    <span class="gray_font">수수료</span>
                     <span class="text-end">{{ Math.floor(state.item.sellWishPrice*0.015) }}원</span>
                 </div>
                 <div class="d-flex justify-content-between">   
-                    <span style="color: #8d8d8d;">배송비</span>
+                    <span class="gray_font">배송비</span>
                     <span class="text-end">5,000원</span>
                 </div>
                 <hr />
@@ -91,7 +91,7 @@
             <div v-if="state.type === 'normal'">
                 <div class="d-flex justify-content-between flex-wrap">
                     <p class="text-start fw-bold">총 결제금액</p>
-                    <p class="text-end fs-4 fw-bold" style="color: #ffc340;">
+                    <p class="text-end fs-4 fw-bold" style="color: rgb(103, 194, 58);">
                         {{ Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 3000) }}원
                     </p>
                 </div>
@@ -102,15 +102,15 @@
                     <span class="text-end fw-bold">{{ state.item.sellWishPrice }}원</span>
                 </div>
                 <div class="d-flex justify-content-between">   
-                    <span style="color: #8d8d8d;">검수비</span>
+                    <span class="gray_font">검수비</span>
                     <span class="text-end">무료</span>
                 </div>
                 <div class="d-flex justify-content-between">   
-                    <span style="color: #8d8d8d;">수수료</span>
+                    <span class="gray_font">수수료</span>
                     <span class="text-end">{{ Math.floor(state.item.sellWishPrice*0.015) }}원</span>
                 </div>
                 <div class="d-flex justify-content-between">   
-                    <span style="color: #8d8d8d;">배송비</span>
+                    <span class="gray_font">배송비</span>
                     <span class="text-end">3,000원</span>
                 </div>
                 <hr />
@@ -119,7 +119,7 @@
             <p class="fw-bold fs-4 mt-5">결제 방법</p>
             <div class="d-flex justify-content-between flex-wrap">
                 <span class="fw-bold">카드 간편 결제</span>
-                <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+새 카드 추가</span>
+                <span class="text-end gray_font" @click="showAddressAdd = true">+새 카드 추가</span>
             </div>
 
             <div> 
@@ -164,7 +164,7 @@
 
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">배송 주소</span>
-                <span class="text-end" style="color: #8d8d8d;" @click="showAddressAdd = true">+ 새 주소 추가</span>
+                <span class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
             </div>
             <button v-show="state.selectedAddress" class="btn btn-secondary float-end" @click="showAddressList = true">변경</button>
             
@@ -174,50 +174,82 @@
 
             <div v-show="state.selectedAddress">
                 <div class="d-flex mt-5">
-                    <span class="col-2" style="color: #8d8d8d;">받는 분</span>
+                    <span class="col-2 gray_font">받는 분</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
                 </div>
                 <div class="d-flex">
-                    <span class="col-2" style="color: #8d8d8d;">연락처</span>
+                    <span class="col-2 gray_font">연락처</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.phoneNumber }}</span>
                 </div>
                 <div class="d-flex">
-                    <span class="col-2" style="color: #8d8d8d;">배송 주소</span>
+                    <span class="col-2 gray_font">배송 주소</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
                 </div>
             </div>
             <hr />
 
-            <h4>배송 방법</h4>
-            <div>
-                <p>일반배송</p>
+            <p class="fw-bold fs-4 mt-5">배송 방법</p>
+            <div class="d-flex justify-content-between flex-wrap">
+                <p class="text-start">일반배송 3,000원</p>
+                <p class="text-end gray_font">검수 후 배송, 5-7일 내 도착예정</p>
+            </div>
+            <hr />
+
+            <p class="fw-bold fs-4 mt-5">최종 주문 정보</p>
+            <div class="d-flex justify-content-between flex-wrap">
+                <p class="text-start fw-bold">총 결제금액</p>
+                <p class="text-end fs-4 fw-bold" style="color: rgb(103, 194, 58);">
+                    {{ Math.floor(state.bidPrice + state.bidPrice*0.03 + 3000) }}원
+                </p>
+            </div>
+            <hr />
+
+            <div class="d-flex justify-content-between mt-3">   
+                <span class="fw-bold">구매 희망가</span>
+                <span class="text-end fw-bold">{{ state.bidPrice }}원</span>
+            </div>
+            <div class="d-flex justify-content-between">   
+                <span class="gray_font">검수비</span>
+                <span class="text-end">무료</span>
+            </div>
+            <div class="d-flex justify-content-between">   
+                <span class="gray_font">수수료</span>
+                <span class="text-end">{{ Math.floor(state.bidPrice*0.03) }}원</span>
+            </div>
+            <div class="d-flex justify-content-between">   
+                <span class="gray_font">배송비</span>
+                <span class="text-end">3,000원</span>
+            </div>
+            <hr />
+
+            <div class="d-flex justify-content-between"> 
+                <span>입찰 마감 기한</span>
+                <span class="text-end">{{ state.bidDays }}일 - {{ state.bidFormattedDate }} 까지</span>
+            </div>
+            <hr />
+
+            <p class="fw-bold fs-4 mt-5">결제 방법</p>
+            <div class="d-flex justify-content-between flex-wrap">
+                <span class="fw-bold">카드 간편 결제</span>
+                <span class="text-end gray_font" @click="showAddressAdd = true">+새 카드 추가</span>
+            </div>
+
+            <div> 
+                <p class="mt-2">카드를 추가하세요</p>
+            </div>
+
+            <div class="mt-3">
+                <p class="fw-bold">일반 결제</p>
+                <div class="btn-group mb-2" role="group" data-toggle="buttons">
+                    <input type="radio" class="btn-check" id="3" autocomplete="off" name="pay" :checked="state.payMethod === 3">
+                    <label class="btn btn-outline-warning rounded mx-1" for="3" @click="handlePay(3)">카카오 페이</label>
+                </div>
             </div>
             <hr />
             
-            <h4>최종 주문 정보</h4>
-            <h5>총 결제 금액</h5>
-            <div>
-                <h5 >{{ Math.floor(state.bidPrice + state.bidPrice*0.03 + 3000) }}원</h5>
-                <hr />
-                <p>구매 희망가</p>
-                <p>{{ state.bidPrice }}</p>
-                <p>검수비</p>
-                <p>무료</p>
-                <p>수수료</p>
-                <p>{{ Math.floor(state.bidPrice*0.03) }}</p>
-                <p>배송비</p>
-                <p>3,000원</p>
-                <hr />
-                <p>입찰 마감 기한</p>
-                <p>{{ state.bidDays }}일 - {{ state.bidFormattedDate }} 까지</p>
-            </div> 
-            <hr />
+            <p class="fw-bold fs-4 mt-5">구매 조건 확인</p>
 
-            <h4>결제 방법</h4>
-            <hr />
-            
-            <h4>구매 조건 확인</h4>
-            <button @click="handleBid">구매 입찰하기</button>
+            <button class="btn btn-secondary w-100 fs-5 fw-bold p-3" @click="handleBid">구매 입찰하기</button>
         </div>
     </div>
 </template>
@@ -394,7 +426,7 @@ export default {
 <style lang="css" scoped>
 @import "../assets/css/common.css";
 #wrap {
-    border: 1px solid #cccccc;
+    /* border: 1px solid #cccccc; */
     width: 800px;
 }
 .head_img{

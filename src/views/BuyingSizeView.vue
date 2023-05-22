@@ -62,7 +62,7 @@
 
                     <div v-show="state.methodSelect === 2">    
                         <div class="d-flex align-items-center justify-content-around mx-auto w-100">
-                            <button class="del_button green_button btn btn-warning flex-grow-1 mx-1 mb-3" type="button">
+                            <button class="del_button green_button btn flex-grow-1 mx-1 mb-3" type="button">
                                 <div v-for="(tmp, i) in state.rowFast" :key="i">
                                     <div v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
                                         <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
