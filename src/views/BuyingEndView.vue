@@ -142,7 +142,7 @@ export default {
                 return `${year}-${month}-${day}`;
         };
   
-      const handleReview = async(id) => {
+      const handleReview = (id) => {
         router.push({path:'/mypage/buying/review', query:{productid:id}});
       }
 

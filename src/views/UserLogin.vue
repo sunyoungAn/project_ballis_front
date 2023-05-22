@@ -43,46 +43,69 @@ import { useStore } from 'vuex';
         password: ""
       })
 
-      // const handleLogin = () =>{
-      //   const headers = {"Content-Type":"application/json"};
-      //   axios.post("/api/login/member",state,{headers}).then((res)=>{
-      //     store.commit('setAccount',res.data);
-      //     sessionStorage.setItem("TOKEN", res.data)
-      //     alert('로그인 되었습니다');
-      //     router.push({path:'/'});
-      //   }).catch(()=>{
-      //     alert('로그인 실패');
-      //   })
-      // }
  
-      const handleLogin = async ()=>{
-        if(state.email === ''){
+      // const handleLogin = async ()=>{
+      //   if(state.email === ''){
+      //     alert('이메일을 입력하세요');
+      //     return false;
+      //   }
+
+      //   if(state.password === ''){
+      //     alert('비밀번호를 입력하세요');
+      //     return false;
+      //   }
+
+      //   const url = `/api/login/member`;
+      //   const headers = {"Content-Type":"application/json"};
+      //   const body = { email:state.email, password:state.password};
+      //   const { data } = await axios.post(url, body, {headers});
+      //   console.log(data);
+      //   try {
+      //     const res = await axios.post(url, body, { headers });
+      //     // console.log(res.data);
+      //     console.log(res.data.memberNumber);
+      //     // sessionStorage.setItem("TOKEN", res.data);
+      //     sessionStorage.setItem("TOKEN", res.data.memberNumber);
+      //     store.commit('setLogged', true);
+      //     store.commit('setMemberStatus', res.data.memberStatus);
+      //     alert('로그인 되었습니다');
+      //     router.push({ path: '/' });
+      //   } catch (error) {
+      //     alert('로그인 실패');
+      //   }
+      // }
+
+      const handleLogin = async () => {
+        if (state.email === '') {
           alert('이메일을 입력하세요');
           return false;
         }
 
-        if(state.password === ''){
+        if (state.password === '') {
           alert('비밀번호를 입력하세요');
           return false;
         }
 
         const url = `/api/login/member`;
-        const headers = {"Content-Type":"application/json"};
-        const body = { email:state.email, password:state.password};
-        const { data } = await axios.post(url, body, {headers});
-        console.log(data);
+        const headers = { "Content-Type": "application/json" };
+        const body = { email: state.email, password: state.password };
+        
         try {
-          const res = await axios.post(url, body, { headers });
-          // console.log(res.data);
-          console.log(res.data.memberNumber);
-          // sessionStorage.setItem("TOKEN", res.data);
-          sessionStorage.setItem("TOKEN", res.data.memberNumber);
-          store.commit('setLogged', true);
-          store.commit('setMemberStatus', res.data.memberStatus);
-          alert('로그인 되었습니다');
-          router.push({ path: '/' });
+          const { data } = await axios.post(url, body, { headers });
+          console.log(data);
+          
+          if (data.memberNumber) {
+            sessionStorage.setItem("TOKEN", data.memberNumber);
+            store.commit('setLogged', true);
+            store.commit('setMemberStatus', data.memberStatus);
+            alert('로그인 되었습니다');
+            router.push({ path: '/' });
+          } else {
+            window.alert("이메일과 비밀번호가 일치하지 않습니다");
+          }
         } catch (error) {
-          alert('로그인 실패');
+          console.error(error);
+          alert('회원 정보가 없습니다');
         }
       }
       return {

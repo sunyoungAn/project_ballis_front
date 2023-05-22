@@ -33,8 +33,11 @@
               <li><img :src="getImagePath(tmp)" class="item_img main_img_background"></li>
               <p class="fw-bolder product_name">{{ tmp.productName }}</p>
               <li style="margin-top: 20px;">{{ formatDate(tmp.selling.registDate) }}</li>
-              <div v-show="tmp.selling.sellingStatus === 1">
+              <div v-show="tmp.selling.sellingStatus === 1" >
                 <span class="badge rounded-pill text-bg-success item_badge">{{ tmp.selling.sellingStatus === 1 ? '입찰중' : '기한만료' }}</span>
+              </div>
+              <div v-show="tmp.selling.sellingStatus === 1" >
+                <button type="button" class="btn btn-outline-dark delete_button" @click="handleDelete(tmp.selling.id)">입찰삭제</button>
               </div>
               <div v-show="tmp.selling.sellingStatus === 2">
                 <span class="badge rounded-pill text-bg-secondary item_badge">{{  tmp.selling.sellingStatus === 1 ? '입찰중' : '기한만료' }}</span>
@@ -133,6 +136,17 @@
             const day = ('0' + date.getDate()).slice(-2);
             return `${year}-${month}-${day}`;
       };
+
+      const handleDelete =  async (id) => {
+        if(confirm('삭제하시겠습니까?')){
+            const url = `/api/delete/selling/${id}`;
+            const headers = {"Content-Type":"application/json"};
+            const body={};
+            const {data} = await axios.delete(url, {headers:headers, data:body});
+            console.log(data);
+            handleData();
+          } 
+      }
   
       onMounted(() => {
         handleData();
@@ -145,7 +159,8 @@
         setMinDate,
         searchDate,
         formatDate,
-        getImagePath
+        getImagePath,
+        handleDelete
       };
     },
   };
@@ -156,7 +171,7 @@
 .ul_item_box{
     padding: 15px;
     display: grid;
-    grid-template-columns:  15% 55% 15% 15%;
+    grid-template-columns:  15% 45% 15% 10% 15%;
     list-style-type: none;
 }
 
@@ -182,7 +197,7 @@
 }
 
 .item_badge{
-  margin-top: 20px; 
+  margin-top: 20px;
   width:70px; 
   height: 25px;
 }
@@ -193,6 +208,12 @@
   justify-content: center;
   align-items: center;
   height: 100%; 
+}
+
+.delete_button{
+  border-radius: 0; 
+  margin-top: 13px;
+  margin-left: 70px;
 }
 
  
