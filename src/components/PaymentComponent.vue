@@ -49,12 +49,9 @@ export default {
             selling : {},
             
             memberNumber : sessionStorage.getItem("TOKEN"),
-            buyer_email: 'gildong@gmail.com',
-            buyer_name: '홍길동',
-            buyer_tel: '01042424242',
+            member : "",
             
             paymentType : 3, // 1:카드 간편결제 2:일반카드 3:카카오페이 4:네이버페이
-
         })
 
 
@@ -97,6 +94,14 @@ export default {
         Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 5000) // 빠른배송
         : Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 3000); // 즉시구매
 
+        // 회원 데이터 
+        const handleData = async()=> {
+            const url = `/api/get/member?memberNumber=${state.memberNumber}`;
+            const headers = {"Content-Type":"application/json", "auth" : state.memberNumber};
+            const { data } = await axios.get(url,{headers});
+            state.member = data;
+            console.log("회원정보: ", state.member);
+        };
 
         const IMP = window.IMP; 
         IMP.init("imp26282104"); // 상점id
@@ -110,9 +115,9 @@ export default {
                         merchant_uid: state.merchantUid,
                         name: state.item.productKorName, // 상품명
                         amount: finalPrice, // 결제가격
-                        buyer_email: state.buyer_email, 
-                        buyer_name: state.buyer_name,  
-                        buyer_tel: state.buyer_tel, 
+                        buyer_email: state.member.email, 
+                        buyer_name: state.member.name,  
+                        buyer_tel: state.member.phoneNumber, 
                         buyer_addr: state.address.address + state.address.subAddress,
                         buyer_postcode: state.address.zipCode,
                     },
@@ -131,7 +136,7 @@ export default {
                                     contractId : null,
                                     sellingId : state.item.sellingId,
                                     memberNumber : state.memberNumber,
-                                    name : state.address.name, 
+                                    name : state.member.name, 
                                     address : state.address.address,
                                     subAddress : state.address.subAddress,
                                     zipCode : state.address.zipCode,
@@ -167,9 +172,9 @@ export default {
                         merchant_uid: state.merchantUid,
                         name: '창고 이용료', // 상품명
                         amount: 3000, // 창고이용료 
-                        buyer_email: state.buyer_email, 
-                        buyer_name: state.buyer_name,  
-                        buyer_tel: state.buyer_tel, 
+                        buyer_email: state.member.email, 
+                        buyer_name: state.member.name,  
+                        buyer_tel: state.member.phoneNumber, 
                         buyer_addr: state.address.address + state.address.subAddress,
                         buyer_postcode: state.address.zipCode,
                     },
@@ -188,7 +193,7 @@ export default {
                                     contractId : null,
                                     sellingId : null,
                                     memberNumber : state.memberNumber,
-                                    name : state.address.name, 
+                                    name : state.member.name, 
                                     address : state.address.address,
                                     subAddress : state.address.subAddress,
                                     zipCode : state.address.zipCode,
@@ -224,6 +229,7 @@ export default {
             if(props.showPayment){
                 requestPay();
             }
+            handleData();
             setMerchantUid();
         })
 

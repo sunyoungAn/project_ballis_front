@@ -130,20 +130,26 @@
             </div>
 
             <p class="fw-bold fs-4 mt-5">결제 방법</p>
-            <div class="d-flex justify-content-between flex-wrap">
+            <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold">카드 간편 결제</span>
-                <span class="text-end gray_font" @click="showAddressAdd = true">+새 카드 추가</span>
+                <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
             </div>
 
-            <div> 
+            <div v-if="state.cards.length === 0">
                 <p class="mt-2">카드를 추가하세요</p>
             </div>
 
-            <div class="mt-3">
-                <p class="fw-bold">일반 결제</p>
-                <div class="btn-group mb-2" role="group" data-toggle="buttons">
-                    <input type="radio" class="btn-check" id="3" autocomplete="off" name="pay" :checked="state.payMethod === 3">
-                    <label class="btn btn-outline-warning rounded mx-1" for="3" @click="handlePay(3)">카카오 페이</label>
+            <div v-else>
+                <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
+                <div v-for="tmp of state.cards" :key="tmp" class="mt-3">
+                    <div class="d-flex">
+                        <span class="col-2 gray_font">카드번호</span>
+                        <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                    </div>
+                    <div class="d-flex">
+                        <span class="col-2 gray_font">유효일</span>
+                        <span class="col-8 text-start">{{ tmp.expiryMonth }} / {{ tmp.expiryYear }}</span>
+                    </div>
                 </div>
             </div>
             <hr />
@@ -256,14 +262,29 @@
             <hr />
 
             <p class="fw-bold fs-4 mt-5">결제 방법</p>
-            <div class="d-flex justify-content-between flex-wrap">
+            <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold">카드 간편 결제</span>
-                <span class="text-end gray_font" @click="showAddressAdd = true">+새 카드 추가</span>
+                <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
             </div>
 
-            <div> 
+            <div v-if="state.cards.length === 0">
                 <p class="mt-2">카드를 추가하세요</p>
             </div>
+
+            <div v-else>
+                <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
+                <div v-for="tmp of state.cards" :key="tmp" class="mt-3">
+                    <div class="d-flex">
+                        <span class="col-2 gray_font">카드번호</span>
+                        <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                    </div>
+                    <div class="d-flex">
+                        <span class="col-2 gray_font">유효일</span>
+                        <span class="col-8 text-start">{{ tmp.expiryMonth }} / {{ tmp.expiryYear }}</span>
+                    </div>
+                </div>
+            </div>
+            <hr />
 
             <div class="mt-3">
                 <p class="fw-bold">일반 결제</p>
@@ -313,6 +334,8 @@ export default {
             addressList : [],
             selectedAddress : {},
             memberNumber : sessionStorage.getItem("TOKEN"),
+            member : '',
+            cards : '',
             
             row : [],
             sellingStatus : null,
@@ -418,6 +441,17 @@ export default {
             // }
         }
 
+        // 멤버 정보 읽어오기
+        const handleMember = async()=> {
+            const url = `/api/get/member?memberNumber=${state.memberNumber}`;
+            const headers = {"Content-Type":"application/json", "auth" : state.memberNumber};
+            const { data } = await axios.get(url,{headers});
+            state.member = data;
+            state.cards = data.cards;
+            console.log("회원정보: ", state.member);
+            console.log("카드정보: ", state.cards);
+        };
+
         // 구매 입찰 시 데이터 필요
         if(state.type === 'bid') {
             const handleData = async() => {
@@ -439,6 +473,7 @@ export default {
         onMounted(()=>{
             handleStore();
             handleAddressList();
+            handleMember();
         })
 
         return {

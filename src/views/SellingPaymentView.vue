@@ -21,7 +21,7 @@
             </div>
 
             <div v-if="!state.member.depositor">
-                <p>계좌를 추가하세요</p>
+                <p class="mt-3">계좌를 추가하세요</p>
             </div>
 
             <div v-else>
@@ -100,11 +100,11 @@
             <p class="fw-bold fs-4 mt-5">결제 방법</p>
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold">카드 간편 결제</span>
-                <span v-if="!state.cards" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
+                <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
             </div>
 
-            <div v-if="!state.cards">
-                <p>카드를 추가하세요</p>
+            <div v-if="state.cards.length === 0">
+                <p class="mt-2">카드를 추가하세요</p>
             </div>
 
             <div v-else>
@@ -145,7 +145,7 @@
             </div>
 
             <div v-if="!state.member.depositor">
-                <p>계좌를 추가하세요</p>
+                <p class="mt-3">계좌를 추가하세요</p>
             </div>
 
             <div v-else>
@@ -224,11 +224,11 @@
                 <p class="fw-bold fs-4 mt-5">결제 방법</p>
                 <div class="d-flex justify-content-between mt-5 flex-wrap">
                     <span class="fw-bold">카드 간편 결제</span>
-                    <span v-if="!state.cards" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
+                    <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
                 </div>
 
-                <div v-if="!state.cards">
-                    <p>카드를 추가하세요</p>
+                <div v-if="state.cards.length === 0">
+                    <p class="mt-2">카드를 추가하세요</p>
                 </div>
 
                 <div v-else>
@@ -301,11 +301,11 @@
                 <p class="fw-bold fs-4 mt-5">결제 방법</p>
                 <div class="d-flex justify-content-between mt-5 flex-wrap">
                     <span class="fw-bold">카드 간편 결제</span>
-                    <span v-if="!state.cards" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
+                    <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
                 </div>
 
-                <div v-if="!state.cards">
-                    <p>카드를 추가하세요</p>
+                <div v-if="state.cards.length === 0">
+                    <p class="mt-2">카드를 추가하세요</p>
                 </div>
 
                 <div v-else>
