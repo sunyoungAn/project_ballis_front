@@ -14,48 +14,21 @@
             
             <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button 
-                        class="nav-link" 
-                        :class="{ active: state.type === 'con' }" 
-                        id="pills-con-tab" 
-                        data-bs-toggle="pill" 
-                        data-bs-target="#con" 
-                        type="button" 
-                        role="tab" 
-                        @click="state.type = 'con'"
-                        >체결 거래
-                    </button>
+                    <button class="nav-link active" id="pills-con-tab" data-bs-toggle="pill" data-bs-target="#con"
+                    @click="state.type = 'con'">체결 거래</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button 
-                        class="nav-link" 
-                        :class="{ active: state.type === 'sell' }"
-                        id="pills-sell-tab" 
-                        data-bs-toggle="pill" 
-                        data-bs-target="#sell" 
-                        type="button" 
-                        role="tab" 
-                        @click="state.type = 'sell'"
-                        >판매 입찰
-                    </button>
+                    <button class="nav-link" id="pills-sell-tab" data-bs-toggle="pill" data-bs-target="#sell"
+                    @click="state.type = 'sell'">판매 입찰</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button 
-                    class="nav-link" :class="{ active: state.type === 'buy' }"
-                        id="pills-buy-tab" 
-                        data-bs-toggle="pill" 
-                        data-bs-target="#buy" 
-                        type="button" 
-                        role="tab" 
-                        @click="state.type = 'buy'"
-                        >구매 입찰
-                    </button>
+                    <button class="nav-link" id="pills-buy-tab" data-bs-toggle="pill" data-bs-target="#buy"
+                    @click="state.type = 'buy'">구매 입찰</button>
                 </li>
             </ul>
             
             <div class="tab-content" id="pills-tabContent">
-                <div v-show="state.type === 'con'">
-                <div class="tab-pane fade" id="con" role="tabpanel">
+                <div v-show="state.type === 'con'" class="tab-pane fade show active" id="con" role="tabpanel">
                     <ul class="info_head">
                         <li class="info_box">사이즈</li>
                         <li class="info_box">거래가</li>
@@ -71,9 +44,8 @@
                         </ul>
                     </div>
                 </div>
-                </div>
 
-                <div class="tab-pane fade" id="sell" role="tabpanel" v-show="state.type === 'sell'">
+                <div v-show="state.type === 'sell'" class="tab-pane fade" id="sell" role="tabpanel">
                     <ul class="info_head">
                         <li class="info_box">사이즈</li>
                         <li class="info_box">판매 희망가</li>
@@ -89,7 +61,7 @@
                     </div>
                 </div>
 
-                <div class="tab-pane fade" id="buy" role="tabpanel" v-show="state.type === 'buy'">
+                <div v-show="state.type === 'buy'" class="tab-pane fade" id="buy" role="tabpanel">
                     <ul class="info_head">
                         <li class="info_box">사이즈</li>
                         <li class="info_box">구매 희망가</li>
@@ -118,10 +90,6 @@ export default {
             type: String,
             required: true
         },
-        type: {
-            type: String,
-            required: true           
-        },
         conRow: {
             type: Array,
             default: function() {
@@ -145,12 +113,11 @@ export default {
 
         const state = reactive({
             productId : props.productId,
-            type : props.type,
-            row: {},
-
             conRow: props.conRow,
             buyRow: props.buyRow,
-            sellRow: props.sellRow
+            sellRow: props.sellRow,
+            row: {},
+            type: 'con'
         })
 
         const handleInfo = async() => {
@@ -159,7 +126,6 @@ export default {
                 state.row = res.data[0];
                 console.log("출력용 데이터", state.row);
                 state.row.imagePath = `/api/product/display?name=${state.row.imagePath}`;
-                console.log("타입",state.type);
             }catch(err){
                 console.error(err);
             }
