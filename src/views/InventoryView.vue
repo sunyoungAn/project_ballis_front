@@ -33,9 +33,12 @@
                   tmp.selling.sellingStatus === 15 ? '검수완료' :
                   tmp.selling.sellingStatus === 16 ? '창고이동' :
                   tmp.selling.sellingStatus === 17 ? '판매중' :
-                  tmp.selling.sellingStatus === 18 ? '판매완료' : '보관만료'
+                  tmp.selling.sellingStatus === 18 ? '판매완료' : 
+                  tmp.selling.sellingStatus === 18 ? '보관만료' : '정산완료'
                 }}
               </span>
+              <span style="margin-top: 20px;">{{ formatDate(tmp.selling.expiryDate) }}</span>
+              <button type="button" class="btn btn-outline-dark delete_button" v-show="tmp.selling.sellingStatus === 11" @click="handleDelete(tmp.selling.id)">입찰삭제</button>
             </ul>
           </div>
         </article>
@@ -85,9 +88,31 @@ export default {
           { label: "판매중", value: 17 },
           { label: "판매완료", value: 18 },
           { label: "보관만료", value: 19 },
+          { label: "정산완료", value: 50 }
         ];
         return options;
       });
+
+      //날짜설정
+      const formatDate = (dateString) => {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            return `${year}-${month}-${day}`;
+      };
+
+      //보관입찰 삭제
+      const handleDelete =  async (id) => {
+        if(confirm('삭제하시겠습니까?')){
+            const url = `/api/delete/selling/${id}`;
+            const headers = {"Content-Type":"application/json"};
+            const body={};
+            const {data} = await axios.delete(url, {headers:headers, data:body});
+            console.log(data);
+            handleData();
+          } 
+      }
 
       onMounted(()=>{
         handleData();
@@ -96,7 +121,9 @@ export default {
       return {
         state,
         statusOptions,
-        filteredList
+        filteredList,
+        formatDate,
+        handleDelete
       }
     }
 }
@@ -114,7 +141,7 @@ export default {
 .ul_item_box{
     padding: 15px;
     display: grid;
-    grid-template-columns: 20% 60% 20%;
+    grid-template-columns: 15% 45% 15% 10% 15%;
     list-style-type: none;
 }
 
@@ -145,4 +172,12 @@ export default {
   width:70px; 
   height: 25px;
 }
+
+.delete_button{
+  border-radius: 0; 
+  margin-top: 13px;
+  margin-left: 70px;
+  height: 40px;
+}
+
 </style>

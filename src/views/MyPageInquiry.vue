@@ -9,7 +9,7 @@
                 </div>
 
                 <div style="float: right; margin-bottom: 30px;">
-                    <button type="button" class="btn btn-outline-dark"><a href="/mypage/inquiry/insert">글쓰기</a></button>
+                    <button type="button" class="btn btn-outline-dark" @click="handleInsert()">글쓰기</button>
                 </div>
 
                 <div>
@@ -77,6 +77,10 @@ export default {
             router.push({path:'/mypage/inquiry/content', query:{id:no}})
         };
 
+        const handleInsert = () => {
+            router.push({path:'/mypage/inquiry/insert'});
+        }
+
         onMounted(()=>{
             handleData();
         })
@@ -85,7 +89,8 @@ export default {
         return {
             state,
             formatDate,
-            handleContent
+            handleContent,
+            handleInsert
             
         }
     }
