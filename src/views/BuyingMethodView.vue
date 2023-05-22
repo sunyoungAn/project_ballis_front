@@ -25,13 +25,24 @@
                     </div>
                 </div>
 
+                <!-- 수정전 -->
+                <!-- <div class="btn-group w-100 my-4" role="group" data-toggle="buttons"> -->
+                    <!-- <input type="radio" class="green_button d-none" id="bid" name="price" :checked="state.type === 'bid'"> -->
+                    <!-- <label class="btn not_checked p-3" for="bid" @click="state.type = 'bid'">구매 입찰</label> -->
+                    <!-- <label class="btn p-3" v-bind:class="state.type === 'bid'? 'green_button' : 'not_checked' " for="bid" @click="state.type = 'bid'">구매 입찰</label> -->
+
+                    <!-- <input type="radio" class="green_button d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid"> -->
+                    <!-- <label class="btn not_checked p-3" for="normal" @click="state.type = 'normal'">즉시 구매</label> -->
+                    <!-- <label class="btn p-3" v-bind:class="state.type === 'normal'? 'green_button' : 'not_checked' " for="normal" @click="state.type = 'normal'">즉시 구매</label> -->
+                <!-- </div> -->
 
                 <div class="btn-group w-100 my-4" role="group" data-toggle="buttons">
-                    <input type="radio" class="green_button d-none" id="bid" name="price" :checked="state.type === 'bid'">
-                    <label class="btn not_checked p-3" for="bid" @click="state.type = 'bid'">구매 입찰</label>
-
-                    <input type="radio" class="green_button d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
-                    <label class="btn not_checked p-3" for="normal" @click="state.type = 'normal'">즉시 구매</label>
+                    <label class="btn p-3" v-bind:class="state.type === 'bid'? 'green_button' : 'not_checked'" for="bid" @click="state.type = 'bid'">
+                        구매 입찰<input type="radio" class="d-none" id="bid" name="price" :checked="state.type === 'bid'">
+                    </label>
+                    <label class="btn p-3" v-bind:class="[state.type === 'normal'? 'green_button' : 'not_checked']" @click="state.onlyBid === false ? state.type = 'normal' : state.type = 'bid'">
+                        즉시 구매<input type="radio" class="d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
+                    </label>
                 </div>
 
                 <!-- 즉시 구매 -->
@@ -249,6 +260,7 @@ export default {
 } 
 .green_button {
     background-color: rgb(103, 194, 58);
+    height: 60px;
     /* color: #ffffff; */
 }
 .green_button:hover {
