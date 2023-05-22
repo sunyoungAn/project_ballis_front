@@ -47,7 +47,7 @@
                         <span>{{ tmp.name }}  {{ tmp.phoneNumber }}</span><br>
                         <span>({{ tmp.zipCode }}){{ tmp.address }}  {{ tmp.subAddress }}</span>
                         <button type="button" class="btn btn-outline-dark search_button" @click="handleDelete(index, tmp.id)" >삭제</button>
-                        <button type="button" class="btn btn-outline-dark search_button" @click="setDefaultAddress">기본배송지등록</button>
+                        <button type="button" class="btn btn-outline-dark search_button" @click="updateDefaultAddress(tmp.id)">기본배송지등록</button>
                     </div>
                 </div>
 
@@ -56,10 +56,12 @@
                 <hr>
                 
                 <div class="p_tag_box_2">
+                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="showAddressAdd = true">변경</button>
                     <p class="p_title">결제카드</p>
                     <p class="p_text">101-124-456-7594</p>
                     <p class="p_title">정산계좌</p>
                     <p class="p_text">000-00000-000000-0000</p>
+
                 </div>
             </article>
         </section>
@@ -82,7 +84,7 @@ export default {
             member : '',
             isModalViewed:false,
             address:[],
-            defaultAddress:2,
+            defaultAddress:"",
         });
 
 
@@ -127,6 +129,16 @@ export default {
            } 
         }
 
+        const updateDefaultAddress = async (id) => {
+            const url = `/api/update/address/${state.token}/${id}`;
+            const headers = {"Content-Type":"application/json"};
+            const body = new FormData();
+            body.append("defaultAddress", state.defaultAddress);
+            const {data} = await axios.put(url,body,{headers});
+            console.log(data);
+            handleData1();
+        }
+
         onMounted(()=>{
             handleData();
             handleData1();
@@ -135,7 +147,8 @@ export default {
         return {
             state,
             showAddressAdd,
-            handleDelete
+            handleDelete,
+            updateDefaultAddress
         }
     },
 
