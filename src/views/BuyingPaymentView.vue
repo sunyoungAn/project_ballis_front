@@ -44,6 +44,20 @@
                     <span class="col-2 gray_font">배송 주소</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
                 </div>
+
+                <select class="form-select mt-3" v-model="deliveryRequest">
+                    <option selected>요청사항 없음</option>
+                    <option value="1">문 앞에 놓아 주세요</option>
+                    <option value="2">경비실에 맡겨 주세요</option>
+                    <option value="3">파손 위험 상품입니다. 배송 시 주의해주세요</option>
+                    <option value="4">직접 입력</option>
+                </select>
+
+                <input v-if="deliveryRequest === '4'"
+                v-model="state.requestCustom" 
+                class="form-control mt-3" 
+                placeholder="내용을 입력해주세요.(최대 40자)"
+                maxlength="40" />
             </div>
             <hr />
 
@@ -139,7 +153,7 @@
             <payment-component 
             :address="state.selectedAddress" 
             :type="state.type" 
-            :contractDto="state.contractDto"
+            :delivery="state.deliveryRequest"
             />
         </div>
 
@@ -184,6 +198,20 @@
                     <span class="col-2 gray_font">배송 주소</span>
                     <span class="col-8 text-start">{{ state.selectedAddress.address }} {{ state.selectedAddress.subAddress }}</span>
                 </div>
+
+                <select class="form-select mt-3" v-model="deliveryRequest">
+                    <option selected>요청사항 없음</option>
+                    <option value="1">문 앞에 놓아 주세요</option>
+                    <option value="2">경비실에 맡겨 주세요</option>
+                    <option value="3">파손 위험 상품입니다. 배송 시 주의해주세요</option>
+                    <option value="4">직접 입력</option>
+                </select>
+
+                <input v-if="deliveryRequest === '4'"
+                v-model="state.requestCustom" 
+                class="form-control mt-3" 
+                placeholder="내용을 입력해주세요.(최대 40자)"
+                maxlength="40" />
             </div>
             <hr />
 
@@ -275,13 +303,13 @@ export default {
 
         const showAddressAdd = ref(false);
         const showAddressList = ref(false);
+        const deliveryRequest = ref('요청사항 없음');
 
         const state = reactive({
             productid: Number(route.query.productid),
             size : Number(route.query.size),
             type : route.query.type,
             item : '',
-            itemImagePath : '',
             addressList : [],
             selectedAddress : {},
             memberNumber : sessionStorage.getItem("TOKEN"),
@@ -295,13 +323,27 @@ export default {
             bidFormattedDate : '',
             bidDays : '',
 
-            contractDto : {},
-
-            payMethod : 0
+            payMethod : 0,
+            deliveryRequest : '',
+            requestCustom : '',
         })
-        
 
         watchEffect(() => {
+            if(deliveryRequest.value === '1') {
+                state.deliveryRequest = '문 앞에 놓아 주세요'
+            } else if(deliveryRequest.value === '2') {
+                state.deliveryRequest = '경비실에 맡겨 주세요'
+            } else if(deliveryRequest.value === '3') {
+                state.deliveryRequest = '파손 위험 상품입니다. 배송 시 주의해주세요'
+            } else if(deliveryRequest.value === '4') {
+                state.deliveryRequest = state.requestCustom
+            }
+            
+            console.log("밸류", deliveryRequest.value)
+            console.log("스테이트" ,state.deliveryRequest)
+        });
+
+        const handleStore = () => {
             state.item = store.getters.getSelectedItem;
             if(state.item) {
                 state.item.imagePath = `/api/product/display?name=${state.item.imagePath}`;
@@ -309,8 +351,8 @@ export default {
             state.bidPrice = Number(store.getters.getSelectedPrice);
             state.bidDate = store.getters.getSelectedDate;
             state.bidFormattedDate = store.getters.getSelectedFormattedDate;
-            state.bidDays = store.getters.getSelectedDays;
-        });
+            state.bidDays = store.getters.getSelectedDays;   
+        }
 
         // 결제 방법 선택
         const handlePay = (payMethod) => {
@@ -343,20 +385,6 @@ export default {
         const selectAdd = (selectedAddress) => {
             state.selectedAddress = selectedAddress;
             console.log("선택주소",selectedAddress)
-        }
-
-        // 빠른배송, 즉시구매 시 결제창에 데이터 전달
-        if(state.type === 'fast' || state.type === 'normal') {
-            state.contractDto = {
-                productId : state.productid,
-                buyingId : null,
-                sellingId : state.item.sellingId,
-                buyerNumber : state.memberNumber,
-                sellerNumber : state.item.sellerNumber,
-                price : state.item.sellWishPrice,
-                productSize : state.size
-            }
-            console.log("전달되니컨트랙트", state.contractDto)
         }
             
         // 구매입찰
@@ -409,6 +437,7 @@ export default {
         }
 
         onMounted(()=>{
+            handleStore();
             handleAddressList();
         })
 
@@ -417,6 +446,7 @@ export default {
             handlePay,
             showAddressAdd,
             showAddressList,
+            deliveryRequest,
             clickModal,
             selectAdd,
             handleBid,

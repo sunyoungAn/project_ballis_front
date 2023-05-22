@@ -20,10 +20,6 @@ export default {
             type : String,
             required : true
         },
-        contractDto : {
-            type : Object,
-            default : null
-        },
         sellingDto : {
             type : Object,
             default : null
@@ -31,6 +27,10 @@ export default {
         showPayment: {
             type: Boolean,
             required: true
+        },
+        delivery: {
+            type: String,
+            default : '요청사항 없음'
         }
     },
     setup (props) {
@@ -41,8 +41,7 @@ export default {
         const state = reactive({
             item : "",
             address : {},
-            message : "", 
-
+            message : "",
             merchantUid: "", // 주문번호
             
             type : "",
@@ -58,15 +57,29 @@ export default {
 
         })
 
+
         watchEffect(() => {
             state.item = store.getters.getSelectedItem;
             state.address = props.address;
             state.type = props.type;
-            state.contract = props.contractDto;
             state.selling = props.sellingDto;
-            console.log("셀링받아왔나", state.selling);
-            console.log("콘트랙트받아왔나", state.contract);
-            console.log("아이템 정보", state.item)
+            state.message = props.delivery;
+            if(state.item) {
+                state.contract = {
+                    productId : state.item.id,
+                    buyingId : null,
+                    sellingId : state.item.sellingId,
+                    buyerNumber : state.memberNumber,
+                    sellerNumber : state.item.sellerNumber,
+                    price : state.item.sellWishPrice,
+                    productSize : state.item.sellProductSize
+
+                }
+            }
+            // console.log("셀링받아왔나", state.selling);
+            // console.log("콘트랙트", state.contract);
+            // console.log("아이템 정보", state.item);
+            // console.log("배송요청", state.message);
         });
 
         // 주문번호 생성
