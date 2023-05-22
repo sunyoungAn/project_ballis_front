@@ -22,7 +22,7 @@
                         <div class="button_size_body1" :class="{ 'active': activeIndex === index }">{{ size }}</div>
                         <div v-for="(tmp, i) in state.rowSell" :key="i">
                             <div v-if="tmp.buyProductSize === size">
-                                <div class="button_size_body3" :class="{ 'active': activeIndex === index }">{{ tmp.buyWishPrice }}</div>
+                                <div class="button_size_body3" :class="{ 'active': activeIndex === index }">{{ changePriceFormat(tmp.buyWishPrice) }}</div>
                             </div>
                         </div> 
                     </button>
@@ -42,7 +42,7 @@
                             <button class="del_button blue_button btn flex-grow-1 mx-0 mb-3">
                                 <div v-for="(tmp, i) in state.rowSell" :key="i">
                                     <div v-if="tmp.buyProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
-                                        <p class="fs-5 fw-bold">{{ tmp.buyWishPrice }}</p>
+                                        <p class="fs-5 fw-bold">{{ changePriceFormat(tmp.buyWishPrice) }}</p>
                                         <p>선불발송</p>
                                     </div>
                                 </div>
@@ -173,6 +173,14 @@ export default {
             
             state.showMethod = true;
         }
+        
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(!data) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
 
         onMounted (()=> {
             handleInfo();
@@ -184,7 +192,8 @@ export default {
             state,
             activeIndex,
             handleMethod,
-            handleType
+            handleType,
+            changePriceFormat
         }
     }
 }

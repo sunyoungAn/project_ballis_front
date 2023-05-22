@@ -15,12 +15,12 @@
                 <div class="d-flex align-items-center justify-content-center">
                     <div class="price_box d-flex flex-column align-items-center text-center" id="price_box1">
                         <p class="price_name">즉시 구매가</p>
-                        <p v-if="state.row[0].sellWishPrice" class="fs-5">{{ state.row[0].sellWishPrice }}원</p>
+                        <p v-if="state.row[0].sellWishPrice" class="fs-5">{{ changePriceFormat(state.row[0].sellWishPrice) }}원</p>
                         <p v-else class="fs-5">- 원</p> 
                     </div>
                     <div class="price_box d-flex flex-column align-items-center text-center"> 
                         <p class="price_name">즉시 판매가</p>
-                        <p v-if="state.row[0].buyWishPrice" class="fs-5">{{ state.row[0].buyWishPrice }}원</p>
+                        <p v-if="state.row[0].buyWishPrice" class="fs-5">{{ changePriceFormat(state.row[0].buyWishPrice) }}원</p>
                         <p v-else class="fs-5">- 원</p> 
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                         판매 입찰
                         <input type="radio" class="d-none" id="bid" name="price" :checked="state.type === 'bid'">
                     </label>
-                    <label class="btn p-3" v-bind:class="[state.type === 'normal'? 'blue_button' : 'not_checked']" @click="state.onlyBid === false ? state.type = 'normal' : state.type = 'bid'">
+                    <label class="btn p-3" v-bind:class="[state.type === 'normal'? 'blue_button' : 'not_checked']" @click="state.sellNow ? state.type = 'normal' : state.type = 'bid'">
                         즉시 판매
                         <input type="radio" class="d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
                     </label>
@@ -43,7 +43,7 @@
                 <!-- 즉시 판매 -->
                 <div v-show="state.type === 'normal'">
                     <p class="fw-bold">즉시 판매가</p>
-                    <p class="fs-4 fw-bold text-end">{{ state.row[0].buyWishPrice }}원</p>
+                    <p class="fs-4 fw-bold text-end">{{ changePriceFormat(state.row[0].buyWishPrice) }}원</p>
                     <hr />
 
                     <div class="d-flex justify-content-between mt-2">   
@@ -52,7 +52,7 @@
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">수수료</span>
-                        <span class="text-end">{{ -Math.floor(Number(state.row[0].buyWishPrice)*0.02) }}원</span>
+                        <span class="text-end">{{ -changePriceFormat(Math.floor(Number(state.row[0].buyWishPrice)*0.02)) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">배송비</span>
@@ -62,7 +62,7 @@
 
                     <div class="d-flex justify-content-between mt-5"> 
                         <p class="fw-bold">정산 금액</p>
-                        <p class="fs-4 fw-bold text-end" style="color: rgb(64, 158, 255);">{{ Math.floor(Number(state.row[0].buyWishPrice) - Number(state.row[0].buyWishPrice)*0.02) }}원</p>
+                        <p class="fs-4 fw-bold text-end" style="color: rgb(64, 158, 255);">{{ changePriceFormat(Math.floor(Number(state.row[0].buyWishPrice) - Number(state.row[0].buyWishPrice)*0.02)) }}원</p>
                     </div>
 
                     <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
@@ -90,7 +90,7 @@
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">수수료</span>
-                        <span class="text-end">{{ -Math.floor(Number(state.inputValue)*0.02) }}원</span>
+                        <span class="text-end">{{ -changePriceFormat(Math.floor(Number(state.inputValue)*0.02)) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">배송비</span>
@@ -116,7 +116,7 @@
 
                     <div class="d-flex justify-content-between mt-5"> 
                         <p class="fw-bold">정산 금액</p>
-                        <p class="fs-4 fw-bold text-end" style="color: rgb(64, 158, 255);">{{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원</p>
+                        <p class="fs-4 fw-bold text-end" style="color: rgb(64, 158, 255);">{{ changePriceFormat(Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02)) }}원</p>
                     </div>
                     
                     <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
@@ -145,7 +145,7 @@
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">수수료</span>
-                        <span class="text-end">{{ -Math.floor(Number(state.inputValue)*0.02) }}원</span>
+                        <span class="text-end">{{ -changePriceFormat(Math.floor(Number(state.inputValue)*0.02)) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">배송비</span>
@@ -170,7 +170,7 @@
                     <div class="d-flex justify-content-between mt-5"> 
                         <p class="fw-bold">정산 금액</p>
                         <p class="fs-4 fw-bold text-end" style="color: rgb(64, 158, 255);">
-                            {{ Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02) }}원
+                            {{ changePriceFormat(Math.floor(Number(state.inputValue) - Number(state.inputValue)*0.02)) }}원
                         </p>
                     </div>
                     <hr />    
@@ -301,6 +301,14 @@ export default {
             }
         }
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(typeof data !== 'number' || isNaN(data)) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         onMounted(()=>{
             handleData();
             handleDate(30);
@@ -311,6 +319,7 @@ export default {
             handleNext,
             handleInput,
             handleDate,
+            changePriceFormat
         }
     }
 }

@@ -28,7 +28,7 @@
                             </div>
                             <div v-for="(tmp, i) in state.rowCheaper" :key="i">
                                 <div v-if="tmp.sellProductSize === size">
-                                    <div class="button_size_body3" :class="{ 'active': activeIndex === index }">{{ tmp.sellWishPrice }}</div>
+                                    <div class="button_size_body3" :class="{ 'active': activeIndex === index }">{{ changePriceFormat(tmp.sellWishPrice) }}</div>
                                 </div>
                             </div> 
                         </div>
@@ -43,7 +43,7 @@
                             <button class="del_button green_button btn flex-grow-1 mx-0 mb-3">
                                 <div v-for="(tmp, i) in state.rowFast" :key="i">
                                     <div v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
-                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p class="fs-5 fw-bold">{{ changePriceFormat(tmp.sellWishPrice) }}</p>
                                         <p>빠른배송(1-2일 소요)</p>
                                     </div>
                                 </div>
@@ -52,7 +52,7 @@
                             <button class="del_button btn btn-secondary flex-grow-1 mx-0 mb-3">
                                 <div v-for="(tmp, i) in state.rowNormal" :key="i">
                                     <div v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
-                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p class="fs-5 fw-bold">{{ changePriceFormat(tmp.sellWishPrice) }}</p>
                                         <p>일반배송(5-7일 소요)</p>
                                     </div>
                                 </div>
@@ -65,7 +65,7 @@
                             <button class="del_button green_button btn flex-grow-1 mx-1 mb-3" type="button">
                                 <div v-for="(tmp, i) in state.rowFast" :key="i">
                                     <div v-if="tmp.sellProductSize === state.size" @click="handleFast(state.size, tmp)">
-                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p class="fs-5 fw-bold">{{ changePriceFormat(tmp.sellWishPrice) }}</p>
                                         <p>빠른배송(1-2일 소요)</p>
                                     </div>
                                 </div>
@@ -78,7 +78,7 @@
                             <button class="del_button btn btn-secondary flex-grow-1 mx-1 mb-3" type="button">
                                 <div v-for="(tmp, i) in state.rowNormal" :key="i">
                                     <div v-if="tmp.sellProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
-                                        <p class="fs-5 fw-bold">{{ tmp.sellWishPrice }}</p>
+                                        <p class="fs-5 fw-bold">{{ changePriceFormat(tmp.sellWishPrice) }}</p>
                                         <p>일반배송(5-7일 소요)</p>
                                     </div>
                                 </div>
@@ -238,6 +238,14 @@ export default {
             state.showMethod = true;
         }
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(typeof data !== 'number' || isNaN(data)) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         onMounted (()=> {
             handleInfo();
             handleData();
@@ -248,7 +256,8 @@ export default {
             activeIndex,
             handleMethod,
             handleFast,
-            handleType
+            handleType,
+            changePriceFormat
         }
     }
 }

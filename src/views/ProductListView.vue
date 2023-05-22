@@ -154,8 +154,11 @@
                     <button class="fast_small"><img src="@/assets/image/lightning.png" class="lightning"/>빠른배송</button>
                 </p>
                 <p>&nbsp;</p>
-                <p style="font-weight: bold; font-size: large;">{{ tmp.wishPrice }}원</p>
-                <p v-if="tmp.wishPrice" style="color: #aeaeae;">즉시 구매가</p>
+                <div v-if="tmp.wishPrice">
+                    <p style="font-weight: bold; font-size: large;">{{ changePriceFormat(tmp.wishPrice) }}원</p>
+                    <p style="color: #aeaeae;">즉시 구매가</p>
+                </div>
+                <p v-else>-</p>
                 <p><span>wish {{ tmp.wishCnt }} &nbsp;</span>
                 <span>Review {{ tmp.reviewCnt }}</span></p>       
             </div>
@@ -376,6 +379,14 @@ export default {
             state.searchWord = '';
         }
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(!data) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         watch([ 
             () => state.categoryList, 
             () => state.brandIdList, 
@@ -412,7 +423,8 @@ export default {
             handleSizeList,
             handleWishPriceList,
             handleProductOne,
-            removeSearchWord
+            removeSearchWord,
+            changePriceFormat
         }
     }
 }

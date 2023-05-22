@@ -24,7 +24,7 @@
                 <ul v-for="(tmp, i) in this.displayedCon.slice().reverse()" :key="i" class="info_body">
                     <li class="info_box" v-if="tmp.sellSize">{{ tmp.sellSize }}</li>
                     <li class="info_box" v-else>{{ tmp.buySize }}</li>
-                    <li class="info_box">{{ tmp.price }}원</li>
+                    <li class="info_box">{{ changePriceFormat(tmp.price) }}원</li>
                     <li class="info_box">{{ tmp.contractDate }}</li>
                 </ul>
             </div>
@@ -37,7 +37,7 @@
                 <hr />
                 <ul v-for="(tmp, i) in this.displayedSell" :key="i" class="info_body">
                     <li class="info_box">{{ tmp.productSize }}</li>
-                    <li class="info_box">{{ tmp.wishPrice }}원</li>
+                    <li class="info_box">{{ changePriceFormat(tmp.wishPrice) }}원</li>
                     <li class="info_box">{{ tmp.cnt }}</li>
                 </ul>
             </div>
@@ -51,7 +51,7 @@
                 <hr />
                 <ul v-for="(tmp, i) in this.displayedBuy" :key="i" class="info_body">
                     <li class="info_box">{{ tmp.productSize }}</li>
-                    <li class="info_box">{{ tmp.wishPrice }}원</li>
+                    <li class="info_box">{{ changePriceFormat(tmp.wishPrice) }}원</li>
                     <li class="info_box">{{ tmp.cnt }}</li>
                 </ul> 
             </div>
@@ -203,6 +203,14 @@ export default defineComponent({
                     }
                 }
             });
+        },
+
+        // 금액형식변환 세자리마다 콤마추가
+        changePriceFormat(data) {
+            if(!data) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
     },
 

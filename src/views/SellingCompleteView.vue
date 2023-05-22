@@ -29,14 +29,14 @@
                 <div class="d-flex justify-content-between flex-wrap mt-5">
                     <p class="text-start fs-4 fw-bold">총 정산 금액</p>
                     <p class="text-end fs-4 fw-bold" style="color: rgb(64, 158, 255);">
-                        {{ Math.floor(Number(state.item.buyWishPrice) - Number(state.item.buyWishPrice*0.02)) }}원
+                        {{ changePriceFormat(Math.floor(Number(state.item.buyWishPrice) - Number(state.item.buyWishPrice*0.02))) }}원
                     </p>
                 </div>
                 <hr />
                 
                 <div class="d-flex justify-content-between mt-3">   
                     <span class="fw-bold">즉시 판매가</span>
-                    <span class="text-end fw-bold">{{ Number(state.item.buyWishPrice) }}원</span>
+                    <span class="text-end fw-bold">{{ changePriceFormat(Number(state.item.buyWishPrice)) }}원</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">   
                     <span class="gray_font">검수비</span>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="d-flex justify-content-between mt-2">   
                     <span class="gray_font">수수료</span>
-                    <span class="text-end">{{ -Math.floor(Number(state.item.buyWishPrice*0.02)) }}원</span>
+                    <span class="text-end">{{ -changePriceFormat(Math.floor(Number(state.item.buyWishPrice*0.02))) }}원</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">   
                     <span class="gray_font">배송비</span>
@@ -87,7 +87,7 @@
                 <div class="d-flex justify-content-between flex-wrap mt-5">
                     <p class="text-start fs-4 fw-bold">총 정산 금액</p>
                     <p class="text-end fs-4 fw-bold" style="color: rgb(64, 158, 255);">
-                        {{ Math.floor(state.bidPrice - state.bidPrice*0.02) }}원
+                        {{ changePriceFormat(Math.floor(state.bidPrice - state.bidPrice*0.02)) }}원
                     </p>
                 </div>
                 <hr />
@@ -102,7 +102,7 @@
                 </div>
                 <div class="d-flex justify-content-between mt-2">   
                     <span class="gray_font">수수료</span>
-                    <span class="text-end">{{ -Math.floor(state.bidPrice*0.02) }}원</span>
+                    <span class="text-end">{{ -changePriceFormat(Math.floor(state.bidPrice*0.02)) }}원</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">   
                     <span class="gray_font">배송비</span>
@@ -147,14 +147,14 @@
                 <div class="d-flex justify-content-between flex-wrap mt-5">
                     <p class="text-start fs-4 fw-bold">총 정산 금액</p>
                     <p class="text-end fs-4 fw-bold" style="color: rgb(64, 158, 255);">
-                        {{ Math.floor(state.bidPrice - state.bidPrice*0.02) }}원
+                        {{ changePriceFormat(Math.floor(state.bidPrice - state.bidPrice*0.02)) }}원
                     </p>
                 </div>
                 <hr />
                 
                 <div class="d-flex justify-content-between mt-3">   
                     <span class="fw-bold">판매 희망가</span>
-                    <span class="text-end fw-bold">{{ state.bidPrice }}원</span>
+                    <span class="text-end fw-bold">{{ changePriceFormat(state.bidPrice) }}원</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">   
                     <span class="gray_font">검수비</span>
@@ -162,7 +162,7 @@
                 </div>
                 <div class="d-flex justify-content-between mt-2">   
                     <span class="gray_font">수수료</span>
-                    <span class="text-end">{{ -Math.floor(state.bidPrice*0.02) }}원</span>
+                    <span class="text-end">{{ -changePriceFormat(Math.floor(state.bidPrice*0.02)) }}원</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">   
                     <span class="gray_font">배송비</span>
@@ -217,8 +217,6 @@ export default {
             bidPrice : 0,
             bidFormattedDate : '',
             bidDays : ''
-
-
         })
 
         watchEffect(() => {
@@ -245,9 +243,18 @@ export default {
                 handleData();
             })
         }
+
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(typeof data !== 'number' || isNaN(data)) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
         
         return {
-            state
+            state,
+            changePriceFormat
         }
     }
 }

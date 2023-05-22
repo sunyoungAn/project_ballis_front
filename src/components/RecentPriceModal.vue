@@ -39,7 +39,7 @@
                         <ul v-for="(tmp, i) in state.conRow.slice().reverse()" :key="i" class="info_body">
                             <li class="info_box" v-if="tmp.sellSize">{{ tmp.sellSize }}</li>
                             <li class="info_box" v-else>{{ tmp.buySize }}</li>
-                            <li class="info_box">{{ tmp.price }}원</li>
+                            <li class="info_box">{{ changePriceFormat(tmp.price) }}원</li>
                             <li class="info_box">{{ tmp.contractDate }}</li>
                         </ul>
                     </div>
@@ -55,7 +55,7 @@
                     <div class="scroll">
                         <ul v-for="(tmp, i) in state.sellRow" :key="i" class="info_body">
                             <li class="info_box">{{ tmp.productSize }}</li>
-                            <li class="info_box">{{ tmp.wishPrice }}원</li>
+                            <li class="info_box">{{ changePriceFormat(tmp.wishPrice) }}원</li>
                             <li class="info_box">{{ tmp.cnt }}</li>
                         </ul>
                     </div>
@@ -71,7 +71,7 @@
                     <div class="scroll">
                         <ul v-for="(tmp, i) in state.buyRow" :key="i" class="info_body">
                             <li class="info_box">{{ tmp.productSize }}</li>
-                            <li class="info_box">{{ tmp.wishPrice }}원</li>
+                            <li class="info_box">{{ changePriceFormat(tmp.wishPrice) }}원</li>
                             <li class="info_box">{{ tmp.cnt }}</li>
                         </ul>
                     </div> 
@@ -131,12 +131,21 @@ export default {
             }
         }
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(!data) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         onMounted(()=>{
             handleInfo();
         })
 
         return { 
-            state
+            state,
+            changePriceFormat
         };
     }
     

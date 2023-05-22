@@ -15,12 +15,12 @@
                 <div class="d-flex align-items-center justify-content-center">
                     <div class="price_box d-flex flex-column align-items-center text-center" id="price_box1">
                         <p class="price_name">즉시 구매가</p>
-                        <p v-if="state.row[0].sellWishPrice" class="fs-5">{{ state.row[0].sellWishPrice }}원</p>
+                        <p v-if="state.row[0].sellWishPrice" class="fs-5">{{ changePriceFormat(state.row[0].sellWishPrice) }}원</p>
                         <p v-else class="fs-5">- 원</p> 
                     </div>
                     <div class="price_box d-flex flex-column align-items-center text-center"> 
                         <p class="price_name">즉시 판매가</p>
-                        <p v-if="state.row[0].buyWishPrice" class="fs-5">{{ state.row[0].buyWishPrice }}원</p>
+                        <p v-if="state.row[0].buyWishPrice" class="fs-5">{{ changePriceFormat(state.row[0].buyWishPrice) }}원</p>
                         <p v-else class="fs-5">- 원</p> 
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                 <!-- 즉시 구매 -->
                 <div v-show="state.type === 'normal'">
                     <p class="fw-bold">즉시 구매가</p>
-                    <p class="fs-4 fw-bold text-end">{{ state.row[0].sellWishPrice }}원</p>
+                    <p class="fs-4 fw-bold text-end">{{ changePriceFormat(state.row[0].sellWishPrice) }}원</p>
                     <p class="gray_font">총 결제금액은 다음 화면에서 계산됩니다.</p> 
                     <hr />
                     <div class="d-flex justify-content-between mt-5">   
@@ -204,6 +204,14 @@ export default {
             }
         }
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(typeof data !== 'number' || isNaN(data)) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         onMounted(()=>{
             handleData();
             handleDate(30);
@@ -214,6 +222,7 @@ export default {
             handleNext,
             handleInput,
             handleDate,
+            changePriceFormat
         }
     }
 }

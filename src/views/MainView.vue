@@ -62,7 +62,7 @@
                         </div>
                         <p>&nbsp;</p>
                         <div v-if="tmp.wishPrice">
-                            <p style="font-weight: bold; font-size: large;">{{ tmp.wishPrice }}원</p>
+                            <p style="font-weight: bold; font-size: large;">{{ changePriceFormat(tmp.wishPrice) }}원</p>
                             <p style="color: #aeaeae;">즉시 구매가</p>
                         </div>
                         <div v-else>
@@ -97,7 +97,7 @@
                         </div>
                         <p>&nbsp;</p>
                         <div v-if="tmp.wishPrice">
-                            <p style="font-weight: bold; font-size: large;">{{ tmp.wishPrice }}원</p>
+                            <p style="font-weight: bold; font-size: large;">{{ changePriceFormat(tmp.wishPrice) }}원</p>
                             <p style="color: #aeaeae;">즉시 구매가</p>
                         </div>
                         <div v-else>
@@ -176,8 +176,6 @@ export default {
                 query: { productid: id }
             });
         }
-
-
         
         const showMoreNew = () => {
             state.visibleNewCount += 4;
@@ -189,7 +187,6 @@ export default {
             state.displayedPopItems = state.popRows.slice(0, state.visiblePopCount);
         }
 
-        
         const handleDataNew = () => {
             const url = `/api/get/product/new`;
             const headers = { "Content-Type" : "application/json" };
@@ -255,6 +252,14 @@ export default {
             router.push({path:'/product/list', query:{brandId : brandId}});
         }
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(!data) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         onMounted(()=>{
             handleDataNew();
             handleDataPop();
@@ -267,7 +272,8 @@ export default {
             showMorePop,
             showModal,
             handleProductOne,
-            moveProductList
+            moveProductList,
+            changePriceFormat
         }
     }
 }

@@ -41,7 +41,7 @@
                     
                     <div class="product" id="product_price" v-if="tmp.price">
                         <span>최근거래가</span>
-                        <span class="float-end fs-4 fw-bold">{{ tmp.price }}원</span>
+                        <span class="float-end fs-4 fw-bold">{{ changePriceFormat(tmp.price) }}원</span>
                     </div>
 
                     <div class="product d-flex align-items-center justify-content-around gap-2 mx-auto" id="product_wish_price">
@@ -49,7 +49,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>구매</p>
                                 <div v-if="tmp.sellWishPrice" class="text-end">
-                                    <p>{{ tmp.sellWishPrice }}원</p>
+                                    <p>{{ changePriceFormat(tmp.sellWishPrice) }}원</p>
                                     <p style="font-size: 15px;">즉시 구매가</p>
                                 </div>
                                 <div v-else class="text-end">
@@ -61,7 +61,7 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <p>판매</p>
                                 <div v-if="tmp.buyWishPrice" class="text-end">
-                                    <p>{{ tmp.buyWishPrice }}원</p>
+                                    <p>{{ changePriceFormat(tmp.buyWishPrice) }}원</p>
                                     <p style="font-size: 15px;">즉시 판매가</p>
                                 </div>
                                 <div v-else class="text-end">
@@ -95,7 +95,7 @@
                             </div>
                             <div class="info_box_last">
                                 <p class="info_box_name">발매가</p>
-                                <p>{{ tmp.launchingPrice }}원</p>
+                                <p>{{ changePriceFormat(tmp.launchingPrice) }}원</p>
                             </div>
                         </div>
                         <hr />
@@ -168,7 +168,6 @@ export default {
         ReviewModal
     },
     setup () {
-        
         const route = useRoute();
         const router = useRouter();
 
@@ -200,7 +199,6 @@ export default {
                 });
         }
 
-
         const handleData = () => {
             axios.get(`/api/get/product/one/images?productid=${state.productid}`).then((res)=> {
                 console.log("상품정보,이미지", res.data);
@@ -213,6 +211,14 @@ export default {
             })
         }
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(!data) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         onMounted(()=>{
             handleDataReview();
             handleData();
@@ -221,7 +227,8 @@ export default {
         return {
             state,
             handleBuying,
-            handleSelling
+            handleSelling,
+            changePriceFormat
         }
     }
 }

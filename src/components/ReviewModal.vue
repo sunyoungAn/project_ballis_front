@@ -36,7 +36,7 @@
                         <img :src="state.productRows[0].imagePath" class="img-thumbnail">
                         <p>&nbsp;</p>
                         <p>{{ state.productRows[0].productEngName }}</p>
-                        <p style="font-weight: bold;">{{ state.productRows[0].sellWishPrice }}원</p>
+                        <p style="font-weight: bold;">{{ changePriceFormat(state.productRows[0].sellWishPrice) }}원</p>
                     </div>
                 </div>
             </div>
@@ -158,6 +158,14 @@ export default {
             }
         };
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            if(!data) {
+                return data
+            }
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         onMounted(() => {
             receiveReview();
             handleData();
@@ -167,7 +175,8 @@ export default {
             state,
             handleRight,
             handleLeft,
-            handleProductOne
+            handleProductOne,
+            changePriceFormat
         };
     },
 };
