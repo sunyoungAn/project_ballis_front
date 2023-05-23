@@ -31,9 +31,14 @@
 
                 <div class="item_box">
                     <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
-                        <li><img :src="getImagePath(tmp)" class="item_img main_img_background"></li>
+                        <li>
+                            <div>
+                                <img :src="getImagePath(tmp)" class="item_img main_img_background">
+                            </div>
+                            <div>사이즈 : {{ tmp.contract.productSize }}</div>
+                        </li>
                         <p class="fw-bolder product_name">{{ tmp.productName }}</p>
-                        <li style="margin-top: 20px;">{{ formatDate(tmp.contract.registDate) }}</li>
+                        <li style="margin-top: 20px; cursor: pointer;" @click="state.isModalShow=true; state.modalTargetId=tmp.contract.id;">{{ formatDate(tmp.contract.registDate) }}</li>
                         <span class="badge rounded-pill text-bg-success item_badge">
                             {{ 
                             tmp.contract.buyingStatus === 31 ? '대기중' :
@@ -58,16 +63,20 @@
 
         </section>
     </div>
+
+    <!-- 모달영역 -->
+    <admin-payment-delivery-modal v-if="state.isModalShow" :openmodal="state.isModalShow" :id="state.modalTargetId" @closemodal="modalClose"></admin-payment-delivery-modal>
 </template>
 
 <script>
 import { computed, onMounted, reactive } from 'vue';
 import BuyingTab from '../components/BuyingTab.vue';
 import MyPageMenu from '../components/MyPageMenu.vue';
+import AdminPaymentDeliveryModal from '@/components/AdminPaymentDeliveryModal.vue'
 import axios from 'axios';
 
 export default {
-    components: { MyPageMenu, BuyingTab },
+    components: { MyPageMenu, BuyingTab,AdminPaymentDeliveryModal },
 
     setup () {
         const state = reactive({
@@ -75,7 +84,9 @@ export default {
             token : sessionStorage.getItem("TOKEN"),
             selectedStatus: "",
             startDate:'',
-            endDate:''
+            endDate:'',
+            isModalShow : false, // 모달창 제어 변수
+            modalTargetId : 0
         })
 
         //거래진행리스트 전체 출력
@@ -158,6 +169,11 @@ export default {
                 return `${year}-${month}-${day}`;
         };
 
+        // 모달창 닫기
+        const modalClose = (value) => {
+            state.isModalShow = value;
+        }
+
         onMounted(()=>{
             handleData();
         })
@@ -170,6 +186,7 @@ export default {
             searchDate,
             getImagePath,
             formatDate,
+            modalClose
         }
     }
 }
