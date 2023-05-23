@@ -141,15 +141,25 @@
 
             <div v-else>
                 <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
-                <div v-for="tmp of state.cards" :key="tmp" class="mt-3">
+                <input type="checkbox" class="btn-check" id="2" autocomplete="off" name="pay" :checked="state.payMethod === 1">
+                <label class="btn btn-outline-secondary mt-3 w-100" @click="handlePay(1)">
                     <div class="d-flex">
                         <span class="col-2 gray_font">카드번호</span>
-                        <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                        <span class="col-10 text-start">{{ state.cards[0].cardNumber }}</span>
                     </div>
                     <div class="d-flex">
                         <span class="col-2 gray_font">유효일</span>
-                        <span class="col-8 text-start">{{ tmp.expiryMonth }} / {{ tmp.expiryYear }}</span>
+                        <span class="col-10 text-start">{{ state.cards[0].expiryMonth }} / {{ state.cards[0].expiryYear }}</span>
                     </div>
+                </label>
+            </div>
+            <hr />
+
+            <div class="mt-3">
+                <p class="fw-bold">일반 결제</p>
+                <div class="btn-group mb-2" role="group" data-toggle="buttons">
+                    <input type="checkbox" class="btn-check" id="3" autocomplete="off" name="pay" :checked="state.payMethod === 3">
+                    <label class="btn btn-outline-warning rounded mx-1" @click="handlePay(3)">카카오 페이</label>
                 </div>
             </div>
             <hr />
@@ -160,6 +170,7 @@
             :address="state.selectedAddress" 
             :type="state.type" 
             :delivery="state.deliveryRequest"
+            :payMethod="state.payMethod"
             />
         </div>
 
@@ -273,25 +284,17 @@
 
             <div v-else>
                 <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
-                <div v-for="tmp of state.cards" :key="tmp" class="mt-3">
+                <input type="checkbox" class="btn-check" id="2" autocomplete="off" name="pay" :checked="state.payMethod === 1">
+                <label class="btn btn-outline-secondary mt-3 w-100" @click="handlePay(1)">
                     <div class="d-flex">
                         <span class="col-2 gray_font">카드번호</span>
-                        <span class="col-8 text-start">{{ state.selectedAddress.name }}</span>
+                        <span class="col-10 text-start">{{ state.cards[0].cardNumber }}</span>
                     </div>
                     <div class="d-flex">
                         <span class="col-2 gray_font">유효일</span>
-                        <span class="col-8 text-start">{{ tmp.expiryMonth }} / {{ tmp.expiryYear }}</span>
+                        <span class="col-10 text-start">{{ state.cards[0].expiryMonth }} / {{ state.cards[0].expiryYear }}</span>
                     </div>
-                </div>
-            </div>
-            <hr />
-
-            <div class="mt-3">
-                <p class="fw-bold">일반 결제</p>
-                <div class="btn-group mb-2" role="group" data-toggle="buttons">
-                    <input type="radio" class="btn-check" id="3" autocomplete="off" name="pay" :checked="state.payMethod === 3">
-                    <label class="btn btn-outline-warning rounded mx-1" for="3" @click="handlePay(3)">카카오 페이</label>
-                </div>
+                </label>
             </div>
             <hr />
             
@@ -413,24 +416,27 @@ export default {
         // 구매입찰
         const handleBid = async() => {
             // 유효성 검사 통과 > 구매 조건 확인 all check
-            // if(state.errorMessage.length === 0) { 
-    
-                try {
-                    const url = `/api/post/buy`;
-                    const headers = {"Content-Type":"application/json"};
-                    const body = {
-                        memberNumber : state.memberNumber,
-                        productId : state.productid,
-                        productSize : state.size,
-                        wishPrice : state.bidPrice,
-                        expiryDate : new Date(state.bidDate).toISOString()
-                    }
-                    const res = await axios.post(url, body, {headers});
-                    console.log("보냄", res);
-                } catch(err) {
-                    console.error(err);
+            if(state.selectedAddress.length === 0) { 
+                alert('주소를 입력하세요.')
+                return false
+            } 
+            if(state.payMethod === 0) {
+                alert('결제 방법을 선택하세요')
+                return false
+            }  
+            try {
+                const url = `/api/post/buy`;
+                const headers = {"Content-Type":"application/json"};
+                const body = {
+                    memberNumber : state.memberNumber,
+                    productId : state.productid,
+                    productSize : state.size,
+                    wishPrice : state.bidPrice,
+                    expiryDate : new Date(state.bidDate).toISOString()
                 }
-                    
+                const res = await axios.post(url, body, {headers});
+                console.log("보냄", res);
+            
                 router.push({
                     path : '/buying/complete',
                     query : {
@@ -438,8 +444,11 @@ export default {
                         type : state.type
                     }
                 })
-            // }
+            } catch(err) {
+                console.error(err);
+            }
         }
+        
 
         // 멤버 정보 읽어오기
         const handleMember = async()=> {

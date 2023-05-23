@@ -52,7 +52,7 @@
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">수수료</span>
-                        <span class="text-end">{{ -changePriceFormat(Math.floor(Number(state.row[0].buyWishPrice)*0.02)) }}원</span>
+                        <span class="text-end">{{ -changePriceFormat(Math.floor(state.row[0].buyWishPrice)*0.02) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">배송비</span>
@@ -303,7 +303,8 @@ export default {
 
         // 금액형식변환 세자리마다 콤마추가
         const changePriceFormat = (data) => {
-            if(typeof data !== 'number' || isNaN(data)) {
+            if(!data) {
+                console.log("숫자",data);
                 return data
             }
             return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');

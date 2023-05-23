@@ -30,7 +30,11 @@ export default {
         },
         delivery: {
             type: String,
-            default : '요청사항 없음'
+            default : ''
+        },
+        payMethod: {
+            type: Number,
+            default: 0
         }
     },
     setup (props) {
@@ -51,7 +55,7 @@ export default {
             memberNumber : sessionStorage.getItem("TOKEN"),
             member : "",
             
-            paymentType : 3, // 1:카드 간편결제 2:일반카드 3:카카오페이 4:네이버페이
+            paymentType : 0, // 1:카드 간편결제 2:일반카드 3:카카오페이 4:네이버페이
         })
 
 
@@ -61,6 +65,7 @@ export default {
             state.type = props.type;
             state.selling = props.sellingDto;
             state.message = props.delivery;
+            state.paymentType = props.payMethod;
             if(state.item) {
                 state.contract = {
                     productId : state.item.id,
@@ -70,9 +75,10 @@ export default {
                     sellerNumber : state.item.sellerNumber,
                     price : state.item.sellWishPrice,
                     productSize : state.item.sellProductSize
-
                 }
             }
+            console.log("선택한주소", state.address)
+            console.log("멤버정보", state.member)
             // console.log("셀링받아왔나", state.selling);
             // console.log("콘트랙트", state.contract);
             // console.log("아이템 정보", state.item);
@@ -107,6 +113,14 @@ export default {
         IMP.init("imp26282104"); // 상점id
 
         const requestPay = () => {
+            if(state.address.length === 0) {
+                alert('주소를 입력하세요.')
+                return false
+            }
+            if(state.paymentType === 0) {
+                alert('결제 방법을 선택하세요.')
+                return false
+            }
             if(state.type === 'fast' || state.type === 'normal') {// 구매-빠른배송, 즉시구매
                 IMP.request_pay(
                     {
@@ -165,6 +179,10 @@ export default {
                     } 
                 )
             } else if (state.type ==='keep') { // 판매-보관판매
+                if(!state.member.depositor) {
+                    alert('판매 정산 계좌를 입력하세요.')
+                    return false
+                }
                 IMP.request_pay(
                     {
                         pg: 'kakaopay',
