@@ -14,10 +14,10 @@
 
                 <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
                     <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
-                        <p><a href="/mypage/selling">판매 내역 보기</a></p>
+                        <p @click="toSelling">판매 내역 보기</p>
                     </button>
                     <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
-                        <p><a href="/product/list">SHOP 바로가기</a></p>
+                        <p @click="toList">SHOP 바로가기</p>
                     </button>
                 </div>
 
@@ -71,10 +71,10 @@
 
                 <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
                     <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
-                        <p><a href="/mypage/selling">판매 내역 보기</a></p>
+                        <p @click="toSelling">판매 내역 보기</p>
                     </button>
                     <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
-                        <p><a href="/product/list">SHOP 바로가기</a></p>
+                        <p @click="toList">SHOP 바로가기</p>
                     </button>
                 </div>
                 
@@ -131,10 +131,10 @@
 
                 <div class="d-flex align-items-center justify-content-around gap-2 mx-auto w-100">
                     <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
-                        <p><a href="/mypage/inventory">보관 판매 내역 보기</a></p>
+                        <p @click="toInventory">보관 판매 내역 보기</p>
                     </button>
                     <button class="btn btn-outline-secondary flex-grow-1 mx-0 mb-3 p-2">
-                        <p><a href="/product/list">SHOP 바로가기</a></p>
+                        <p @click="toList">SHOP 바로가기</p>
                     </button>
                 </div>
 
@@ -199,12 +199,13 @@
 <script>
 import axios from 'axios';
 import { onMounted, reactive, watchEffect } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 export default {
     setup () {
         const route = useRoute();
+        const router = useRouter();
         const store = useStore();
         
         const state = reactive({
@@ -225,6 +226,21 @@ export default {
             state.bidFormattedDate = store.getters.getSelectedFormattedDate;
             state.bidDays = store.getters.getSelectedDays;
         });
+
+        // 판매 내역으로 보내기
+        const toSelling = () => {
+            router.push({ path : '/mypage/selling' })
+        }
+
+        // 보관 판매 내역으로 보내기
+        const toInventory = () => {
+            router.push({ path : '/mypage/inventory' })
+        }
+
+        // 리스트로 보내기
+        const toList = () => {
+            router.push({ path : '/product/list' })
+        }  
         
         // 판매입찰, 보관판매 시 데이터 필요
         if(state.type === 'bid' || state.type === 'keep') {
@@ -254,6 +270,9 @@ export default {
         
         return {
             state,
+            toSelling,
+            toInventory,
+            toList,
             changePriceFormat
         }
     }
