@@ -193,7 +193,7 @@ export default {
             router.push({path:"/selling/size", query:{productid:id}})
         }
 
-        
+        // 한상품에 대한 리뷰 불러오기
         const handleDataReview = () => {
             const url = `/api/get/review/product?productid=${state.productid}`;
             const headers = { "Content-Type" : "application/json" };

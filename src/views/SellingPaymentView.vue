@@ -1,6 +1,6 @@
 <template>
     <!-- 계좌 모달 -->
-    <account-add-modal v-if="showAccountAdd" :member="state.member" @close="showAccountAdd = false" />
+    <account-add-modal v-if="showAccountAdd" :member="state.member" @close="showAccountAdd = false" @reload="handleReload"/>
     <!-- 주소 모달 -->
     <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
@@ -374,6 +374,7 @@ export default {
 
         const showAddressAdd = ref(false);
         const showAddressList = ref(false);
+        const showAccountAdd = ref(false);
 
         const state = reactive({
             productid: Number(route.query.productid),
@@ -570,6 +571,10 @@ export default {
             return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
 
+        const handleReload = () => {
+            handleMember();
+        };
+
         onMounted(()=>{
             handleMember();
             handleAddressList();
@@ -579,11 +584,13 @@ export default {
             state,
             showAddressAdd,
             showAddressList,
+            showAccountAdd,
             selectAdd,
             handleSellNow,
             handleSellLater,
             changePriceFormat,
-            handlePay
+            handlePay,
+            handleReload
         }
     }
 }

@@ -39,7 +39,7 @@
                 <!-- 즉시 구매 -->
                 <div v-show="state.type === 'normal'">
                     <p class="fw-bold">즉시 구매가</p>
-                    <p class="fs-4 fw-bold text-end">{{ changePriceFormat(state.row[0].sellWishPrice) }}원</p>
+                    <p class="fs-4 fw-bold text-end">{{ changePriceFormat(state.item.sellWishPrice) }}원</p>
                     <p class="gray_font">총 결제금액은 다음 화면에서 계산됩니다.</p> 
                     <hr />
                     <div class="d-flex justify-content-between mt-5">   
@@ -115,6 +115,7 @@ export default {
             type : route.query.type,
             row : [],
             onlyBid : false,
+            item: '',
 
             inputValue : '',
             errorMessage : '',
@@ -131,6 +132,12 @@ export default {
                 state.days = 30;
             }
         });
+
+        // 이전페이지에서 선택한 아이템 정보 
+        const handleItem = () => {
+            state.item = store.getters.getSelectedItem;
+            console.log("선택아이템", state.item);
+        }
         
         const handleDate = (days) => {
             state.days = days;
@@ -213,6 +220,7 @@ export default {
         }
 
         onMounted(()=>{
+            handleItem();
             handleData();
             handleDate(30);
         })
