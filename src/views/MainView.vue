@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div class="button">
-                    <button @click="showMoreNew()">더보기</button>
+                    <button v-if="state.visibleNewCount >=4 && state.visibleNewCount <=8" @click="showMoreNew()">더보기</button>
                 </div>
             </div>
             <hr />
@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <div class="button">
-                    <button @click="showMorePop()">더보기</button>
+                    <button v-if="state.visiblePopCount >=4 && state.visiblePopCount <=8" @click="showMorePop()">더보기</button>
                 </div>
                
             </div>
