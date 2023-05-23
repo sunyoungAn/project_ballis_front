@@ -304,7 +304,6 @@ export default {
         // 금액형식변환 세자리마다 콤마추가
         const changePriceFormat = (data) => {
             if(!data) {
-                console.log("숫자",data);
                 return data
             }
             return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
