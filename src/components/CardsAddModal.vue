@@ -1,37 +1,49 @@
 <template>
     <div class="black_bg_box">
-        <div class="white_bg_box">
-            <div style="text-align: center;">
-                <h4>계좌 등록</h4>
-            </div>
-            <div class="input_box_card">
-                <input class="form-control text-center mt-5" type="text" v-model="state.account.accountNumber" placeholder="계좌번호 입력(-포함)">
-                <input class="form-control text-center mt-3" type="text" v-model="state.account.bankName" placeholder="은행 입력">
-                <input class="form-control text-center my-3" type="text" v-model="state.account.depositor" placeholder="계좌주 입력">
-            </div>
-    
-            <div style="text-align: center;">
-                <button type="button" class="green_button btn mx-1" @click="submit()">등록</button>
-                <button type="button" class="green_button btn" @click="$emit('close')">닫기</button>
-            </div>
-        </div>
+       <div class="white_bg_box">
+          <div style="text-align: center;">
+            <h4>카드 등록</h4>
+           </div>
+          <div class="address_input_box">
+                <input class="form-control" type="text" v-model="state.form.name" style="margin-right: 15px; width: 200px;" id="name" placeholder="이름"><br/>
+                <input class="form-control" type="text" v-model="state.form.zipCode" style="margin-right: 15px; width: 200px;" placeholder="우편번호"><br/>
+                <input class="form-control" type="text" v-model="state.form.address" style="margin-right: 15px; width: 350px;" id="address" placeholder="주소"><br/>
+                <input class="form-control" type="text" v-model="state.form.subAddress" style="margin-right: 15px; width: 350px;" id="detailAddress" placeholder="상세주소"><br/>
+                <input class="form-control" type="text" v-model="state.form.phoneNumber" style="margin-right: 15px; width: 350px;" id="detailAddress" placeholder="전화번호"><br/>
+   
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" v-model="state.form.defaultAddress" value="2" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        기본 배송지로 설정
+                    </label>
+                </div>
+          </div>
+   
+          <div style="text-align: center;">
+           <button type="button" class="green_button btn btn-outline-success mx-1" @click="submit()">등록</button>
+           <button type="button" class="green_button btn btn-outline-success" @click="$emit('close')">닫기</button>
+          </div>
+         
+       </div>
     </div>
 </template>
 <script>
 import axios from 'axios';
 import { reactive } from 'vue';
 
+
 export default {
-    props : {
-        member : {
-            type : Object,
-            required : true
-        },
-    },
     setup(props, { emit }) {
         const state = reactive({
-            member: {},
-            account: {}
+            form:{
+                name:"",
+                zipCode: "",
+                address: "",
+                subAddress:"",
+                phoneNumber:"",
+                memberNumber: sessionStorage.getItem("TOKEN"),
+                defaultAddress:2
+            }
         })
 
         const  execDaumPostcode=() => {
@@ -84,8 +96,17 @@ export default {
         return { 
             state, 
             execDaumPostcode,
-            submit 
-        };
+            submit };
+    },
+
+    watch: {
+            'state.form.defaultAddress': function (val) {
+            if (val) {
+                this.state.form.defaultAddress = 1;
+            } else {
+                this.state.form.defaultAddress = 2;
+            }
+        }    
     }
 }
 

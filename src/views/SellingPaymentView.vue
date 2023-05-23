@@ -1,4 +1,6 @@
 <template>
+    <!-- 계좌 모달 -->
+    <account-add-modal v-if="showAccountAdd" :member="state.member" @close="showAccountAdd = false" />
     <!-- 주소 모달 -->
     <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
@@ -349,6 +351,7 @@
 </template>
 
 <script>
+import AccountAddModal from '@/components/AccountAddModal.vue';
 import AddressModal from '@/components/AddressModal.vue';
 import PaymentComponent from '@/components/PaymentComponent.vue';
 import AddressListModal from '@/components/AddressListModal.vue';
@@ -359,6 +362,7 @@ import { useStore } from 'vuex';
 
 export default {
     components: {
+        AccountAddModal,
         AddressModal,
         PaymentComponent,
         AddressListModal

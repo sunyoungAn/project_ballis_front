@@ -52,7 +52,7 @@
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">수수료</span>
-                        <span class="text-end">{{ -changePriceFormat(Math.floor(state.row[0].buyWishPrice)*0.02) }}원</span>
+                        <span class="text-end">-{{ changePriceFormat(Math.floor(state.row[0].buyWishPrice)*0.02) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">배송비</span>
@@ -90,7 +90,7 @@
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">수수료</span>
-                        <span class="text-end">{{ -changePriceFormat(Math.floor(Number(state.inputValue)*0.02)) }}원</span>
+                        <span class="text-end">-{{ changePriceFormat(Math.floor(Number(state.inputValue)*0.02)) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">배송비</span>
@@ -145,7 +145,7 @@
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">수수료</span>
-                        <span class="text-end">{{ -changePriceFormat(Math.floor(Number(state.inputValue)*0.02)) }}원</span>
+                        <span class="text-end">-{{ changePriceFormat(Math.floor(Number(state.inputValue)*0.02)) }}원</span>
                     </div>
                     <div class="d-flex justify-content-between">   
                         <span class="gray_font">배송비</span>

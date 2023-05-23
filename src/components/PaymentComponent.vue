@@ -77,7 +77,7 @@ export default {
                     productSize : state.item.sellProductSize
                 }
             }
-            console.log("선택한주소", state.address)
+            console.log("선택한주소", state.address.address)
             console.log("멤버정보", state.member)
             // console.log("셀링받아왔나", state.selling);
             // console.log("콘트랙트", state.contract);
@@ -113,7 +113,7 @@ export default {
         IMP.init("imp26282104"); // 상점id
 
         const requestPay = () => {
-            if(state.address.length === 0) {
+            if(!state.address.address) {
                 alert('주소를 입력하세요.')
                 return false
             }
