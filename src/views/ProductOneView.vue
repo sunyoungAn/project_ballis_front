@@ -201,6 +201,11 @@ export default {
                 .then(res => {
                     console.log('리뷰', res.data);
                     state.reviewRows = res.data;
+
+                    // 리뷰 이미지 불러오기
+                    for(let i = 0; i<state.reviewRows.length; i++){
+                        state.reviewRows[i].imagePath = `/api/review/display?name=${state.reviewRows[i].imagePath}`;
+                    }
                 })
                 .catch(error => {
                     console.error('API 호출 오류', error);

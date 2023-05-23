@@ -142,6 +142,12 @@ export default {
                 const res = await axios.get(`/api/get/review/one?reviewid=${state.reviewId}`);
                 state.reviewRows = res.data;
                 console.log('1개리뷰', res.data);
+
+                // 리뷰 이미지 불러오기
+                for(let i = 0; i<state.reviewRows.length; i++){
+                    state.reviewRows[i].imagePath = `/api/review/display?name=${state.reviewRows[i].imagePath}`;
+                }
+
             } catch (err) {
                 console.error(err);
             }
