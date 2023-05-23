@@ -21,10 +21,11 @@
           </div>
 
           <div class="item_box">
-            <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
+
+            <ul class="ul_item_box" v-for="tmp in filteredList" :key="tmp.id">
               <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" class="item_img main_img_background"></li>
               <p class="fw-bolder product_name">{{ tmp.productName }}</p>
-              <span class="badge rounded-pill text-bg-success item_badge">
+              <!-- <span class="badge rounded-pill text-bg-success item_badge">
                 {{ 
                   tmp.selling.sellingStatus === 11 ? '발송요청' :
                   tmp.selling.sellingStatus === 12 ? '입고대기' :
@@ -34,11 +35,25 @@
                   tmp.selling.sellingStatus === 16 ? '창고이동' :
                   tmp.selling.sellingStatus === 17 ? '판매중' :
                   tmp.selling.sellingStatus === 18 ? '판매완료' : 
-                  tmp.selling.sellingStatus === 18 ? '보관만료' : '정산완료'
+                  tmp.selling.sellingStatus === 19 ? '보관만료' : '정산완료'
+                }}
+              </span> -->
+              <span class="badge rounded-pill text-bg-success item_badge">
+                {{ 
+                  tmp.sellingStatus === 11 ? '발송요청' :
+                  tmp.sellingStatus === 12 ? '입고대기' :
+                  tmp.sellingStatus === 13 ? '입고완료' :
+                  tmp.sellingStatus === 14 ? '검수중' :
+                  tmp.sellingStatus === 15 ? '검수완료' :
+                  tmp.sellingStatus === 16 ? '창고이동' :
+                  tmp.sellingStatus === 17 ? '판매중' :
+                  tmp.sellingStatus === 18 ? '판매완료' : 
+                  tmp.sellingStatus === 19 ? '보관만료' : 
+                  tmp.sellingStatus === 50 ? '정산완료' : ''
                 }}
               </span>
+
               <span style="margin-top: 20px;">{{ formatDate(tmp.selling.expiryDate) }}</span>
-              <button type="button" class="btn btn-outline-dark delete_button" v-show="tmp.selling.sellingStatus === 11" @click="handleDelete(tmp.selling.id)">입찰삭제</button>
             </ul>
           </div>
         </article>
@@ -57,6 +72,7 @@ export default {
         list: [],
         token: sessionStorage.getItem("TOKEN"),
         selectedStatus: "",
+        contractlist:[]
       });
 
       const handleData = async () => {
@@ -64,16 +80,16 @@ export default {
         const headers = { "Content-Type": "application/json", "auth": state.token };
         const { data } = await axios.get(url, { headers });
         state.list = data;
-        console.log(state.list)
+        console.log("데이터", state.list)
       };
   
       const filteredList = computed(() => {
-        if (state.selectedStatus === "") {
-          return state.list;
-        } else {
-          const status = parseInt(state.selectedStatus);
-          return state.list.filter(product => product.selling.sellingStatus === status);
-        }
+          if (state.selectedStatus === "") {
+            return state.list;
+          } else {
+            const status = parseInt(state.selectedStatus);
+            return state.list.filter(product => product.sellingStatus === status);
+          }
       });
 
       const statusOptions = computed(() => {
@@ -102,18 +118,6 @@ export default {
             return `${year}-${month}-${day}`;
       };
 
-      //보관입찰 삭제
-      const handleDelete =  async (id) => {
-        if(confirm('삭제하시겠습니까?')){
-            const url = `/api/delete/selling/${id}`;
-            const headers = {"Content-Type":"application/json"};
-            const body={};
-            const {data} = await axios.delete(url, {headers:headers, data:body});
-            console.log(data);
-            handleData();
-          } 
-      }
-
       onMounted(()=>{
         handleData();
       })
@@ -123,7 +127,6 @@ export default {
         statusOptions,
         filteredList,
         formatDate,
-        handleDelete
       }
     }
 }
