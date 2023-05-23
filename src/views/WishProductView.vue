@@ -11,7 +11,7 @@
                 </div>
                  <div class="item_box">
                      <ul class="ul_item_box" v-for="tmp of state.list" :key="tmp">
-                         <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" class="item_img main_img_background"></li>
+                        <li><img :src="tmp.imagelist[0].imagePath" class="item_img main_img_background"></li>
                          <p class="fw-bolder product_name">{{ tmp.productName }}</p>
                          <div class="button-group">
                              <button type="button" class="btn btn-outline-success" @click="handleBuying(tmp.productId)">구매하기</button>
@@ -50,7 +50,14 @@ import { useRouter } from 'vue-router'
              const { data } = await axios.get(url,{headers});
              state.list = data;
              console.log(state.list)
-         }
+
+             for (let i = 0; i < state.list.length; i++) {
+                    const imagelist = state.list[i].imagelist;
+                    for (let j = 0; j < imagelist.length; j++) {
+                        imagelist[j].imagePath = `/api/wish/display/image?imagePath=${imagelist[j].imagePath}`;
+                    }
+                }
+            }
          //상품구매이동
          const handleBuying = async(id) =>{
             router.push({path:'/product/one', query:{productid:id}});

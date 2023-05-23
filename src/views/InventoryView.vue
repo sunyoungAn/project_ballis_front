@@ -25,23 +25,9 @@
           </div>
 
           <div class="item_box">
-
             <ul class="ul_item_box" v-for="tmp in filteredList" :key="tmp.id">
-              <li><img :src="`http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`" class="item_img main_img_background"></li>
+              <li><img :src="tmp.imagelist[0].imagePath" class="item_img main_img_background"></li>
               <p class="fw-bolder product_name">{{ tmp.productName }}</p>
-              <!-- <span class="badge rounded-pill text-bg-success item_badge">
-                {{ 
-                  tmp.selling.sellingStatus === 11 ? '발송요청' :
-                  tmp.selling.sellingStatus === 12 ? '입고대기' :
-                  tmp.selling.sellingStatus === 13 ? '입고완료' :
-                  tmp.selling.sellingStatus === 14 ? '검수중' :
-                  tmp.selling.sellingStatus === 15 ? '검수완료' :
-                  tmp.selling.sellingStatus === 16 ? '창고이동' :
-                  tmp.selling.sellingStatus === 17 ? '판매중' :
-                  tmp.selling.sellingStatus === 18 ? '판매완료' : 
-                  tmp.selling.sellingStatus === 19 ? '보관만료' : '정산완료'
-                }}
-              </span> -->
               <span class="badge rounded-pill text-bg-success item_badge">
                 {{ 
                   tmp.sellingStatus === 11 ? '발송요청' :
@@ -76,7 +62,8 @@ export default {
         list: [],
         token: sessionStorage.getItem("TOKEN"),
         selectedStatus: "",
-        contractlist:[]
+        contractlist:[],
+        images : [],
       });
 
       const handleData = async () => {
@@ -84,9 +71,16 @@ export default {
         const headers = { "Content-Type": "application/json", "auth": state.token };
         const { data } = await axios.get(url, { headers });
         state.list = data;
-        console.log("데이터", state.list)
+        console.log("데이터", state.list);
+
+        for (let i = 0; i < state.list.length; i++) {
+          const imagelist = state.list[i].imagelist;
+          for (let j = 0; j < imagelist.length; j++) {
+            imagelist[j].imagePath = `/api/wish/display/image?imagePath=${imagelist[j].imagePath}`;
+          }
+        }
       };
-  
+        
       const filteredList = computed(() => {
           if (state.selectedStatus === "") {
             return state.list;
