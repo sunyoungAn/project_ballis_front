@@ -24,7 +24,6 @@
 
             <div class="mb-3">
              <input class="form-control" type="file" style="width: 300px;" @change="previewFiles($event)" multiple>
-                {{state.imagePath}}
              <div class="image_box" style="display: flex; flex-wrap: wrap;">
                 <div v-if="state.imagePreviews.length < 4" style="display: flex; flex-wrap: wrap;">
                     <div v-for="(preview, index) in state.imagePreviews" :key="index" style="flex: 1;">

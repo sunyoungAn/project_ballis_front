@@ -33,7 +33,7 @@
                 
                 <div class="p_tag_box_2">
                     <p class="p_title" style="float: left;">배송지</p>
-                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="showAddressAdd = true">+새 배송지 추가</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="showAddressAdd = true">+새 배송지 추가</button>
                 </div>
 
                 <div  v-for="tmp of state.address" :key="tmp">
@@ -42,25 +42,28 @@
                     <div  v-show="tmp.defaultAddress===1">
                         <span>{{ tmp.name }}  {{ tmp.phoneNumber }}</span><span class="badge rounded-pill bg-secondary">기본배송지</span><br>
                         <span>({{ tmp.zipCode }}){{ tmp.address }}  {{ tmp.subAddress }}</span>
+                        <button type="button" class="btn btn-outline-dark mypage_button" @click="handleDeleteAddress(index, tmp.id)" >삭제</button>
                     </div>
                     <div  v-show="tmp.defaultAddress===2">
                         <span>{{ tmp.name }}  {{ tmp.phoneNumber }}</span><br>
                         <span>({{ tmp.zipCode }}){{ tmp.address }}  {{ tmp.subAddress }}</span>
-                        <button type="button" class="btn btn-outline-dark search_button" @click="handleDeleteAddress(index, tmp.id)" >삭제</button>
-                        <button type="button" class="btn btn-outline-dark search_button" @click="updateDefaultAddress(tmp.id)">기본배송지등록</button>
+                        <button type="button" class="btn btn-outline-dark mypage_button" @click="handleDeleteAddress(index, tmp.id)" >삭제</button>
+                        <button type="button" class="btn btn-outline-dark mypage_button" @click="updateDefaultAddress(tmp.id)">기본배송지등록</button>
                     </div>
                 </div>
 
+                <br>
+                <br>
 
 
                 <hr>
                 <div class="p_tag_box_2" v-show="state.div1 === 1">
-                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="state.div1 = 2" v-if="!state.cards.length">추가</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="state.div1 = 2" v-if="!state.cards.length">추가</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="handleDeletecard(tmp.id)" v-if="state.cards.length">삭제</button>
                     <p class="p_title">결제카드</p>
                     <div v-for="tmp of state.cards" :key="tmp">
                         <span>{{ tmp.name }}</span> <br> <br>
                         <span>카드번호 : {{ tmp.cardNumber }} 유효일 : {{ tmp.expiryMonth }} / {{ tmp.expiryYear }} </span>
-                        <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="handleDeletecard(tmp.id)" v-if="state.cards.length">삭제</button>
                     </div>
                 </div>
 
@@ -72,16 +75,16 @@
                         <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.card.expiryMonth" placeholder="카드 유효월(MM) 입력">
                         <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.card.name" placeholder="카드 소유주 입력">
                     </div>
-                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="state.div1 = 1">취소</button>
-                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click=handleInsertcard()>등록</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="state.div1 = 1">취소</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click=handleInsertcard()>등록</button>
                 </div>
                 
                 <br>
 
                 <hr>
                 <div class="p_tag_box_2" v-show="state.div === 1">
-                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="state.div = 2" v-if="!state.member.accountNumber">추가</button>
-                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="handleDeleteAccount(state.member.memberNumber)" v-if="state.member.accountNumber">삭제</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="state.div = 2" v-if="!state.member.accountNumber">추가</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="handleDeleteAccount(state.member.memberNumber)" v-if="state.member.accountNumber">삭제</button>
                     <p class="p_title">정산계좌</p>
                     <span>{{state.member.depositor}} {{state.member.bankName}} {{ state.member.accountNumber }}</span>
                 </div>
@@ -93,8 +96,8 @@
                         <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.account.bankName" placeholder="은행 입력">
                         <input class="form-control form-control-lg text-center" style=" margin-bottom: 5px; text-align: start;" type="text" v-model="state.account.depositor" placeholder="계좌주 입력">
                     </div>
-                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click="state.div = 1">취소</button>
-                    <button type="button" style="float: right;" class="btn btn-outline-dark search_button" @click=handleInsertAccount()>등록</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="state.div = 1">취소</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click=handleInsertAccount()>등록</button>
                 </div>
             </article>
         </section>
@@ -272,7 +275,7 @@ article {
   /* border: 1px solid blue; */
 }
 
-.search_button{
+.mypage_button{
   float: right;
   border-radius: 0;
   margin-right : 5px

@@ -12,35 +12,20 @@
 
             <br>
 
-            <!-- <div class="mb-3">
-             <input class="form-control" type="file" style="width: 300px;" @change="mainImage($event)" >
-             <div class="image_box" style="display: flex; flex-wrap: wrap;">
-                <div v-if="state.imagePreviews.length < 4" style="display: flex; flex-wrap: wrap;">
-                    <div v-for="(preview, index) in state.imagePreviews" :key="index" style="flex: 1;">
-                        <img :src="preview" alt="Preview Image" style="width: 100px; height: 100px;">
-                    </div>
-                </div>
-             </div>
-            </div>
-            <div class="mb-3">
-             <input class="form-control" type="file" style="width: 300px;" @change="subImage($event)" multiple>
-            </div> -->
+            <input class="form-control" type="file" style="width: 300px;" @change="mainImage($event)">
 
-            <div class="mb-3">
-                <input class="form-control" type="file" style="width: 300px;" @change="mainImage($event)">
-                <div class="image_box" style="display: flex; flex-wrap: wrap;">
-                    <div v-show="state.mainImagePreview" style="flex: 1;">
-                        <img :src="state.mainImagePreview"  style="width: 100px; height: 100px;">
-                    </div>
-                </div>
-                </div>
+            <br>
 
-                <div class="mb-3">
-                <input class="form-control" type="file" style="width: 300px;" @change="subImage($event)" multiple>
-                <div class="image_box" style="display: flex; flex-wrap: wrap;">
-                    <div v-for="(preview, index) in state.subImagePreviews" :key="index" style="flex: 1;">
-                    <img :src="preview" :alt="'Sub Image ' + (index + 1)" style="width: 100px; height: 100px;">
-                    </div>
+            <input class="form-control" type="file" style="width: 300px;" @change="subImage($event)" multiple>
+
+            <br>
+
+            <div class="image-container">
+                <div v-show="state.mainImagePreview">
+                    <img :src="state.mainImagePreview" class="image-preview" style="margin-right: 10px;">
+                </div>
+                <div v-for="(preview, index) in state.subImagePreviews" :key="index" class="image-item">
+                    <img :src="preview" :alt="'Sub Image ' + (index + 1)" class="image-preview">
                 </div>
             </div>
         </div>
@@ -187,6 +172,19 @@ export default {
 
 textarea {
   resize: none;
+}
+
+.image-container {
+  display: flex;
+}
+
+.image-item {
+  margin-right: 10px;
+}
+
+.image-preview {
+  width: 200px;
+  height: 200px;
 }
 
 
