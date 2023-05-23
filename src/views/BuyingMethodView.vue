@@ -37,7 +37,7 @@
                 </div>
 
                 <!-- 즉시 구매 -->
-                <div v-show="state.type === 'normal'">
+                <div v-if="state.type === 'normal'">
                     <p class="fw-bold">즉시 구매가</p>
                     <p class="fs-4 fw-bold text-end">{{ changePriceFormat(state.item.sellWishPrice) }}원</p>
                     <p class="gray_font">총 결제금액은 다음 화면에서 계산됩니다.</p> 
@@ -52,7 +52,7 @@
                 </div>      
 
                 <!-- 구매 입찰 -->
-                <div v-show="state.type === 'bid'">
+                <div v-if="state.type === 'bid'">
                     <p class="fw-bold">구매 희망가</p>
                     <div class="input-group">
                         <input type="text" class="form-control form-control-lg text-end" v-model="state.inputValue" @input="handleInput">

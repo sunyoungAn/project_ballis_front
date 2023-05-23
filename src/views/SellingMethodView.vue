@@ -41,7 +41,7 @@
                 </div>
 
                 <!-- 즉시 판매 -->
-                <div v-show="state.type === 'normal'">
+                <div v-if="state.type === 'normal'">
                     <p class="fw-bold">즉시 판매가</p>
                     <p class="fs-4 fw-bold text-end">{{ changePriceFormat(state.row[0].buyWishPrice) }}원</p>
                     <hr />
@@ -71,7 +71,7 @@
                 </div>      
 
                 <!-- 판매 입찰 -->
-                <div v-show="state.type === 'bid'">
+                <div v-if="state.type === 'bid'">
                     <p class="fw-bold">판매 희망가</p>
                     <div class="input-group">
                         <input type="text" class="form-control form-control-lg text-end" v-model="state.inputValue" @input="handleInput">
@@ -126,7 +126,7 @@
                 </div>
 
                 <!-- 보관 판매 -->
-                <div v-show="state.type === 'keep'">
+                <div v-if="state.type === 'keep'">
                     <p class="fw-bold">판매 희망가</p>
                     <div class="input-group">
                         <input type="text" class="form-control form-control-lg text-end" v-model="state.inputValue" @input="handleInput">
