@@ -72,7 +72,11 @@
                     </div>
 
                     <div class="product d-grid gap-2 col-13" id="product_wish">
-                        <button type="button" class="btn btn-outline-secondary btn-lg" @click="handleMember">관심 상품</button>
+                        <button type="button" class="btn btn-outline-secondary btn-lg" @click="handleWish">
+                            <span v-if="state.isWish">★</span>
+                            <span v-else>☆</span>
+                            <span>관심 상품</span>
+                        </button>
                     </div>
 
                     <div class="product mt-5" id="product_info">
@@ -176,6 +180,9 @@ export default {
             row : [],
             showModal : false,
             memberNumber : sessionStorage.getItem("TOKEN"),
+            wishList : [],
+            isWish : false,
+            wishId : 0,
         })
 
         const handleBuying = (id) => {
@@ -200,18 +207,50 @@ export default {
                 });
         }
 
-        // 관심 상품 추가 제거
+        // 관심 상품 데이터 읽어오기
         const handleMember = async() => {
-            if(!state.memberNumber) {
-                alert('로그인이 필요합니다.')
-                router.push({path:"/member/login"})
-            } else {
-                const url = `/api/get/member?memberNumber=${state.memberNumber}`;
+            if(state.memberNumber){
+                const url = `/api/get/wish/${state.memberNumber}`;
                 const headers = {"Content-Type":"application/json", "auth" : state.memberNumber};
                 const { data } = await axios.get(url,{headers});
-                state.member = data;
-                console.log("회원정보: ", state.member);
+                state.wishList = data;
+                console.log("위시리스트", state.wishList)
+
+                for(let i = 0; i < state.wishList.length; i++) {
+                    if(state.wishList[i].productId === state.productid) {
+                        state.wishId = state.wishList[i].wish.id;
+                        state.isWish = true;
+                        break;
+                    } else {
+                        state.wishId = 0;
+                        state.isWish = false;
+                    }
+                }
             }
+        }
+
+        // 관심 상품 추가 삭제
+        const handleWish = async() => {
+            if(state.memberNumber && state.isWish){  // 이미 즐겨찾기되어있음 -> 삭제
+                const url = `/api/delete/wish/${state.wishId}`;
+                const headers = {"Content-Type":"application/json"};
+                const body = {};
+                const {data} = await axios.delete(url, {headers:headers, data:body});
+                console.log("즐찾삭제", data);
+                
+                handleMember();
+            } else if (state.memberNumber && !state.isWish) { // 즐겨찾기 안되어있음 -> 추가
+                const url = `/api/add/wish/${state.memberNumber}?productid=${state.productid}`;
+                const headers = {"Content-Type":"application/json"};
+                const body = {};
+                const {data} = await axios.post(url, {headers:headers, data:body});
+                console.log("즐찾추가", data);
+
+                handleMember();
+            } else if (!state.memberNumber) {
+                alert('로그인이 필요합니다.')
+                router.push({path:"/member/login"})
+            } 
         }
     
         const handleData = () => {
@@ -237,14 +276,15 @@ export default {
         onMounted(()=>{
             handleDataReview();
             handleData();
+            handleMember();
         })
 
         return {
             state,
-            handleMember,
             handleBuying,
             handleSelling,
-            changePriceFormat
+            changePriceFormat,
+            handleWish
         }
     }
 }

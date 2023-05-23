@@ -99,7 +99,17 @@ import { useStore } from 'vuex';
             store.commit('setLogged', true);
             store.commit('setMemberStatus', data.memberStatus);
             alert('로그인 되었습니다');
-            router.push({ path: '/' });
+            
+            // 로그인 이전페이지 주소 정보 가져오기
+            const path = sessionStorage.getItem("CURRENT_PATH");
+            const query = JSON.parse (sessionStorage.getItem("QUERY"));
+            
+            if(path === '/product/one'){ // 로그인 이후 다시 돌아와야하는 페이지
+              router.push({path:path, query:query});
+            } else { // 나머지는 홈으로
+              router.push({ path: '/' });
+            }  
+
           } else {
             window.alert("이메일과 비밀번호가 일치하지 않습니다");
           }

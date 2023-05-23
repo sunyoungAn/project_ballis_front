@@ -217,63 +217,13 @@ const router = createRouter({
   }
 })
 
-
-
-
-router.beforeEach((to, from, next)=>{
-  console.log(to, from);
-  // 홈에 있다가 주문하기 누를때 로그인이 안되어 있다면 로그인페이지로 가야하는데 
-  // 로그인 이후 이전페이지로 보내면 로그인 페이지로 이동
-  // 로그인, 로그아웃은 되돌아가려는 페이지가 아니다! 기록하면 안됨
-  if(to.path !== '/login' && to.path !=='/logout'){
-      // 서버 : 포트번호/itemcontent
-      sessionStorage.setItem("CURRENT_PATH", to.path);
-      // 저장소에는 object 타입 저장 불가능->stringify로 문자로 바꿔줌 ex) ? no=580
-      sessionStorage.setItem("QUERY", JSON.stringify(to.query));
-      // sessionStorage에 각각의 페이지 방문할때 마다 저장
-      // url의 앞부분(/itemcontent)은 path에 ?뒷부분(no=580)은 query에 보관!
-
-      // 주문하기 눌렀을때 바로 로그인 페이지로 넘어가면 로그인 이후 이전페이지로 보내면 다시 주문수량 선택하는 페이지(itemcontent)로 옴. 주문 정보가 기록이 안된것! 
-      // 주문하는 정보 기록하기 위해 보여주지 않아도 주문페이지(order)로 갔다가 로그인 페이지로 가야함. 
-      // 로그인 되어야 표시되는 페이지들 ex)주문페이지... or로 다른 페이지 더 넣어도됨!
-      if(to.path === '/order' || to.path === "/test" ) { // ||는 or의 의미
-          const logged = store.getters.getLogged;
-          // 로그인 여부를 store에서 받아옴
-          console.log(logged);
-          if(logged === false) { // 로그인 되어 있지 않으면
-              next({path:'/login'}); // 강제로 페이지 변경
-              return; // 함수종료, 아래쪽 next 수행하지 않기 위해서
-          }
-      }
-
-      // /boardselect = > /boardselect?page=1&text= (변경해야함)
-      // /boardselect?page=2&text=a (변경하면 안됨)
-      console.log('누르는 page', to.query)
-      if((to.path === '/boardselect') && (Object.keys(to.query).length === 0)) {
-          // next({path:'/boardselect1'});
-          next({path:'/boardselect', query:{page:1, text:''}});
-          return;
-      }
-      // if문 안에 들어간 이유는 현재 로그인, 로그아웃 창으로 이동하는 상황이 아니기 때문에 if문 돌아가게 되어있음
-      // 이 상황에서 if문 바깥에 짜면 안에서 return되는 상황이라 boardselect로 보낼 수가 없다!
-
-      if((to.path === '/itemselect') && (Object.keys(to.query).length === 0)) {
-          next({path:'/itemselect', query:{page:1}});
-          return;
-      }
-  }
-  next(); // next가 없으면 페이지 이동이 안됨. () 안에 페이지가 없으면 기존에 이동하고자 하는 페이지로 이동.
-});
-
-
-
 // 로그인제어
 router.beforeEach((to, from, next)=>{
   console.log(to, from);
 
   // 로그인, 로그아웃이 아닌경우에만
   if(to.path !== '/member/login' && to.path !== '/member/logout') {
-    
+
     sessionStorage.setItem("CURRENT_PATH", to.path);
     sessionStorage.setItem("QUERY", JSON.stringify(to.query));
 
