@@ -31,13 +31,18 @@
 
                 <div class="item_box">
                     <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
-                      <li><img :src="getImagePath(tmp)" class="item_img main_img_background"></li>
+                      <li>
+                        <div>
+                          <img :src="getImagePath(tmp)" class="item_img main_img_background">
+                        </div>
+                        <div>사이즈 : {{ tmp.contract.productSize }}</div>
+                      </li>
                       <p class="fw-bolder product_name">{{ tmp.productName }}</p>
-                      <li style="margin-top: 20px;">{{ formatDate(tmp.contract.registDate) }}</li>
+                      <li style="margin-top: 20px; cursor: pointer;" @click="state.isModalShow=true; state.modalTargetId=tmp.contract.id;">{{ formatDate(tmp.contract.registDate) }}</li>
                        <span class="badge rounded-pill text-bg-success item_badge">
                         {{
                           tmp.contract.buyingStatus === 60 ? '배송완료' :
-                          tmp.contract.buyingStatus === 61 ? '취소완료' :
+                          // tmp.contract.buyingStatus === 61 ? '취소완료' : TODO 취소 완료 정보도 완료탭에 뜨게 끔 추후 수정하기
                           tmp.contract.buyingStatus === 62 ? '반품완료' : '교환완료'
                         }}
                        </span>
@@ -50,17 +55,21 @@
 
         </section>
     </div>
+
+    <!-- 모달영역 -->
+    <admin-payment-delivery-modal v-if="state.isModalShow" :openmodal="state.isModalShow" :id="state.modalTargetId" @closemodal="modalClose"></admin-payment-delivery-modal>
 </template>
 
 <script>
 import { computed, onMounted, reactive } from 'vue';
 import BuyingTab from '../components/BuyingTab.vue';
 import MyPageMenu from '../components/MyPageMenu.vue';
+import AdminPaymentDeliveryModal from '@/components/AdminPaymentDeliveryModal.vue'
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
 export default {
-    components: { MyPageMenu, BuyingTab },
+    components: { MyPageMenu, BuyingTab, AdminPaymentDeliveryModal },
 
     setup () {
         const state = reactive({
@@ -68,7 +77,9 @@ export default {
         token: sessionStorage.getItem("TOKEN"),
         selectedStatus: "",
         startDate:'',
-        endDate:''
+        endDate:'',
+        isModalShow : false, // 모달창 제어 변수
+        modalTargetId : 0
       });
 
       const router = useRouter();
@@ -117,7 +128,7 @@ export default {
         const options = [
           { label: "전체", value: "" },
           { label: "배송완료", value: 60 },
-          { label: "취소완료", value: 61 },
+          // { label: "취소완료", value: 61 },
           { label: "반품완료", value: 62 },
           { label: "교환완료", value: 63 },
         ];
@@ -160,6 +171,11 @@ export default {
            } 
         }
 
+        // 모달창 닫기
+        const modalClose = (value) => {
+            state.isModalShow = value;
+        }
+
 
       onMounted(() => {
         handleData();
@@ -174,7 +190,8 @@ export default {
         handleReview,
         getImagePath,
         formatDate,
-        handleDelete
+        handleDelete,
+        modalClose
       };
     }
 }
