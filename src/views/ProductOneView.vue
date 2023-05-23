@@ -72,7 +72,7 @@
                     </div>
 
                     <div class="product d-grid gap-2 col-13" id="product_wish">
-                        <button type="button" class="btn btn-outline-secondary btn-lg">관심 상품</button>
+                        <button type="button" class="btn btn-outline-secondary btn-lg" @click="handleMember">관심 상품</button>
                     </div>
 
                     <div class="product mt-5" id="product_info">
@@ -174,7 +174,8 @@ export default {
         const state = reactive({
             productid : Number(route.query.productid),
             row : [],
-            showModal : false
+            showModal : false,
+            memberNumber : sessionStorage.getItem("TOKEN"),
         })
 
         const handleBuying = (id) => {
@@ -199,6 +200,20 @@ export default {
                 });
         }
 
+        // 관심 상품 추가 제거
+        const handleMember = async() => {
+            if(!state.memberNumber) {
+                alert('로그인이 필요합니다.')
+                router.push({path:"/member/login"})
+            } else {
+                const url = `/api/get/member?memberNumber=${state.memberNumber}`;
+                const headers = {"Content-Type":"application/json", "auth" : state.memberNumber};
+                const { data } = await axios.get(url,{headers});
+                state.member = data;
+                console.log("회원정보: ", state.member);
+            }
+        }
+    
         const handleData = () => {
             axios.get(`/api/get/product/one/images?productid=${state.productid}`).then((res)=> {
                 console.log("상품정보,이미지", res.data);
@@ -226,6 +241,7 @@ export default {
 
         return {
             state,
+            handleMember,
             handleBuying,
             handleSelling,
             changePriceFormat

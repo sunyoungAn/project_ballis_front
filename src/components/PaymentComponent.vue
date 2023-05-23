@@ -56,6 +56,7 @@ export default {
             member : "",
             
             paymentType : 0, // 1:카드 간편결제 2:일반카드 3:카카오페이 4:네이버페이
+            finalPrice : 0,
         })
 
 
@@ -96,9 +97,13 @@ export default {
         const sellingDto = state.type === 'keep' ? state.selling : null;
 
         // 구매시 최종가격
-        const finalPrice = state.type === 'fast' ? 
-        Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 5000) // 빠른배송
-        : Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 3000); // 즉시구매
+        if(state.type === 'fast') { // 빠른배송
+            state.finalPrice = Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 5000);
+        } else if(state.type === 'normal') { // 즉시구매
+            state.finalPrice = Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 3000);
+        } else {
+            state.finalPrice = 0;
+        }
 
         // 회원 데이터 
         const handleData = async()=> {
@@ -128,7 +133,7 @@ export default {
                         pay_method: 'card',
                         merchant_uid: state.merchantUid,
                         name: state.item.productKorName, // 상품명
-                        amount: finalPrice, // 결제가격
+                        amount: state.finalPrice, // 결제가격
                         buyer_email: state.member.email, 
                         buyer_name: state.member.name,  
                         buyer_tel: state.member.phoneNumber, 
@@ -157,7 +162,7 @@ export default {
                                     phoneNumber : state.address.phoneNumber, 
                                     message : state.message, 
                                     paymentType : state.paymentType,
-                                    price : finalPrice
+                                    price : state.finalPrice
                                 }
                             }
                             console.log("바디",data);
