@@ -65,8 +65,7 @@ export default {
         const state = reactive({
             mainImagePreview:[],
             subImagePreviews:[],
-            subImages:[],
-            subImagedata : null,
+            subImagedata : [],
             form:{
                 memberNumber: sessionStorage.getItem("TOKEN"),
                 name:"",
@@ -77,6 +76,7 @@ export default {
                 pageDiv:3,
                 targetId:5, //임의의 값
                 imagePath:[],
+                subImages:[],
                 uploadfiles:""
             },
             
@@ -142,33 +142,36 @@ export default {
                 const imagePreview = event.target.result;
                 state.mainImagePreview = imagePreview;
                 state.form.imagePath = [file.name]; // 메인 이미지 파일 경로 추가
+                console.log("대표이미지", state.form.imagePath);
             };
             reader.readAsDataURL(file);
             };
 
             const subImage = (event) => {
-            const files = event.target.files;
+                const files = event.target.files;
 
-            if (files.length > 2) {
-                alert("서브 이미지는 최대 2개까지 등록 가능합니다.");
-                event.target.value = null;
-                return false;
-            }
+                if (files.length > 2) {
+                    alert("서브 이미지는 최대 2개까지 등록 가능합니다.");
+                    event.target.value = null;
+                    return false;
+                }
+                console.log(files);
 
-            state.subImagePreviews = [];
-            state.form.subImages = [];
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                const imagePreview = event.target.result;
-                state.subImagePreviews.push(imagePreview);
-                state.form.subImages.push(file.name); // 서브 이미지 파일 경로 추가
-                };
-                reader.readAsDataURL(file);
-            }
-        };
+                state.subImagePreviews = [];
+                state.subImagedata = [];
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    console.log("파일", file);
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const imagePreview = event.target.result;
+                        state.subImagePreviews.push(imagePreview);
+                        state.subImagedata.push(file); // 서브 이미지 파일 경로 추가
+                        console.log("서브이미지:", state.subImagedata);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
 
 
         const handleInsert = async () => {
@@ -194,13 +197,14 @@ export default {
             if (selectedFile.value && selectedFile.value.length > 0) {
                 const mainImageFile = selectedFile.value[0];
                 body.append("imagePath", mainImageFile);
+                console.log("메인이미지파일등록", mainImageFile);
             }
 
             // 서브 이미지 등록
             if (state.subImagedata && state.subImagedata.length > 0) {
                 for (let i = 0; i < state.subImagedata.length; i++) {
-                const subImageFile = state.subImagedata[i];
-                body.append("subImage", subImageFile);
+                    const subImageFile = state.subImagedata[i];
+                    body.append("subImage", subImageFile);
                 }
             }
             const {data} = await axios.post(url,body,{headers});
