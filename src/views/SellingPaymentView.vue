@@ -4,6 +4,9 @@
     <!-- 주소 모달 -->
     <address-modal v-if="showAddressAdd" @close="showAddressAdd = false"/>
     <address-list-modal v-if="showAddressList" :addressList="state.addressList" @close="showAddressList = false" @select="selectAdd"/>
+    <!-- 카드 모달 -->
+    <card-add-modal v-if="showCardAdd" :member="state.member" @close="showCardAdd = false" @reload="handleReload"/>
+
     <div class="common_mt160">
         <!-- 즉시판매 -->
         <div class="container" id="wrap" v-if="state.type === 'normal' && state.item">
@@ -13,21 +16,21 @@
                     <p style="font-weight: bold;">{{ state.item.modelNumber }}</p>
                     <p>{{ state.item.productEngName }}</p>
                     <p style="color: #aeaeae;">{{ state.item.productKorName }}</p>
-                    <p>{{ state.size }}</p>  
+                    <p>{{ state.size }}</p>
                 </div>
             </div>
             
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">판매 정산 계좌</span>
                 <span v-if="!state.member.depositor" class="text-end gray_font" @click="showAccountAdd = true">+ 계좌 추가</span>
+                <span v-else class="text-end gray_font">등록된 계좌는 마이페이지에서 변경 가능합니다.</span>
             </div>
 
             <div v-if="!state.member.depositor">
-                <p class="mt-3">계좌를 추가하세요</p>
+                <p class="mt-3">계좌를 추가하세요.</p>
             </div>
 
             <div v-else>
-                <button class="btn btn-secondary float-end" @click="showAccountList = true">변경</button>
                 <div class="d-flex mt-3">
                     <span class="col-2 gray_font">계좌</span>
                     <span class="col-8 text-start">{{ state.member.bankName }}&nbsp;{{ state.member.accountNumber }}</span>
@@ -41,11 +44,12 @@
 
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">반송 주소</span>
-                <span class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
+                <span v-if="state.addressList.length === 3" class="text-end gray_font">주소는 3개까지 등록 가능합니다.</span>
+                <span v-else class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
             </div>
 
             <div v-if="state.addressList.length === 0">
-                <p class="mt-3">주소를 추가하세요</p>
+                <p class="mt-3">주소를 추가하세요.</p>
             </div>
 
             <div v-else>
@@ -100,17 +104,17 @@
             <hr />
 
             <p class="fw-bold fs-4 mt-5">결제 방법</p>
-            <div class="d-flex justify-content-between mt-5 flex-wrap">
+            <div class="d-flex justify-content-between mt-3 flex-wrap">
                 <span class="fw-bold">카드 간편 결제</span>
-                <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
+                <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardAdd = true">+ 새 카드 추가</span>
+                <span v-else class="text-end gray_font">등록된 카드는 마이페이지에서 변경 가능합니다.</span>
             </div>
 
             <div v-if="state.cards.length === 0">
-                <p class="mt-2">카드를 추가하세요</p>
+                <p class="mt-2">카드를 추가하세요.</p>
             </div>
             <div v-else>
-                <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
-                <input type="checkbox" class="btn-check" id="2" autocomplete="off" name="pay" :checked="state.payMethod === 1">
+                <input type="checkbox" class="btn-check" id="1" autocomplete="off" name="pay" :checked="state.payMethod === 1">
                 <label class="btn btn-outline-secondary mt-3 w-100" @click="handlePay(1)">
                     <div class="d-flex">
                         <span class="col-2 gray_font">카드번호</span>
@@ -124,8 +128,7 @@
             </div>
             <hr />
 
-            <p class="fw-bold fs-4 mt-5">판매 조건 확인</p>
-
+            <!-- <p class="fw-bold fs-4 mt-5">판매 조건 확인</p> -->
             <button class="btn btn-secondary w-100 fs-5 fw-bold p-3" @click="handleSellNow">즉시 판매하기</button>
         </div>
 
@@ -144,14 +147,14 @@
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">판매 정산 계좌</span>
                 <span v-if="!state.member.depositor" class="text-end gray_font" @click="showAccountAdd = true">+ 계좌 추가</span>
+                <span v-else class="text-end gray_font">등록된 계좌는 마이페이지에서 변경가능합니다.</span>
             </div>
 
             <div v-if="!state.member.depositor">
-                <p class="mt-3">계좌를 추가하세요</p>
+                <p class="mt-3">계좌를 추가하세요.</p>
             </div>
 
             <div v-else>
-                <button class="btn btn-secondary float-end" @click="showAccountList = true">변경</button>
                 <div class="d-flex mt-3">
                     <span class="col-2 gray_font">계좌</span>
                     <span class="col-8 text-start">{{ state.member.bankName }}&nbsp;{{ state.member.accountNumber }}</span>
@@ -165,11 +168,12 @@
 
             <div class="d-flex justify-content-between mt-5 flex-wrap">
                 <span class="fw-bold fs-4">반송 주소</span>
-                <span class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
+                <span v-if="state.addressList.length === 3" class="text-end gray_font">주소는 3개까지 등록 가능합니다.</span>
+                <span v-else class="text-end gray_font" @click="showAddressAdd = true">+ 새 주소 추가</span>
             </div>
 
-            <div v-if="!state.addressList">
-                <p>주소를 추가하세요</p>
+            <div v-if="state.addressList.length === 0">
+                <p class="mt-3">주소를 추가하세요.</p>
             </div>
 
             <div v-else>
@@ -224,18 +228,18 @@
                 <hr />
 
                 <p class="fw-bold fs-4 mt-5">결제 방법</p>
-                <div class="d-flex justify-content-between mt-5 flex-wrap">
+                <div class="d-flex justify-content-between mt-3 flex-wrap">
                     <span class="fw-bold">카드 간편 결제</span>
-                    <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
+                    <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardAdd = true">+ 새 카드 추가</span>
+                    <span v-else class="text-end gray_font">등록된 카드는 마이페이지에서 변경 가능합니다.</span>
                 </div>
 
                 <div v-if="state.cards.length === 0">
-                    <p class="mt-2">카드를 추가하세요</p>
+                    <p class="mt-2">카드를 추가하세요.</p>
                 </div>
 
                 <div v-else>
-                    <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
-                    <input type="checkbox" class="btn-check" id="2" autocomplete="off" name="pay" :checked="state.payMethod === 1">
+                    <input type="checkbox" class="btn-check" id="1" autocomplete="off" name="pay" :checked="state.payMethod === 1">
                     <label class="btn btn-outline-secondary mt-3 w-100" @click="handlePay(1)">
                         <div class="d-flex">
                             <span class="col-2 gray_font">카드번호</span>
@@ -249,8 +253,7 @@
                 </div>
                 <hr />
 
-                <p class="fw-bold fs-4 mt-5">판매 조건 확인</p>
-
+                <!-- <p class="fw-bold fs-4 mt-5">판매 조건 확인</p> -->
                 <button class="btn btn-secondary w-100 fs-5 fw-bold p-3" @click="handleSellLater">판매 입찰하기</button>
             </div>
 
@@ -302,17 +305,17 @@
                 <hr />
 
                 <p class="fw-bold fs-4 mt-5">결제 방법</p>
-                <div class="d-flex justify-content-between mt-5 flex-wrap">
+                <div class="d-flex justify-content-between mt-3 flex-wrap">
                     <span class="fw-bold">카드 간편 결제</span>
-                    <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardsAdd = true">+ 새 카드 추가</span>
+                    <span v-if="state.cards.length === 0" class="text-end gray_font" @click="showCardAdd = true">+ 새 카드 추가</span>
+                    <span v-else class="text-end gray_font">등록된 카드는 마이페이지에서 변경 가능합니다.</span>
                 </div>
 
                 <div v-if="state.cards.length === 0">
-                    <p class="mt-2">카드를 추가하세요</p>
+                    <p class="mt-2">카드를 추가하세요.</p>
                 </div>
 
                 <div v-else>
-                    <button class="btn btn-secondary float-end" @click="showCardsList = true">변경</button>
                     <input type="radio" class="btn-check" id="2" autocomplete="off" name="pay" :checked="state.payMethod === 1">
                     <label class="btn btn-outline-secondary mt-3 w-100" @click="handlePay(1)">
                         <div class="d-flex">
@@ -336,7 +339,7 @@
                 </div>
                 <hr />
 
-                <p class="fw-bold fs-4 mt-5">보관 판매 조건 확인</p>
+                <!-- <p class="fw-bold fs-4 mt-5">보관 판매 조건 확인</p> -->
 
                 <!-- 결제 컴포넌트-->
                 <payment-component 
@@ -353,8 +356,9 @@
 <script>
 import AccountAddModal from '@/components/AccountAddModal.vue';
 import AddressModal from '@/components/AddressModal.vue';
-import PaymentComponent from '@/components/PaymentComponent.vue';
 import AddressListModal from '@/components/AddressListModal.vue';
+import CardAddModal from '@/components/CardAddModal.vue';
+import PaymentComponent from '@/components/PaymentComponent.vue';
 import axios from 'axios';
 import { onMounted, reactive, ref, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -364,17 +368,19 @@ export default {
     components: {
         AccountAddModal,
         AddressModal,
-        PaymentComponent,
-        AddressListModal
+        AddressListModal,
+        CardAddModal,
+        PaymentComponent
     },
     setup () {
         const route = useRoute();
         const router = useRouter();
         const store = useStore();
 
+        const showAccountAdd = ref(false);
         const showAddressAdd = ref(false);
         const showAddressList = ref(false);
-        const showAccountAdd = ref(false);
+        const showCardAdd = ref(false);
 
         const state = reactive({
             productid: Number(route.query.productid),
@@ -386,7 +392,6 @@ export default {
             memberNumber : sessionStorage.getItem("TOKEN"),
             member : '',
             cards : '',
-            payMethod: 0,
             
             row : [],
             sellingStatus : null,
@@ -396,7 +401,8 @@ export default {
             bidDate : '',
             bidFormattedDate : '',
             bidDays : '',
-
+            
+            payMethod: 0,
             sellingDto : {}
         })
 
@@ -416,6 +422,11 @@ export default {
             state.payMethod = payMethod;
         }
 
+        // 계좌, 카드 등록 후 업데이트
+        const handleReload = () => {
+            handleMember();
+        };
+
         // 주소 리스트
         const handleAddressList = async() => {
             try {
@@ -424,10 +435,14 @@ export default {
                 // console.log("주소목록", state.addressList)
 
                 const defaultAddress = state.addressList.find(address => address.defaultAddress === 1)
-                if(defaultAddress) {
-                    state.selectedAddress = defaultAddress
-                }else if(state.addressList.length === 1) {
+                if(defaultAddress) { // 기본 배송지 존재
+                    state.selectedAddress = defaultAddress 
+                } else if(state.addressList.length === 1) { // 처음 주소 추가
                     state.selectedAddress = state.addressList[0]
+                } else if(state.addressList.length === 2) { // 두번째 주소 추가
+                    state.selectedAddress = state.addressList[1]
+                } else if(state.addressList.length === 3) { // 세번째 주소 추가 
+                    state.selectedAddress = state.addressList[2]
                 }
             } catch(err) {
                 console.error(err);
@@ -453,7 +468,7 @@ export default {
 
         // 즉시판매 - 결제테이블
         const handleSellNow = async() => {
-            // 유효성 검사 통과 > 구매 조건 확인 all check
+            // 유효성 검사 통과
             if(!state.member.depositor) {
                 alert('판매 정산 계좌를 입력하세요.')
                 return false
@@ -480,23 +495,22 @@ export default {
                 }
                 const res = await axios.post(url, body, {headers});
                 console.log("보냄", res);
-
+                
+                router.push({
+                    path : '/selling/complete',
+                    query : {
+                        productid: state.productid,
+                        type : state.type
+                    }
+                })
             } catch(err) {
                 console.error(err);
             }
-                
-            router.push({
-                path : '/selling/complete',
-                query : {
-                    productid: state.productid,
-                    type : state.type
-                }
-            })
         }
 
         // 판매입찰 - 판매테이블
         const handleSellLater = async() => {
-            // 유효성 검사 통과 > 구매 조건 확인 all check
+            // 유효성 검사 통과
             if(!state.member.depositor) {
                 alert('판매 정산 계좌를 입력하세요.')
                 return false
@@ -521,17 +535,17 @@ export default {
                 }
                 const res = await axios.post(url, body, {headers});
                 console.log("보냄", res);
+
+                router.push({
+                    path : '/selling/complete',
+                    query : {
+                        productid: state.productid,
+                        type : state.type
+                    }
+                })
             } catch(err) {
                 console.error(err);
             }
-                
-            router.push({
-                path : '/selling/complete',
-                query : {
-                    productid: state.productid,
-                    type : state.type
-                }
-            })
         }
 
         // 멤버 정보 읽어오기
@@ -545,7 +559,7 @@ export default {
             console.log("카드정보: ", state.cards);
         };
 
-        // 판매 입찰, 보관 판매 시 데이터 필요
+        // 판매 입찰, 보관 판매 시 상품 정보 출력용 데이터 필요
         if(state.type === 'bid' || state.type === 'keep') {
             const handleData = async() => {
                 try {
@@ -571,10 +585,6 @@ export default {
             return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
 
-        const handleReload = () => {
-            handleMember();
-        };
-
         onMounted(()=>{
             handleMember();
             handleAddressList();
@@ -582,9 +592,10 @@ export default {
 
         return {
             state,
+            showAccountAdd,
             showAddressAdd,
             showAddressList,
-            showAccountAdd,
+            showCardAdd,
             selectAdd,
             handleSellNow,
             handleSellLater,
