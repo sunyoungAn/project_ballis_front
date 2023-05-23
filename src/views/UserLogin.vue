@@ -110,12 +110,19 @@ import { useStore } from 'vuex';
               router.push({ path: '/' });
             }  
 
-          } else {
-            window.alert("이메일과 비밀번호가 일치하지 않습니다");
+          } else if (data.status === 404) {
+            alert("이메일과 비밀번호가 일치하지 않습니다");
           }
         } catch (error) {
           console.error(error);
-          alert('회원 정보가 없습니다');
+          if (error.response) {
+            const status = error.response.status;
+            if (status === 404) {
+              alert("이메일과 비밀번호가 일치하지 않습니다");
+            } else if (status === 403) {
+              alert("탈퇴한 회원입니다.");
+            }
+          } 
         }
       }
       return {

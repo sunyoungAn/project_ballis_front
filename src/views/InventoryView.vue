@@ -14,6 +14,10 @@
             <select class="form-select form-select-sm" v-model="state.selectedStatus" style="width: 150px; height: 50px;">
                 <option v-for="option in statusOptions" :value="option.value" :key="option.value">{{ option.label }}</option>
             </select>
+            <span style="color: gray;">
+                발송요청시에만 취소 가능합니다<br>
+                취소를 원하시면 일대일 문의를 남겨주세요.
+            </span>
           </div>
 
           <div class="p_tag_box">
