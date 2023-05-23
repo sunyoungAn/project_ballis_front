@@ -5,9 +5,9 @@
                 <hr>
 
                 <ul class="ul_box">
-                    <a class="nav-link active" aria-current="page" href="/mypage/selling">판매입찰</a>
-                    <a class="nav-link active" aria-current="page" href="/mypage/sellinging">진행중</a>
-                    <a class="nav-link active" aria-current="page" href="/mypage/sellingend">완료</a>
+                  <router-link to="/mypage/selling">판매입찰</router-link>
+                  <router-link to="/mypage/sellinging">진행중</router-link>
+                  <router-link to="/mypage/sellingend">완료</router-link>
                 </ul>
             </div>
     </article>
@@ -43,6 +43,16 @@ export default {
     list-style-type: none;
     color: gray;
     list-style-type: none;
+}
+
+a{
+  text-decoration: none;
+  color: gray;
+}
+
+a:hover{
+  color: black;
+  font-weight: bold;
 }
 
 </style>

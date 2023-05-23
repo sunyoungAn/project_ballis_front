@@ -8,10 +8,10 @@
         
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="/notice">공지사항</a>
+                        <router-link to="/notice">공지사항</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/mypage/inquiry">일대일문의</a>
+                        <router-link to="/mypage/inquiry">일대일문의</router-link>
                     </li>
                 </ul>
             </nav>
@@ -25,7 +25,7 @@
                     <table class="table">
                     <thead>
                         <tr>
-                        <th scope="col" style="width:100px">글번호</th>
+                        <th scope="col" style="width:150px">글번호</th>
                         <th scope="col">글제목</th>
                         <th scope="col" style="width:300px">작성날짜</th>
                         </tr>
@@ -34,7 +34,7 @@
                         <tr v-for="list of state.list" :key="list" @click="handleContent(list.id)" style="cursor: pointer;">
                         <th scope="row">{{ list.id }}</th>
                         <td>{{ list.title }}</td>
-                        <td>{{ list.registDate }}</td>
+                        <td>{{ formatDate(list.registDate) }}</td>
                         </tr>
                     </tbody>
                     </table>
@@ -71,13 +71,22 @@ export default {
             router.push({path:'/notice/content', query:{id:no}})
         };
 
+        const formatDate = (dateString) => {
+                const date = new Date(dateString);
+                const year = date.getFullYear();
+                const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                const day = ('0' + date.getDate()).slice(-2);
+                return `${year}-${month}-${day}`;
+        };
+
         onMounted(()=>{
             handleData();
         })
 
         return {
             state,
-            handleContent
+            handleContent,
+            formatDate
         }
     }
 }
@@ -91,6 +100,12 @@ a{
   color: gray;
 }
  
+
+ul > li {
+    margin-top: 15px;
+    font-weight: bolder;
+}
+
 a:hover{
   color: black;
   font-weight: bold;

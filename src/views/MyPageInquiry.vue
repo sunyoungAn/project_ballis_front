@@ -17,15 +17,18 @@
                     <thead>
                         <tr style="text-align: center;">
                         <th scope="col" style="width:100px">글번호</th>
-                        <th scope="col" style="width:400px">글제목</th>
+                        <th scope="col" style="width:300px">글제목</th>
+                        <th scope="col" style="width:100px">문의유형</th>
                         <th scope="col" style="width:100px">작성날짜</th>
                         <th scope="col" style="width:100px">문의답변</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="tmp of state.list" :key="tmp"  @click="handleContent(tmp.id)" style="cursor: pointer;">
-                        <th scope="row">{{ tmp.id }}</th>
+                        <th scope="row" style="text-align: center;">{{ tmp.id }}</th>
                         <td>{{ tmp.title }}</td>
+                        <td style="text-align: center;">{{ tmp.category === 1 ? '구매관련' :
+                               tmp.category === 2 ? '판매관련' : '기타'  }}</td>
                         <td>{{ formatDate(tmp.inquiryRegistDate) }}</td>
                         <td style="text-align: center;">{{ tmp.inquiryStatus === 1 ? 'X' : 'O' }}</td>
                         </tr>
@@ -103,7 +106,6 @@ export default {
 section{
     display: grid;
     grid-template-columns: 200px auto;
-    border: 1px solid gray;
 }
 
 article {

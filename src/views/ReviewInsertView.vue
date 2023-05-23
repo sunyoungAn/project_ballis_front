@@ -29,8 +29,8 @@
             <div class="mb-3">
                 <input class="form-control" type="file" style="width: 300px;" @change="mainImage($event)">
                 <div class="image_box" style="display: flex; flex-wrap: wrap;">
-                    <div v-if="state.mainImagePreview" style="flex: 1;">
-                    <img :src="state.mainImagePreview" alt="Main Image" style="width: 100px; height: 100px;">
+                    <div v-show="state.mainImagePreview" style="flex: 1;">
+                        <img :src="state.mainImagePreview"  style="width: 100px; height: 100px;">
                     </div>
                 </div>
                 </div>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 import axios from 'axios';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -63,7 +63,7 @@ export default {
         const route = useRoute();
 
         const state = reactive({
-            mainImagePreview:[],
+            mainImagePreview:null,
             subImagePreviews:[],
             subImagedata : [],
             form:{
@@ -82,50 +82,7 @@ export default {
             
         })
 
-        const selectedFile =ref(null);
-
-        // const mainImage = (event) =>{
-
-        //     selectedFile.value = event.target.files;
-
-        //     if(selectedFile.value.length > 3 ){
-        //         alert("이미지는 최대 3개까지 등록 가능합니다.");
-        //         event.target.files = null;
-        //         return false;
-        //     } 
-
-
-        //     state.form.imagePath=[];
-        //     for(let i=0; i<selectedFile.value.length; i++){
-        //         //선택한 파일의 미리보기 이미지 생성
-        //         const file = selectedFile.value[i];
-        //         const reader = new FileReader();
-        //         reader.onload=(event)=>{
-        //             const imagePreview =event.target.result;
-        //             if(state.imagePreviews.length<3){
-        //                 state.imagePreviews.push(imagePreview);
-        //                 state.form.imagePath.push(file.name); //이미지 파일 경로 추가
-        //             } else{
-        //                 alert("이미지는 최대 3개까지만 등록 가능합니다.");
-        //             }
-        //         };
-        //         reader.readAsDataURL(file);
-        //     }
-        // }
-
-        // const subImage = (e) => {
-        //     console.log('subImage', e.target.files);
-        //     state.subImages = [];
-        //     if(e.target.files.length > 0) {
-        //         state.subImagedata = e.target.files;
-        //         for(let i = 0;  i < e.target.files.length; i++) {
-        //             state.subImages.push(URL.createObjectURL(e.target.files[i]));
-        //         }
-        //     } else {
-        //         state.subImagedata = null;
-        //     }
-        // }
-       
+        const selectedFile =[];
 
         const mainImage = (event) => {
             selectedFile.value = event.target.files;
@@ -137,6 +94,7 @@ export default {
             }
 
             const file = selectedFile.value[0];
+            state.mainImagePreview = [];
             const reader = new FileReader();
             reader.onload = (event) => {
                 const imagePreview = event.target.result;
@@ -210,7 +168,7 @@ export default {
             const {data} = await axios.post(url,body,{headers});
             console.log(data);
             alert("등록되었습니다");
-            router.push({path:'/mypage'});
+            router.push({path:'/mypage/buyingend'});
         }
 
         return {

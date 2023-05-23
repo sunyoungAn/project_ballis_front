@@ -178,7 +178,7 @@ export default {
             window.alert("회원가입이 완료되었습니다.");
             router.push({ path: '/member/login' });
           }).catch(()=>{
-            window.alert("회원가입실패");
+            window.alert("중복된 이메일 주소입니다.");
           })
         }
       

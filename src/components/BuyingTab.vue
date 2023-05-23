@@ -8,9 +8,6 @@
                   <router-link to="/mypage/buying">구매입찰</router-link>
                   <router-link to="/mypage/buyinging">진행중</router-link>
                   <router-link to="/mypage/buyingend">완료</router-link>
-                    <!-- <a class="nav-link active" aria-current="page" href="/mypage/buying">구매입찰</a>
-                    <a class="nav-link active" aria-current="page" href="/mypage/buyinging">진행중</a>
-                    <a class="nav-link active" aria-current="page" href="/mypage/buyingend">완료</a> -->
                 </ul>
         </div>
     </article>

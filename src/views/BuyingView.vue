@@ -36,6 +36,9 @@
                       <div v-show="tmp.buying.buyingStatus === 1">
                         <span class="badge rounded-pill text-bg-success item_badge">{{ tmp.buying.buyingStatus === 1 ? '입찰중' : '기한만료' }}</span>
                       </div>
+                      <div v-show="tmp.buying.buyingStatus === 1" >
+                        <button type="button" class="btn btn-outline-dark delete_button" @click="handleDelete(tmp.buying.id)">입찰삭제</button>
+                      </div>
                       <div v-show="tmp.buying.buyingStatus === 2">
                         <span class="badge rounded-pill text-bg-secondary item_badge">{{ tmp.buying.buyingStatus === 1 ? '입찰중' : '기한만료' }}</span>
                       </div>
@@ -133,6 +136,18 @@ export default {
             const day = ('0' + date.getDate()).slice(-2);
             return `${year}-${month}-${day}`;
       };
+
+      //입찰삭제
+      const handleDelete =  async (id) => {
+        if(confirm('삭제하시겠습니까?')){
+            const url = `/api/delete/buying/${id}`;
+            const headers = {"Content-Type":"application/json"};
+            const body={};
+            const {data} = await axios.delete(url, {headers:headers, data:body});
+            console.log(data);
+            handleData();
+          } 
+      }
   
       onMounted(() => {
         handleData();
@@ -145,7 +160,8 @@ export default {
         searchDate,
         setMinDate,
         formatDate,
-        getImagePath
+        getImagePath,
+        handleDelete
       };
     },
 }
@@ -157,7 +173,7 @@ export default {
 .ul_item_box{
     padding: 15px;
     display: grid;
-    grid-template-columns: 15% 55% 15% 15%;
+    grid-template-columns: 15% 45% 15% 10% 15%;
     list-style-type: none;
 }
 
@@ -195,6 +211,12 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%; 
+}
+
+.delete_button{
+  border-radius: 0; 
+  margin-top: 13px;
+  margin-left: 70px;
 }
 
 </style>

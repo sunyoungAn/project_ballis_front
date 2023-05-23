@@ -41,7 +41,8 @@
                           tmp.contract.buyingStatus === 62 ? '반품완료' : '교환완료'
                         }}
                        </span>
-                      <button @click="handleReview(tmp.productId)" style="width: 90px; height: 30px; margin-top: 18px;">리뷰작성</button>
+                       <button type="button" class="btn btn-outline-dark insert_button" v-if="!tmp.reviewlist.length" @click="handleReview(tmp.productId)">리뷰작성</button>
+                       <button type="button" class="btn btn-outline-dark insert_button" v-if="tmp.reviewlist.length" @click="handleDelete(tmp.reviewlist[0].id)" >리뷰삭제</button>
                     </ul>
                     
                 </div>
@@ -142,9 +143,22 @@ export default {
                 return `${year}-${month}-${day}`;
         };
   
-      const handleReview = (id) => {
-        router.push({path:'/mypage/buying/review', query:{productid:id}});
-      }
+        //리뷰작성이동
+        const handleReview = (id) => {
+          router.push({path:'/mypage/buying/review', query:{productid:id}});
+        }
+
+        //리뷰삭제
+        const handleDelete = async (id) => {
+          if(confirm('삭제하시겠습니까?')){
+            const url = `/api/delete/review/${id}`;
+            const headers = {"Content-Type":"application/json"};
+            const body={};
+            const {data} = await axios.delete(url, {headers:headers, data:body});
+            console.log(data);
+            handleData();
+           } 
+        }
 
 
       onMounted(() => {
@@ -160,6 +174,7 @@ export default {
         handleReview,
         getImagePath,
         formatDate,
+        handleDelete
       };
     }
 }
@@ -208,6 +223,12 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%; 
+}
+
+.insert_button{
+  width: 90px; 
+  height: 40px; 
+  margin-top: 13px;
 }
 
 </style>

@@ -137,6 +137,7 @@
             return `${year}-${month}-${day}`;
       };
 
+      //입찰 삭제
       const handleDelete =  async (id) => {
         if(confirm('삭제하시겠습니까?')){
             const url = `/api/delete/selling/${id}`;
