@@ -89,6 +89,7 @@ export default {
             row : {},
             rowFast : [],
             rowSell : [],
+            rowOne : [],
             sizes : [],
             showMethod : false,
             methodSelect : 0,
@@ -144,7 +145,7 @@ export default {
                 const res = await axios.get(`/api/get/product/sell?productid=${state.productid}`);
                 console.log('구매입찰 데이터', res.data);
                 state.rowSell = res.data;
-
+                console.log("최종 구매입찰 데이터", state.rowOne)
             } catch (err) {
                 console.error(err);
             }

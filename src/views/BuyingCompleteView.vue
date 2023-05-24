@@ -139,7 +139,7 @@
 
                 <div class="d-flex justify-content-between mt-3">   
                     <span class="fw-bold">구매 희망가</span>
-                    <span class="text-end fw-bold">{{ state.bidPrice }}원</span>
+                    <span class="text-end fw-bold">{{ changePriceFormat(state.bidPrice) }}원</span>
                 </div>
                 <div class="d-flex justify-content-between mt-2">   
                     <span class="gray_font">검수비</span>

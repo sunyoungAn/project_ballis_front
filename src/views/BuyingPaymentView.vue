@@ -255,7 +255,7 @@
 
             <div class="d-flex justify-content-between mt-3">   
                 <span class="fw-bold">구매 희망가</span>
-                <span class="text-end fw-bold">{{ state.bidPrice }}원</span>
+                <span class="text-end fw-bold">{{ changePriceFormat(state.bidPrice) }}원</span>
             </div>
             <div class="d-flex justify-content-between">   
                 <span class="gray_font">검수비</span>
@@ -342,7 +342,7 @@ export default {
             type : route.query.type,
             item : '',
             addressList : [],
-            selectedAddress : {},
+            selectedAddress : '',
             memberNumber : sessionStorage.getItem("TOKEN"),
             member : '',
             cards : '',
@@ -428,7 +428,7 @@ export default {
         // 구매입찰
         const handleBid = async() => {
             // 유효성 검사 통과
-            if(state.selectedAddress.length === 0) { 
+            if(!state.selectedAddress) { 
                 alert('주소를 입력하세요.')
                 return false
             } 

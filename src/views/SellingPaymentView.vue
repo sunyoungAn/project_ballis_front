@@ -394,7 +394,7 @@ export default {
             type : route.query.type,
             item : '',
             addressList : [],
-            selectedAddress : {},
+            selectedAddress : '',
             memberNumber : sessionStorage.getItem("TOKEN"),
             member : '',
             cards : '',
@@ -479,7 +479,7 @@ export default {
                 alert('판매 정산 계좌를 입력하세요.')
                 return false
             }
-            if(state.selectedAddress.length === 0) { 
+            if(!state.selectedAddress) { 
                 alert('주소를 입력하세요.')
                 return false
             } 
