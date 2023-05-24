@@ -15,8 +15,10 @@
                         <div style="margin-left: 20px;">
                             <span>{{ state.content.content}}</span>
                             <br><br><br>
-                            <div v-for="tmp of state.images" :key="tmp">
-                                <img :src="`http://localhost:8088/api/inquiry/display/image?imagePath=${tmp.imagePath}`" class="rounded" style="width: 150px;" />
+                            <div class="image_container">
+                                <div v-for="tmp of state.images" :key="tmp" class="image_box">
+                                    <img :src="tmp.imagePath" class="rounded" style="width:150px;"/>
+                                </div>
                             </div>
                         </div>
                         
@@ -89,8 +91,12 @@ export default {
                 console.log(res);
                 state.content = res.data.inquiry;
                 state.images = res.data.image;
-                console.log(state.content);
-                console.log(state.images);
+                console.log("문의글 1개: ", state.content);
+                console.log("이미지: ", state.images);
+
+                for (let i = 0; i < state.images.length; i++) {
+                    state.images[i].imagePath = `/api/inquiry/display/image?imagePath=${state.images[i].imagePath}`;
+                }
             })
         }
 
@@ -168,8 +174,6 @@ a:hover{
   font-weight: bold;
 }
 
-
-
 .button_box3{
     /* float: right; */
     margin-left: 75%;
@@ -183,4 +187,12 @@ a:hover{
     text-underline-offset: 10px;
 }
 
+.image_container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image_box {
+  box-sizing: border-box;
+}
 </style>
