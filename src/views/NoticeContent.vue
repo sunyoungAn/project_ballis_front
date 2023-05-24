@@ -23,11 +23,10 @@
                 </div>
 
                 <div>
-                    <p>{{ state.content.title }}</p>
-                    <!-- <p>{{ state.content.content }}</p> -->
-                    <div v-html="state.content.content"></div> <!-- TODO 확인 v-html을 사용해야 태그들이 인식되어서 수정했습니다 -->
-                    <p>{{ state.content.registDate }}</p>
-                    
+                    <p class="fs-3">{{ state.content.title }}</p>
+                    <p class="text-end">등록일 : {{ formatDate(state.content.registDate) }}</p>
+                    <br>
+                    <div v-html="state.content.content"></div> 
                 </div>
             </article>
         </section>
@@ -57,12 +56,20 @@ export default {
             })
         }
 
+        const formatDate = (dateString) => {
+                const date = new Date(dateString);
+                const year = date.getFullYear();
+                const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                const day = ('0' + date.getDate()).slice(-2);
+                return `${year}-${month}-${day}`;
+        };
+
         onMounted(()=>{
             handleData();
         })
 
     
-        return {state}
+        return {state,formatDate}
     }
 }
 </script>

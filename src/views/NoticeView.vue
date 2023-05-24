@@ -2,7 +2,7 @@
     <div class="container common_mt160 customer_wrap">
         <section>
             <nav>
-                <div class="p_tag_box">
+                <div class="p_tag_box text-start">
                     <p>고객센터</p>
                 </div>
         
@@ -24,7 +24,7 @@
                 <div>
                     <table class="table">
                     <thead>
-                        <tr>
+                        <tr class="text-center">
                         <th scope="col" style="width:150px">글번호</th>
                         <th scope="col">글제목</th>
                         <th scope="col" style="width:300px">작성날짜</th>
@@ -32,9 +32,9 @@
                     </thead>
                     <tbody>
                         <tr v-for="list of state.list" :key="list" @click="handleContent(list.id)" style="cursor: pointer;">
-                        <th scope="row">{{ list.id }}</th>
+                        <th class="text-center" scope="row">{{ list.id }}</th>
                         <td>{{ list.title }}</td>
-                        <td>{{ formatDate(list.registDate) }}</td>
+                        <td class="text-center">{{ formatDate(list.registDate) }}</td>
                         </tr>
                     </tbody>
                     </table>
@@ -115,7 +115,7 @@ a:hover{
 section{
    display: grid;
    grid-template-columns: 200px auto;
-   border: 1px solid gray;
+   /* border: 1px solid gray; */
 }
 
 nav {
