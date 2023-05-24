@@ -41,7 +41,7 @@
                             
                             <button class="del_button blue_button btn flex-grow-1 mx-0 mb-3">
                                 <div v-for="(tmp, i) in state.rowSell" :key="i">
-                                    <div v-if="tmp.buyProductSize === state.size" @click="handleType(state.size, 'normal', tmp)">
+                                    <div v-if="tmp.buyProductSize === state.size" @click="handleType(state.size, 'sell', tmp)">
                                         <p class="fs-5 fw-bold">{{ changePriceFormat(tmp.buyWishPrice) }}</p>
                                         <p>선불발송</p>
                                     </div>
@@ -98,7 +98,7 @@ export default {
         const activeIndex = ref(null);
 
         const handleType = (size, type, tmp) => {
-            if(type === 'normal') {
+            if(type === 'sell') {
                 store.commit('setSelectedItem', tmp)
             }
             router.push({

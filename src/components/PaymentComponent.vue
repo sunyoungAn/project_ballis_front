@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div v-if="state.type === 'sell'">
+        <button class="btn btn-secondary w-100 fs-5 fw-bold p-3" @click="requestPay">즉시 판매하기</button>
+    </div>
+    <div v-else>
         <button class="btn btn-secondary w-100 fs-5 fw-bold p-3" @click="requestPay">결제하기</button>
     </div>
 </template>
@@ -68,7 +71,7 @@ export default {
             state.selling = props.sellingDto;
             state.message = props.delivery;
             state.paymentType = props.payMethod;
-            if(state.item) {
+            if(state.type === 'fast' || state.type === 'normal') { // 구매-빠른배송, 즉시구매
                 state.contract = {
                     productId : state.item.id,
                     buyingId : null,
@@ -77,6 +80,16 @@ export default {
                     sellerNumber : state.item.sellerNumber,
                     price : state.item.sellWishPrice,
                     productSize : state.item.sellProductSize
+                }
+            } else if(state.type === 'sell') { // 판매-즉시판매 (보관판매는 null)
+                state.contract = {
+                    productId : state.item.id,
+                    buyingId : state.item.buyingId,
+                    sellingId : null,
+                    buyerNumber : state.item.buyerNumber,
+                    sellerNumber : state.memberNumber,
+                    price : state.item.buyWishPrice,
+                    productSize : state.item.buyProductSize // 이게 있나?
                 }
             }
             console.log("선택한주소", state.address.address)
@@ -98,7 +111,7 @@ export default {
             state.ImpUid = `imp_${timestamp}${state.memberNumber}`;
         }
 
-        // 빠른배송 구매 and 즉시구매->거래체결 테이블에 저장, 보관판매->거래체결 테이블에 저장x
+        // 빠른배송 구매 and 즉시구매 and 즉시판매->거래체결 테이블에 저장, 보관판매->거래체결 테이블에 저장x
         const contractDto = state.type === 'keep' ? null : state.contract;
         const sellingDto = state.type === 'keep' ? state.selling : null;
 
@@ -107,7 +120,9 @@ export default {
             state.finalPrice = Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 5000);
         } else if(state.type === 'normal') { // 즉시구매
             state.finalPrice = Math.floor(state.item.sellWishPrice + state.item.sellWishPrice*0.015 + 3000);
-        } else {
+        } else if(state.type ==='sell') { // 즉시판매
+            state.finalPrice = Math.floor(state.item.buyWishPrice + state.item.buyWishPrice*0.03 + 3000);
+        } else { // 보관판매-창고 이용료만 결제
             state.finalPrice = 0;
         }
 
@@ -324,6 +339,44 @@ export default {
                         } 
                     )
                 }
+            } else if (state.type === 'sell') { // 즉시판매
+                if(!state.member.depositor) {
+                    alert('판매 정산 계좌를 입력하세요.')
+                    return false
+                }
+                const url = `/api/add/payment?type=${state.type}`;
+                const headers = { "Content-Type": "application/json" };
+                const data = {
+                    contractDto,
+                    sellingDto,
+                    paymentDto : {        
+                        impUid: state.ImpUid, // 결제번호
+                        merchantUid: state.merchantUid, // 주문번호
+                        contractId : null,
+                        sellingId : null,
+                        memberNumber : state.memberNumber,
+                        name : state.member.name, 
+                        address : state.address.address,
+                        subAddress : state.address.subAddress,
+                        zipCode : state.address.zipCode,
+                        phoneNumber : state.address.phoneNumber, 
+                        message : state.message, 
+                        paymentType : state.paymentType,
+                        price : state.finalPrice
+                    }
+                }
+                console.log("즉시판매 바디",data);
+                const res = await axios.post(url, data, {headers});
+                console.log("즉시판매 결제 완료", res);
+                if(res.status === 200) {
+                    router.push({
+                        path : '/selling/complete',
+                        query : {
+                            productid: state.selling.productId,
+                            type : state.type
+                        }
+                    })
+                }     
             }
         }
 

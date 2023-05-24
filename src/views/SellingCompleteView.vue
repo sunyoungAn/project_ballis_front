@@ -1,7 +1,7 @@
 <template>
     <div class="common_mt160">
         <!-- 즉시판매 -->
-        <div v-if="state.type === 'normal' && state.item" class="container" id="wrap">
+        <div v-if="state.type === 'sell' && state.item" class="container" id="wrap">
             <div class="top d-flex flex-column align-items-center justify-content-center">
                 <div class="top_info">
                     <p class="fw-bold fs-3">즉시 판매가 완료되었습니다.</p>

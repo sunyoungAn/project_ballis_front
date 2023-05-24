@@ -34,14 +34,14 @@
                         판매 입찰
                         <input type="radio" class="d-none" id="bid" name="price" :checked="state.type === 'bid'">
                     </label>
-                    <label class="btn p-3" v-bind:class="[state.type === 'normal'? 'blue_button' : 'not_checked']" @click="state.sellNow ? state.type = 'normal' : state.type = 'bid'">
+                    <label class="btn p-3" v-bind:class="[state.type === 'sell'? 'blue_button' : 'not_checked']" @click="state.sellNow ? state.type = 'sell' : state.type = 'bid'">
                         즉시 판매
-                        <input type="radio" class="d-none" id="normal" name="price" :checked="state.type === 'normal'" :disabled="state.onlyBid">
+                        <input type="radio" class="d-none" id="sell" name="price" :checked="state.type === 'sell'" :disabled="state.onlyBid">
                     </label>
                 </div>
 
                 <!-- 즉시 판매 -->
-                <div v-if="state.type === 'normal'">
+                <div v-if="state.type === 'sell'">
                     <p class="fw-bold">즉시 판매가</p>
                     <p class="fs-4 fw-bold text-end">{{ changePriceFormat(state.row[0].buyWishPrice) }}원</p>
                     <hr />
@@ -66,7 +66,7 @@
                     </div>
 
                     <button class="btn btn-secondary w-100 my-3 fs-5 fw-bold p-3" 
-                    @click="handleNext('normal')">
+                    @click="handleNext('sell')">
                     즉시 판매 계속</button>
                 </div>      
 

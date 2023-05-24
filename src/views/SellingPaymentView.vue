@@ -9,7 +9,7 @@
 
     <div class="common_mt160">
         <!-- 즉시판매 -->
-        <div class="container" id="wrap" v-if="state.type === 'normal' && state.item">
+        <div class="container" id="wrap" v-if="state.type === 'sell' && state.item">
             <div class="head d-flex align-items-center">
                 <img :src="state.item.imagePath" class="head_img">
                 <div class="d-flex flex-column ml-3">
@@ -129,7 +129,13 @@
             <hr />
 
             <!-- <p class="fw-bold fs-4 mt-5">판매 조건 확인</p> -->
-            <button class="btn btn-secondary w-100 fs-5 fw-bold p-3" @click="handleSellNow">즉시 판매하기</button>
+            <!-- 결제 컴포넌트-->
+            <payment-component 
+            :address="state.selectedAddress" 
+            :type="state.type" 
+            :sellingDto="state.sellingDto"
+            :payMethod="state.payMethod"
+            />
         </div>
 
         <!-- 판매입찰, 보관판매 -->
@@ -466,48 +472,6 @@ export default {
             }
         }
 
-        // 즉시판매 - 결제테이블
-        const handleSellNow = async() => {
-            // 유효성 검사 통과
-            if(!state.member.depositor) {
-                alert('판매 정산 계좌를 입력하세요.')
-                return false
-            }
-            if(state.selectedAddress.length === 0) { 
-                alert('주소를 입력하세요.')
-                return false
-            } 
-            if(state.payMethod === 0) {
-                alert('결제 방법을 선택하세요')
-                return false
-            }  
-            try {
-                const url = `/api/post/contract/buy?type=${state.type}`;
-                const headers = {"Content-Type":"application/json"};
-                const body = {
-                    productId : state.productid,
-                    buyingId : state.item.buyingId,
-                    sellingId : null,
-                    buyerNumber : state.item.buyerNumber, 
-                    sellerNumber : state.memberNumber,
-                    price : state.item.buyWishPrice,
-                    productSize : state.size	
-                }
-                const res = await axios.post(url, body, {headers});
-                console.log("보냄", res);
-                
-                router.push({
-                    path : '/selling/complete',
-                    query : {
-                        productid: state.productid,
-                        type : state.type
-                    }
-                })
-            } catch(err) {
-                console.error(err);
-            }
-        }
-
         // 판매입찰 - 판매테이블
         const handleSellLater = async() => {
             // 유효성 검사 통과
@@ -597,7 +561,6 @@ export default {
             showAddressList,
             showCardAdd,
             selectAdd,
-            handleSellNow,
             handleSellLater,
             changePriceFormat,
             handlePay,
