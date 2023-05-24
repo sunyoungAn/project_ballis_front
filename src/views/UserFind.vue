@@ -65,7 +65,8 @@
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
+      <div v-if="state.email">
+        <div class="modal-header">
         <div class="d-flex justify-content-end">
           <button class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -78,10 +79,31 @@
           </div>
           <div class="modal-footer mb-3">
             <button class="btn green_button_outline mt-4 mb-3" data-bs-dismiss="modal"><router-link to="/member/login">로그인</router-link></button>
-            <button class="btn green_button_outline mt-4 mb-3">비밀번호찾기</button>
+            <button class="btn green_button_outline mt-4 mb-3" data-bs-dismiss="modal"><router-link to="/password/find">비밀번호찾기</router-link></button>
           </div>
         </div>
       </div>
+      </div>
+
+      <div v-if="!state.email">
+        <div class="modal-header">
+        <div class="d-flex justify-content-end">
+          <button class="btn-close text-end" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="fs-4 fw-bold mt-3 mx-auto text-center" id="exampleModalLabel">이메일 주소 찾기 실패</div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-6">
+          <div class="modal-body text-center fs-5 mt-2">
+            {{ state.error }}
+          </div>
+          <div class="modal-footer mb-3">
+            <button class="btn green_button_outline mt-4 mb-3" style="margin-right: 30%" data-bs-dismiss="modal" aria-label="Close">돌아가기</button>
+          </div>
+        </div>
+      </div>
+      </div>
+      
     </div>
   </div>
 </div>
@@ -96,14 +118,15 @@ import axios from 'axios'
       
       const state = reactive({
         phoneNumber:"",
-        email:""
+        email:"",
+        error : "회원 정보가 없습니다"
       })
 
       const findEmail = () =>{
         axios.get(`/api/find/email/${state.phoneNumber}`).then((res)=>{
           state.email=res.data;
         }).catch(()=>{
-          window.alert("찾기 실패");
+          state.error;
         })
       }
       
