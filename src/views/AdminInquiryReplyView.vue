@@ -36,7 +36,8 @@
                         <td v-if="state.data.pathList !== null"  colspan="3">
                             <ul class="mb-0">
                                  <li v-for="(item, idx) in state.data.pathList" :key="idx">
-                                    <a :href ="'http://localhost:8088/api/download?pathName='+item">첨부이미지 {{ idx+1 }} </a>
+                                    <!-- <a :href ="'http://localhost:8088/api/download?pathName='+item">첨부이미지 {{ idx+1 }} </a> -->
+                                    <a :href =state.downlosturl+item>첨부이미지 {{ idx+1 }} </a>
                                 </li>
                             </ul>
                         </td>
@@ -86,7 +87,8 @@ export default {
             data : '',
             form : {
                 answer : ''
-            }
+            },
+            downlosturl : '/api/download?pathName='
         })
 
         // 문의상세내용
