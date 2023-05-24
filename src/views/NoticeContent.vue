@@ -2,16 +2,16 @@
     <div class="container common_mt160 customer_wrap">
         <section>
             <nav>
-                <div class="p_tag_box">
+                <div class="p_tag_box text-start">
                     <p>고객센터</p>
                 </div>
         
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="/notice">공지사항</a>
+                        <router-link to="/notice">공지사항</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/mypage/inquiry">일대일문의</a>
+                        <router-link to="/mypage/inquiry">일대일문의</router-link>
                     </li>
                 </ul>
             </nav>
@@ -23,11 +23,10 @@
                 </div>
 
                 <div>
-                    <p>{{ state.content.title }}</p>
-                    <!-- <p>{{ state.content.content }}</p> -->
-                    <div v-html="state.content.content"></div> <!-- TODO 확인 v-html을 사용해야 태그들이 인식되어서 수정했습니다 -->
-                    <p>{{ state.content.registDate }}</p>
-                    
+                    <p class="fs-3">{{ state.content.title }}</p>
+                    <p class="text-end">등록일 : {{ formatDate(state.content.registDate) }}</p>
+                    <br>
+                    <div v-html="state.content.content"></div> 
                 </div>
             </article>
         </section>
@@ -57,12 +56,20 @@ export default {
             })
         }
 
+        const formatDate = (dateString) => {
+                const date = new Date(dateString);
+                const year = date.getFullYear();
+                const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                const day = ('0' + date.getDate()).slice(-2);
+                return `${year}-${month}-${day}`;
+        };
+
         onMounted(()=>{
             handleData();
         })
 
     
-        return {state}
+        return {state,formatDate}
     }
 }
 </script>
@@ -74,7 +81,12 @@ a{
   text-decoration: none;
   color: gray;
 }
- 
+
+ul > li {
+    margin-top: 15px;
+    font-weight: bolder;
+}
+
 a:hover{
   color: black;
   font-weight: bold;
@@ -84,7 +96,7 @@ a:hover{
 section{
    display: grid;
    grid-template-columns: 200px auto;
-   border: 1px solid gray;
+   /* border: 1px solid gray; */
 }
 
 nav {

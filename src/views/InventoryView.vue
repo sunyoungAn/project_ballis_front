@@ -14,8 +14,8 @@
             <select class="form-select form-select-sm" v-model="state.selectedStatus" style="width: 150px; height: 50px;">
                 <option v-for="option in statusOptions" :value="option.value" :key="option.value">{{ option.label }}</option>
             </select>
+            <br>
             <span style="color: gray;">
-                발송요청시에만 취소 가능합니다<br>
                 취소를 원하시면 일대일 문의를 남겨주세요.
             </span>
           </div>
@@ -26,7 +26,15 @@
 
           <div class="item_box">
             <ul class="ul_item_box" v-for="tmp in filteredList" :key="tmp.id">
-              <li><img :src="tmp.imagelist[0].imagePath" class="item_img main_img_background"></li>
+              <li>
+                <div>
+                  <img :src="tmp.imagelist[0].imagePath" class="item_img main_img_background">
+                </div>
+                <div>
+                  <div>사이즈 : {{ tmp.selling.productSize }}</div>
+                  <!-- <div>가격 : {{ changePriceFormat(tmp.buying.wishPrice) }}원</div> -->
+                </div>
+              </li>
               <p class="fw-bolder product_name">{{ tmp.productName }}</p>
               <span class="badge rounded-pill text-bg-success item_badge">
                 {{ 

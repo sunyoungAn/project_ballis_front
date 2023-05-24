@@ -116,10 +116,15 @@
                 <el-pagination background layout="prev, pager, next" @current-change="changePage" :total="state.total" />
             </nav>
 
-            <div class="d-flex justify-content-center mt-5">
+            <!-- <div class="d-flex justify-content-center mt-5">
                 <button class="btn btn-success btn-lg d-flex justify-content-end me-2" @click="editSellingStatus()">상태변경</button>
                 <button class="btn btn-success btn-lg d-flex justify-content-start ms-2" @click="deleteSelling()">보관삭제</button>
-            </div>
+            </div> -->
+
+            <!--  -->
+            <div class="d-flex justify-content-center mt-5">
+                <button class="btn btn-success btn-lg d-flex justify-content-start" @click="editSellingStatus()">상태변경</button>
+            </div> 
 
         </div>
 
