@@ -30,14 +30,20 @@
   
           <div class="item_box">
             <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
-              <li><img :src="getImagePath(tmp)" class="item_img main_img_background"></li>
+              <li>
+                <div>
+                  <img :src="getImagePath(tmp)" class="item_img main_img_background">
+                  <div>사이즈 : {{ tmp.selling.productSize }}</div>
+                  <div>가격 : {{ changePriceFormat(tmp.selling.wishPrice) }}원</div>
+                </div>
+              </li>
               <p class="fw-bolder product_name">{{ tmp.productName }}</p>
               <li style="margin-top: 20px;">{{ formatDate(tmp.selling.registDate) }}</li>
               <div v-show="tmp.selling.sellingStatus === 1" >
                 <span class="badge rounded-pill text-bg-success item_badge">{{ tmp.selling.sellingStatus === 1 ? '입찰중' : '기한만료' }}</span>
               </div>
               <div v-show="tmp.selling.sellingStatus === 1" >
-                <button type="button" class="btn btn-outline-dark delete_button" @click="handleDelete(tmp.selling.id)">입찰삭제</button>
+                <button type="button" class="btn btn-outline-dark delete_button" @click="handleCancel(tmp.selling.id)">입찰취소</button>
               </div>
               <div v-show="tmp.selling.sellingStatus === 2">
                 <span class="badge rounded-pill text-bg-secondary item_badge">{{  tmp.selling.sellingStatus === 1 ? '입찰중' : '기한만료' }}</span>
@@ -137,16 +143,21 @@
             return `${year}-${month}-${day}`;
       };
 
-      //입찰 삭제
-      const handleDelete =  async (id) => {
-        if(confirm('삭제하시겠습니까?')){
-            const url = `/api/delete/selling/${id}`;
+      // 판매입찰 취소
+      const handleCancel =  async (id) => {
+        if(confirm('입찰을 취소하시겠습니까?')){
+            const url = `/api/cancel/selling/${id}`;
             const headers = {"Content-Type":"application/json"};
             const body={};
-            const {data} = await axios.delete(url, {headers:headers, data:body});
+            const {data} = await axios.put(url, {headers:headers, data:body});
             console.log(data);
             handleData();
           } 
+      }
+
+      // 금액형식변환 세자리마다 콤마추가
+      const changePriceFormat = (data) => {
+        return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
       }
   
       onMounted(() => {
@@ -161,7 +172,8 @@
         searchDate,
         formatDate,
         getImagePath,
-        handleDelete
+        handleCancel,
+        changePriceFormat
       };
     },
   };

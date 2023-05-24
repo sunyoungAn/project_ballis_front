@@ -31,13 +31,19 @@
 
                 <div class="item_box">
                     <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
-                        <li><img :src="getImagePath(tmp)" class="item_img main_img_background"></li>
+                        <li>
+                            <div>
+                                <img :src="getImagePath(tmp)" class="item_img main_img_background">
+                                <div>사이즈 : {{ tmp.contract.productSize }}</div>
+                                <div v-if="tmp.contract.paidPrice != null">정산금액 : {{ changePriceFormat(tmp.contract.paidPrice) }}원</div>
+                            </div>
+                        </li>
                         <p class="fw-bolder product_name">{{ tmp.productName }}</p>
                         <li style="margin-top: 20px;">{{ formatDate(tmp.contract.registDate) }}</li>
                         <span class="badge rounded-pill text-bg-success item_badge">
                             {{ 
                                 tmp.contract.sellingStatus === 50 ? '정산완료' :
-                                tmp.contract.sellingStatus === 51 ? '취소완료' :
+                                // tmp.contract.sellingStatus === 51 ? '취소완료' : TODO 취소 완료 정보도 완료탭에 뜨게 끔 추후 수정하기
                                 tmp.contract.sellingStatus === 52 ? '불합격반송' : '회수완료'
                             }}
                         </span>
@@ -89,7 +95,7 @@ export default {
             const endDate = new Date(state.endDate + 'T00:00:00');
             endDate.setDate(endDate.getDate() + 1);
             const endDateISO = endDate.toISOString().split('T')[0];
-            const url = `/api/sellinging/date/${state.token}`;
+            const url = `/api/sellingend/date/${state.token}`;
             const headers = {"Content-Type": "application/json", "auth": state.token};
             const params = { startDate, endDate: endDateISO };
             const {data} = await axios.get(url, {headers, params});
@@ -131,13 +137,17 @@ export default {
             const options = [
                 { label: "전체", value: "" },
                 { label: "정산완료", value: 50 },
-                { label: "취소완료", value: 51 },
+                // { label: "취소완료", value: 51 }, TODO 취소 완료 정보도 완료탭에 뜨게 끔 추후 수정하기
                 { label: "불합격반송", value: 52 },
                 { label: "회수완료", value: 53 }
             ];
             return options;
         });
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
 
         onMounted(()=>{
             handleData();
@@ -150,7 +160,8 @@ export default {
             setMinDate,
             searchDate,
             formatDate,
-            getImagePath
+            getImagePath,
+            changePriceFormat
         }
     }
 }

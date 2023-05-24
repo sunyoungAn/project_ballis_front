@@ -31,7 +31,13 @@
 
                 <div class="item_box">
                     <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
-                        <li><img :src="getImagePath(tmp)" class="item_img main_img_background"></li>
+                        <li>
+                            <div>
+                                <img :src="getImagePath(tmp)" class="item_img main_img_background">
+                            </div>
+                            <div>사이즈 : {{ tmp.contract.productSize }}</div>
+                            <div>가격 : {{ changePriceFormat(tmp.contract.price) }}원</div>
+                        </li>
                         <p class="fw-bolder product_name">{{ tmp.productName }}</p>
                         <li style="margin-top: 20px;">{{ formatDate(tmp.contract.registDate) }}</li>
                         <span class="badge rounded-pill text-bg-success item_badge">
@@ -143,6 +149,11 @@ export default {
                 return `${year}-${month}-${day}`;
         };
 
+        // 금액형식변환 세자리마다 콤마추가
+        const changePriceFormat = (data) => {
+            return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
         onMounted(()=>{
             handleData();
         })
@@ -154,7 +165,8 @@ export default {
             setMinDate,
             searchDate,
             formatDate,
-            getImagePath
+            getImagePath,
+            changePriceFormat
         }
     }
 }
