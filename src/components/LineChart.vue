@@ -1,7 +1,7 @@
 <template>
     <div>
         <canvas v-show="row.length > 0" ref="chart"></canvas>
-        <div v-show="row.length === 0">체결된 거래가 아직 없습니다.</div>
+        <div v-show="row.length === 0" class="mb-5">체결된 거래가 아직 없습니다.</div>
         <ul class="nav nav-pills nav-justified" id="pills-tab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">체결 거래</button>
@@ -55,8 +55,8 @@
                     <li class="info_box">{{ tmp.cnt }}</li>
                 </ul> 
             </div>
-            <div v-show="this.row.length > 5" class="row mt-3 mx-auto">
-                <button type="button" class="btn btn-outline-primary" @click="showMore()">체결 내역 더보기</button>
+            <div v-show="this.row.length > 5 || this.buyRow.length > 5 || this.sellRow.length > 5" class="row mt-3 mx-auto">
+                <button type="button" class="btn btn-outline-primary" @click="showMore()">더보기</button>
             </div>
         </div>
         <!-- 더보기 모달 -->
