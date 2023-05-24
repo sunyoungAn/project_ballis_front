@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="item_box">
-                    <ul class="ul_item_box" v-for="tmp of filteredList" :key="tmp.id">
+                    <ul class="ul_item_box" v-for="tmp in filteredList" :key="tmp.id">
                       <li>
                         <div>
                           <img :src="getImagePath(tmp)" class="item_img main_img_background">
@@ -47,9 +47,8 @@
                         }}
                        </span>
                        <button type="button" class="btn btn-outline-dark insert_button" v-if="!tmp.reviewlist.length" @click="handleReview(tmp.productId)">리뷰작성</button>
-                       <button type="button" class="btn btn-outline-dark insert_button" v-if="tmp.reviewlist.length" @click="handleDelete(tmp.reviewlist[0].id)" >리뷰삭제</button>
+                       <button type="button" class="btn btn-outline-dark insert_button" v-if="tmp.reviewlist.length" @click="handleDelete(tmp.reviewlist[0].id)" >리뷰삭제</button> 
                     </ul>
-                    
                 </div>
             </article>
 
@@ -79,7 +78,8 @@ export default {
         startDate:'',
         endDate:'',
         isModalShow : false, // 모달창 제어 변수
-        modalTargetId : 0
+        modalTargetId : 0,
+        div:1
       });
 
       const router = useRouter();
@@ -91,13 +91,43 @@ export default {
         const { data } = await axios.get(url, { headers });
         console.log(data);
         state.list = data;
-        console.log(state.list)
+        console.log(state.list);
+
+
+        // const dateCheck = () => {
+        //   let found = false; // 조건 충족 여부를 나타내는 변수
+
+        //   for (let i = 0; i < state.list.length && !found; i++) {
+        //     for (let j = i + 1; j < state.list.length && !found; j++) {
+        //       console.log(`i: ${i}, j: ${j}`); // 반복문 인덱스 출력
+
+        //       if (state.list[i].productId === state.list[j].productId) {
+        //         console.log(`Condition: ${state.list[i].contract.registDate < state.list[j].contract.registDate}`); // 조건 결과 출력
+
+        //         if (state.list[i].contract.registDate < state.list[j].contract.registDate) {
+        //           console.log("Condition met: state.div = 1");
+        //           state.list[i].contract.div = 1;
+        //           found = true;
+        //         } else if (state.list[i].contract.registDate > state.list[j].contract.registDate) {
+        //           console.log("Condition not met");
+        //         }
+        //       }
+        //     }
+        //   }
+        // };
+
+        // dateCheck();
+
       };
+
+      
 
        // 입력된 날짜 이후의 날짜를 선택할 수 있도록 설정
        function setMinDate(event) {
             state.minDate = event.target.value;
         }
+
+        
         
        //날짜 검색
        const searchDate = async () => {
@@ -110,8 +140,6 @@ export default {
         const headers = {"Content-Type": "application/json", "auth": state.token};
         const params = { startDate: startDateISO, endDate: endDateISO };
         const {data} = await axios.get(url, {headers, params});
-        console.log(params);
-        console.log("date=>", data);
         state.list = data;
        }
   
@@ -124,7 +152,10 @@ export default {
           return state.list.filter(product => product.contract.buyingStatus === status);
         }
       });
-  
+
+
+
+
       //셀렉박스
       const statusOptions = computed(() => {
         const options = [
@@ -167,11 +198,13 @@ export default {
             const url = `/api/delete/review/${id}`;
             const headers = {"Content-Type":"application/json"};
             const body={};
-            const {data} = await axios.delete(url, {headers:headers, data:body});
+            const {data} = await axios.put(url, {headers:headers, data:body});
             console.log(data);
             handleData();
            } 
         }
+
+
 
         // 모달창 닫기
         const modalClose = (value) => {
@@ -193,7 +226,7 @@ export default {
         getImagePath,
         formatDate,
         handleDelete,
-        modalClose
+        modalClose,
       };
     }
 }
