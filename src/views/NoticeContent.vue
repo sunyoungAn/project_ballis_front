@@ -91,7 +91,7 @@ a:hover{
 section{
    display: grid;
    grid-template-columns: 200px auto;
-   border: 1px solid gray;
+   /* border: 1px solid gray; */
 }
 
 nav {
