@@ -116,8 +116,8 @@
                     <h4 style="font-weight: bold;">Review</h4>
                     <h5 style="color: #aeaeae;">후기</h5>
                 </div>
-                <div class="review_list">
-                    <div class="review_main" v-for="(tmp, i) in state.reviewRows" :key="i">
+                <div class="review_list d-flex justify-content-center">
+                    <div class="review_main" v-for="(tmp, i) in state.displayedReview" :key="i">
                         <img v-if="tmp.mainImageDiv === 1" 
                             @click="showModal = true; 
                             state.reviewid=tmp.reviewId; 
@@ -135,7 +135,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
@@ -149,7 +148,6 @@ export default {
         ReviewModal
     },
     setup() {
-        // const route = useRoute();
         const router = useRouter();
 
         const showModal = ref(false);
@@ -166,6 +164,7 @@ export default {
             visiblePopCount: 4,
 
             reviewRows: [],
+            displayedReview: [],
             reviewid: "",
             productid: ""
         });    
@@ -247,6 +246,8 @@ export default {
                         state.reviewRows[i].imagePath = `/api/review/display?name=${state.reviewRows[i].imagePath}`;
                     }
 
+                    // 12개만 출력 (사진 2장씩 -> 24개)
+                    state.displayedReview = state.reviewRows.slice(0, 24);
                 })
                 .catch(error => {
                     console.error('API 호출 오류', error);
@@ -364,9 +365,9 @@ hr{
     flex-wrap : wrap;
 }
 .review_main_img{
-    width: 160px;
-    height: 160px;
-    margin: 5px;
+    width: 165px;
+    height: 165px;
+    margin: 7px;
     border-radius: 10px;
 }
 .main_img_background {
