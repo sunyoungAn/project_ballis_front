@@ -1,6 +1,6 @@
 <template>
     <div v-if="state.openmodal" class="admin_blackBg">
-        <div class="admin_whiteBg_payment_delivery">
+        <div v-show="state.price" class="admin_whiteBg_payment_delivery">
             <div class="modal-header">
                 <h3 class="modal-title">결제/배송상세정보</h3>
                 <button type="button" class="btn-close" @click="closeModal()"></button>
