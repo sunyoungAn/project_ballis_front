@@ -58,6 +58,7 @@ export default {
             
             memberNumber : sessionStorage.getItem("TOKEN"),
             member : "",
+            buyer: "",
             
             paymentType : 0, // 1:카드 간편결제 2:일반카드 3:카카오페이 4:네이버페이
             finalPrice : 0,
@@ -92,11 +93,11 @@ export default {
                     productSize : state.item.buyProductSize // 이게 있나?
                 }
             }
-            console.log("선택한주소", state.address.address)
-            console.log("멤버정보", state.member)
+            // console.log("선택한주소", state.address.address)
+            // console.log("멤버정보", state.member)
             // console.log("셀링받아왔나", state.selling);
             // console.log("콘트랙트", state.contract);
-            // console.log("아이템 정보", state.item);
+            console.log("아이템 정보", state.item);
             // console.log("배송요청", state.message);
         });
 
@@ -134,6 +135,22 @@ export default {
             state.member = data;
             console.log("회원정보: ", state.member);
         };
+
+        // 즉시판매의 경우 구매자 데이터 필요
+        if(state.type === 'sell') {
+            const handleBuyer = async() => {
+                const url = `/api/get/member?memberNumber=${state.item.buyerNumber}`;
+                const headers = {"Content-Type":"application/json", "auth" : state.item.buyerNumber};
+                const { data } = await axios.get(url,{headers});
+                state.buyer = data;
+                console.log("구매자정보: ", state.buyer);
+            }
+
+            onMounted(()=>{
+                handleBuyer();
+            })
+        }
+
 
         const IMP = window.IMP; 
         IMP.init("imp26282104"); // 상점id
@@ -354,8 +371,8 @@ export default {
                         merchantUid: state.merchantUid, // 주문번호
                         contractId : null,
                         sellingId : null,
-                        memberNumber : state.memberNumber,
-                        name : state.member.name, 
+                        memberNumber : state.item.buyerNumber,
+                        name : state.buyer.name,
                         address : state.address.address,
                         subAddress : state.address.subAddress,
                         zipCode : state.address.zipCode,
