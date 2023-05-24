@@ -37,8 +37,8 @@
         
           <div class="mt-5 text-center">
             <span class="mx-3 vertical_line"><router-link to="/member/join">회원가입</router-link></span>
-            <span class="mx-3 vertical_line"><router-link to="/email/find">아이디찾기</router-link></span>
-            <span class="mx-3"><router-link to="/password/find">비밀번호찾기</router-link></span>
+            <span class="mx-3 vertical_line"><router-link to="/email/find">아이디 찾기</router-link></span>
+            <span class="mx-3"><router-link to="/password/find">비밀번호 찾기</router-link></span>
           </div>
         </div>
       </div>

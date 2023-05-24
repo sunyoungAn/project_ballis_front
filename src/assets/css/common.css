@@ -200,6 +200,22 @@
   background-color: rgb(149, 212, 117);
   color: #ffffff;
 }
+.green_button_outline {
+  border: 1px solid rgb(103, 194, 58);
+  color: rgb(103, 194, 58);
+}
+.green_button_outline:hover{
+  background-color: rgb(103, 194, 58);
+  color: #ffffff;
+}
+.not_checked {
+  border-color: rgb(103, 194, 58);
+  color: rgb(103, 194, 58);
+}
+.not_checked:hover {
+  border-color: rgb(149, 212, 117) !important;
+  color: rgb(149, 212, 117) !important;
+}
 /* 판매 관련 버튼 */
 .blue_button {
   background-color: rgb(64, 158, 255);
