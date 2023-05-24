@@ -22,8 +22,11 @@ export default {
                     store.commit('setLogged',false);
                     store.commit('setMemberStatus', 0);
                });
+               router.push({path:'/'})
+            } else {
+                // 최소한 경우 이전페이지에 있기
+                router.go(-1);
             }
-            router.push({path:'/'})
         });
 
         return {}
