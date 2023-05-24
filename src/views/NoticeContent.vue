@@ -2,16 +2,16 @@
     <div class="container common_mt160 customer_wrap">
         <section>
             <nav>
-                <div class="p_tag_box">
+                <div class="p_tag_box text-start">
                     <p>고객센터</p>
                 </div>
         
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="/notice">공지사항</a>
+                        <router-link to="/notice">공지사항</router-link>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/mypage/inquiry">일대일문의</a>
+                        <router-link to="/mypage/inquiry">일대일문의</router-link>
                     </li>
                 </ul>
             </nav>
@@ -81,7 +81,12 @@ a{
   text-decoration: none;
   color: gray;
 }
- 
+
+ul > li {
+    margin-top: 15px;
+    font-weight: bolder;
+}
+
 a:hover{
   color: black;
   font-weight: bold;
