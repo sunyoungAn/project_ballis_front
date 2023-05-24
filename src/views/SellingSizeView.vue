@@ -89,7 +89,6 @@ export default {
             row : {},
             rowFast : [],
             rowSell : [],
-            rowOne : [],
             sizes : [],
             showMethod : false,
             methodSelect : 0,

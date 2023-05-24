@@ -81,7 +81,8 @@
 }
 
 .review_whiteBg {
-    width: 800px;
+    width: 1000px;
+    height: 800px;
     background: white;
     border-radius: 10px;
     padding: 20px;
