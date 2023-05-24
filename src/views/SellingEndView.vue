@@ -91,14 +91,16 @@ export default {
 
         //날짜 검색
         const searchDate = async () => {
-            const startDate = new Date(state.startDate + 'T00:00:00').toISOString().split('T')[0];
-            const endDate = new Date(state.endDate + 'T00:00:00');
-            endDate.setDate(endDate.getDate() + 1);
+            const startDate = new Date(state.startDate + 'T00:00:00')
+            const endDate = new Date(state.endDate + 'T23:59:59');
+            startDate.setDate(startDate.getDate() +1);
+            const startDateISO = startDate.toISOString().split('T')[0];
             const endDateISO = endDate.toISOString().split('T')[0];
             const url = `/api/sellingend/date/${state.token}`;
             const headers = {"Content-Type": "application/json", "auth": state.token};
-            const params = { startDate, endDate: endDateISO };
+            const params = { startDate: startDateISO, endDate: endDateISO };
             const {data} = await axios.get(url, {headers, params});
+            console.log(params);
             console.log("date=>", data);
             state.list = data;
         }
