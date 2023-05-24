@@ -1,5 +1,5 @@
 <template>
-   <body class="container common_mt160 customer_wrap">
+   <!-- <body class="container common_mt160 customer_wrap">
     <div class="div_box">
         <label class="lbl">이메일 주소</label>
     </div>
@@ -71,7 +71,78 @@
     <div class="button_box">
       <button type="button" class="btn btn-outline-success" @click="handleJoin()">회원가입</button>
     </div>
-   </body>
+   </body> -->
+
+  <div class="container common_mt160 customer_wrap">
+    <div class="row justify-content-center">
+      <div class="fs-3 fw-bold text-center mt-5">회원가입</div>
+      
+      <div class="col-lg-5">
+        <div class="mt-5">
+          <span class="fw-bold">이메일 주소</span>
+          <div class="input-group mt-2">
+            <input class="form-control form-control-lg text-center mx-2 custom_placeholder" type="text" @keyup="checkEmail()" v-model="state.email" placeholder="aa@test.com" />
+            <button class="btn green_button_outline" @click="sendMail()">인증코드 발급</button>
+          </div>
+          <p class="mt-2" v-if="state.emailValid === false" style="color: #e25d5d;">유효하지 않은 이메일입니다.</p>
+        </div>
+
+        <div class="mt-3">
+          <span class="fw-bold">인증코드</span>
+          <div class="input-group mt-2">
+            <input class="form-control form-control-lg text-center mx-2 custom_placeholder" type="text" v-model="state.joinCode" :disabled="state.isVerified" placeholder="인증코드 입력"> 
+            <button class="btn green_button_outline" @click="checkEmailCode()">인증코드 확인</button>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <span class="fw-bold">휴대폰 번호</span>
+          <input class="form-control form-control-lg mt-2 text-center custom_placeholder" type="text" v-model="state.phoneNumber" placeholder="- 제외한 휴대폰 번호 입력"> 
+        </div>
+
+        <div class="mt-3">
+          <span class="fw-bold">비밀번호</span>
+          <input class="form-control form-control-lg mt-2 text-center custom_placeholder" type="password" maxlength="11" @keyup="checkPassword()" v-model="state.password" placeholder="영문 대소문자, 숫자 조합 8-20자">
+          <p class="mt-2" v-if="state.passwordValid===false" style="color: #e25d5d;">사용할 수 없는 비밀번호입니다.</p>
+        </div>
+
+        <div class="mt-3">
+          <span class="fw-bold">비밀번호 확인</span>
+          <input class="form-control form-control-lg mt-2 text-center custom_placeholder" type="password" maxlength="11" @keyup="checkPassword2()" v-model="state.password2" placeholder="비밀번호 재입력">
+          <p class="mt-2" v-if="state.passwordValid2===false" style="color:#e25d5d;">비밀번호가 일치하지 않습니다.</p>
+        </div>
+
+        <div class="mt-3">
+          <div class="row">
+            <div class="col fw-bold">
+              <span>성별</span>
+            </div>
+          
+            <div class="btn-group w-100 mt-2" role="group" data-toggle="buttons">
+              <label class="btn p-2" v-bind:class="state.gender === '2'? 'green_button' : 'not_checked'" @click="state.gender = '2'">
+                남성
+                <input type="radio" class="btn-check" name="options-outlined" v-model="state.gender" value="2" autocomplete="off" >
+              </label>
+              <label class="btn p-2" v-bind:class="state.gender === '1'? 'green_button' : 'not_checked'" @click="state.gender = '2'">
+                여성
+                <input type="radio" class="btn-check" name="options-outlined" v-model="state.gender" value="1" autocomplete="off" />
+              </label>
+          </div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <span class="fw-bold">이름</span>
+          <input class="form-control form-control-lg mt-2 text-center custom_placeholder"  type="text" v-model="state.name" placeholder="이름">
+        </div>
+
+        <button class="btn btn-lg w-100 mt-4 green_button fw-bold" @click="handleJoin()">회원가입</button>
+      </div>
+    </div>
+  </div>
+
+
+
 </template>
 
 <script>
@@ -221,6 +292,28 @@ export default {
 
 <style lang="css" scoped>
 @import "../assets/css/common.css";
-
-
+.green_button {
+  background-color: rgb(103, 194, 58);
+  color: #ffffff;
+}
+.green_button:hover {
+  background-color: rgb(149, 212, 117);
+  color: #ffffff;
+}
+.green_button_outline {
+  border: 1px solid rgb(103, 194, 58);
+  color: rgb(103, 194, 58);
+}
+.green_button_outline:hover{
+  background-color: rgb(103, 194, 58);
+  color: #ffffff;
+}
+.not_checked {
+    border-color: rgb(103, 194, 58);
+    color: rgb(103, 194, 58);
+}
+.not_checked:hover {
+    border-color: rgb(149, 212, 117) !important;
+    color: rgb(149, 212, 117) !important;
+}
 </style>

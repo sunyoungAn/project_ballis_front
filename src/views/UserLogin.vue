@@ -28,12 +28,12 @@
 
     <div class="container common_mt160 customer_wrap">
       <div class="row justify-content-center">
-        <div class="fs-4 fw-bold text-center mt-5">로그인</div>
+        <div class="fs-3 fw-bold text-center mt-5">로그인</div>
         
         <div class="col-lg-4">
-          <input class="form-control form-control-lg text-center mt-5" v-model="state.email" type="text" placeholder="이메일 주소를 입력해주세요">
-          <input class="form-control form-control-lg text-center mt-3" v-model="state.password" type="password" placeholder="비밀번호를 입력해주세요">
-          <button class="btn btn-lg btn-block mt-3 green_button" @click="handleLogin()">로그인</button>
+          <input class="form-control form-control-lg text-center mt-5 custom_placeholder" v-model="state.email" type="text" placeholder="이메일 입력">
+          <input class="form-control form-control-lg text-center mt-3 custom_placeholder" v-model="state.password" type="password" placeholder="비밀번호 입력">
+          <button class="btn btn-lg btn-block mt-4 green_button fw-bold" @click="handleLogin()">로그인</button>
         
           <div class="mt-5 text-center">
             <span class="mx-3 vertical_line"><router-link to="/member/join">회원가입</router-link></span>
@@ -173,6 +173,7 @@ a:hover{
   width: 100%;
   background-color: rgb(103, 194, 58);
   color: #ffffff;
+  font-weight: bold;
 }
 .green_button:hover {
   background-color: rgb(149, 212, 117);
@@ -182,4 +183,5 @@ a:hover{
   padding-right: 30px;
   border-right: 1px solid #cecece;
 }
+
 </style>
