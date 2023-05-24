@@ -74,21 +74,33 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.5); /* r g b apacity*/ 
     position: fixed;
-    padding: 20px;
+    /* padding: 20px; */
+    padding-top: 120px;
     top:0;
     left: 0;
     z-index: 9999999; /* header보다 높아야 해서 높은 값 지정*/
 }
 
+.review_wrap {
+  width: 1200px;
+  height: 700px;
+  /* background: white; */
+  /* border-radius: 10px; */
+  /* padding: 20px; */
+  /* margin-top: 300px; */
+  /* margin-left: auto;
+  margin-right: auto; */
+}
+
 .review_whiteBg {
     width: 1000px;
-    height: 800px;
+    height: 700px;
     background: white;
     border-radius: 10px;
     padding: 20px;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-top: 100px;
+    /* margin-left: auto;
+    margin-right: auto; */
 }
 
 .customer_wrap {

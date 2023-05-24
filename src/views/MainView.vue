@@ -126,15 +126,17 @@
                         >
                     </div>
                 </div>      
-                <!-- 모달 영역 -->  
-                <review-modal v-if="showModal" 
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- 모달 영역 -->  
+    <review-modal v-if="showModal" 
                     :review-id="state.reviewid" 
                     :product-id="state.productid" 
                     @close="showModal = false" 
                 />
-            </div>
-        </div>
-    </div>
 </template>
 
 <script>
