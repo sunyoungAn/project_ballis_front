@@ -198,7 +198,7 @@ export default {
             const url = `/api/delete/review/${id}`;
             const headers = {"Content-Type":"application/json"};
             const body={};
-            const {data} = await axios.put(url, {headers:headers, data:body});
+            const {data} = await axios.delete(url, {headers:headers, data:body});
             console.log(data);
             handleData();
            } 
