@@ -144,6 +144,7 @@ export default {
                 const { data } = await axios.get(url,{headers});
                 state.buyer = data;
                 console.log("구매자정보: ", state.buyer);
+                // console.log("구매자 주소", state.buyer.addresss);
             }
 
             onMounted(()=>{
@@ -271,7 +272,7 @@ export default {
                             contractDto,
                             sellingDto,
                             paymentDto : {        
-                                impUid: state.ImpUid, // 결제번호
+                                impUid: state.impUid, // 결제번호
                                 merchantUid: state.merchantUid, // 주문번호
                                 contractId : null,
                                 sellingId : null,
@@ -373,10 +374,10 @@ export default {
                         sellingId : null,
                         memberNumber : state.item.buyerNumber,
                         name : state.buyer.name,
-                        address : state.address.address,
-                        subAddress : state.address.subAddress,
-                        zipCode : state.address.zipCode,
-                        phoneNumber : state.address.phoneNumber, 
+                        address : state.buyer.addresss[0].address,
+                        subAddress : state.buyer.addresss[0].subAddress,
+                        zipCode : state.buyer.addresss[0].zipCode,
+                        phoneNumber : state.buyer.addresss[0].phoneNumber, 
                         message : state.message, 
                         paymentType : state.paymentType,
                         price : state.finalPrice
