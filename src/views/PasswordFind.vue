@@ -40,12 +40,12 @@
       
         <div class="col-lg-4">
           <div class="mt-5">
-            <span class="fw-bold">이메일 주소</span>
+            <span class="fw-bold">휴대폰 번호</span>
             <input class="form-control form-control-lg text-center mt-2 custom_placeholder" v-model="state.phoneNumber" type="text" placeholder="- 제외하고 가입하신 휴대폰 번호 입력" />
           </div>
 
           <div class="mt-3">
-            <span class="fw-bold">휴대폰 번호</span>
+            <span class="fw-bold">이메일 주소</span>
             <input class="form-control form-control-lg text-center mt-2 custom_placeholder" v-model="state.email" type="text" b placeholder="가입하신 이메일 주소 입력">
           </div>
 
@@ -71,16 +71,49 @@ export default {
         })
         
         const sendPassword = () => {
-          axios.get(`/api/find/password/${state.email}/${state.phoneNumber}`).then((res)=>{
-            console.log(res);
-            axios.post(`/api/send/password?email=${state.email}`,{}).then((res)=>{
-              console.log(res);
-              alert('임시 비밀번호가 전송되었습니다');
-              router.push({path:"/member/login"});
-            })
-          })
-        }
+          if(state.phoneNumber === ""){
+            window.alert("휴대폰 번호를 입력해 주세요");
+            return false;
+          }
 
+          if(state.email === ""){
+            window.alert("이메일 주소를 입력해 주세요");
+            return false;
+          }
+          
+        //   axios.get(`/api/find/password/${state.email}/${state.phoneNumber}`).then((res)=>{
+        //     console.log(res);
+        //     axios.post(`/api/send/password?email=${state.email}`,{}).then((res)=>{
+        //       console.log(res);
+        //       alert('임시 비밀번호가 전송되었습니다');
+        //       router.push({path:"/member/login"});
+        //     })
+        //   })
+          
+        // }
+
+        axios.get(`/api/find/password/${state.email}/${state.phoneNumber}`)
+            .then((res) => {
+              console.log(res);
+              axios.post(`/api/send/password?email=${state.email}`, {})
+                .then((res) => {
+                  console.log(res);
+                  alert('임시 비밀번호가 전송되었습니다');
+                  router.push({ path: "/member/login" });
+                })
+                .catch((error) => {
+                  if (error.response && error.response.status === 500) {
+                    // 팝업창을 사용하여 일치하는 회원 정보가 없다는 메시지를 표시
+                    window.alert('일치하는 회원 정보가 없습니다.');
+                  } else {
+                    console.error(error);
+                  }
+                });
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+          }
         return {
           state,
           sendPassword
