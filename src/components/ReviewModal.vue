@@ -1,53 +1,6 @@
 <template>
     <div class="review_blackBg d-flex justify-content-center">
         <div class="row review_wrap align-items-center"> 
-        <!-- <div class="review_whiteBg">
-            <div class="modal-header">
-                <h3 class="modal-title"></h3>
-                <button type="button" class="btn-close" id="close_btn" aria-label="Close" @click="$emit('close'), state.productOne = false"></button>
-            </div>
-            <div class="modal_body">
-                <div class="left_wrap">
-                    <div id="carouselExampleIndicators1" class="carousel slide" data-bs-ride="true">
-                        <div class="carousel-indicators">
-                            <button v-for="(tmp, i) in state.reviewRows" :key="i" type="button" data-bs-target="#carouselExampleIndicators1" 
-                                :data-bs-slide-to="i" :class="{ active: i === 0 }">
-                            </button>
-                        </div>
-                        <div class="carousel-inner">
-                            <div v-for="(tmp, i) in state.reviewRows" :key="i" :class="['carousel-item', { active: i === 0 }]">
-                                <img :src="tmp.imagePath" :data-bs-slide-to="i" class="d-block w-100">
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="right_wrap">
-                    <div class="content_head" v-if="state.reviewRows.length">
-                        {{ state.reviewRows[0].content }}
-                    </div>
-                    <div class="content_body" v-if="state.productRows.length" @click="handleProductOne(state.productRows[0].id)">
-                        <img :src="state.productRows[0].imagePath" class="img-thumbnail">
-                        <p>&nbsp;</p>
-                        <p>{{ state.productRows[0].productEngName }}</p>
-                        <p style="font-weight: bold;">{{ changePriceFormat(state.productRows[0].sellWishPrice) }}원</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="outter_btn">
-            <img src="@/assets/image/arrow-trans.png" class="outter_right" @click="handleRight()" />
-            <img src="@/assets/image/arrow-trans.png" class="outter_left" @click="handleLeft()"/>
-        </div> -->
-
-        <!-- 수정 -->
         <!-- 이전 후기로 이동 -->
             <div class="col-1">
                 <img src="@/assets/image/arrow-trans.png" class="outter_left" @click="handleLeft()"  />
@@ -55,21 +8,20 @@
 
             <!-- 후기 정보 -->
             <div class="col-10 review_whiteBg mx-auto">
-
+                
                 <!-- 닫기 버튼 -->
-                <div class="modal-header">
+                <div class="modal-header mt-0">
                     <h3 class="modal-title"></h3>
                     <button type="button" class="btn-close" id="close_btn" aria-label="Close" @click="$emit('close'), state.productOne = false"></button>
                 </div>
 
                 <!-- 후기 이미지와 후기 내용 정보 -->
-                <div class="row">
-
+                <div class="row h-100">
                     <!-- 후기이미지 부분 -->
-                    <div class="col-6 mx-auto row align-items-center">
-                        <div id="carouselExampleIndicators1" class="carousel slide col" data-bs-ride="true">
+                    <div class="col-6 mx-auto d-flex align-items-center overflow-hidden">                 
+                        <div id="carouselExampleIndicators1" class="carousel slide" data-bs-ride="true">
                             <div class="carousel-indicators">
-                                <button v-for="(tmp, i) in state.reviewRows" :key="i" type="button" data-bs-target="#carouselExampleIndicators1" 
+                                <button v-for="(tmp, i) in state.reviewRows" :key="i" data-bs-target="#carouselExampleIndicators1" 
                                     :data-bs-slide-to="i" :class="{ active: i === 0 }">
                                 </button>
                             </div>
@@ -78,11 +30,11 @@
                                     <img :src="tmp.imagePath" :data-bs-slide-to="i" class="d-block w-100">
                                 </div>
                             </div>
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide="prev">
+                            <button class="carousel-control-prev" data-bs-target="#carouselExampleIndicators1" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Previous</span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide="next">
+                            <button class="carousel-control-next" data-bs-target="#carouselExampleIndicators1" data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">Next</span>
                             </button>
@@ -90,15 +42,18 @@
                     </div>
 
                     <!-- 후기 내용, 상품 정보 부분-->
-                    <div class="col-6 mx-auto">
-                        <div class="content_head mb-3" v-if="state.reviewRows.length">
+                    <div class="col-5 mx-auto mt-5 review_content">
+                        <!-- 후기 내용 -->
+                        <div class="mb-3 scroll" v-if="state.reviewRows.length">
                             {{ state.reviewRows[0].content }}
                         </div>
-                        <div class="content_body" v-if="state.productRows.length" @click="handleProductOne(state.productRows[0].id)">
+
+                        <!-- 상품 정보 -->
+                        <div class="item_info" v-if="state.productRows.length" @click="handleProductOne(state.productRows[0].id)">
                             <img :src="state.productRows[0].imagePath" class="img-thumbnail" style="width: 100px; height:100px;">
-                            <p>&nbsp;</p>
-                            <p>{{ state.productRows[0].productEngName }}</p>
-                            <p style="font-weight: bold;">{{ changePriceFormat(state.productRows[0].sellWishPrice) }}원</p>
+                            <p class="m-0">&nbsp;</p>
+                            <p class="m-0">{{ state.productRows[0].productEngName }}</p>
+                            <p class="m-0 fw-bold">{{ changePriceFormat(state.productRows[0].sellWishPrice) }}원</p>
                         </div>
                     </div>
                 </div>
@@ -279,18 +234,13 @@ export default {
 .visually-hidden {
     z-index:1;
 }
-/* .content_head {
-    margin-bottom: auto; 
+.review_content {
+    position: relative;    
 }
-*/
-
-.content_body {
-    /* position: absolute;  */
-    bottom: 20px; 
-    margin-right: 20px;
-} 
-.content_body p {
-    margin: 0;
+.item_info {
+    position: absolute;
+    bottom: 100px;
+    left: 20px;
 }
 .outter_btn{
     position: relative;
@@ -300,15 +250,17 @@ export default {
 }
 .outter_right{
     width: 50px;
-    /* position: absolute;
-    right: 350px;
-    bottom: 400px; */
 }
 .outter_left{
     transform: scaleX(-1);
     width: 50px;
-    /* position: absolute;
-    left: 350px;
-    bottom: 400px; */
+}
+.carousel-item img {
+  display: block;
+  margin: auto;
+}
+.scroll{
+    max-height: 300px; 
+    overflow-y: auto;
 }
 </style>
