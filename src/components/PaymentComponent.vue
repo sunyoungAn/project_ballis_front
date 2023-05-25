@@ -38,10 +38,6 @@ export default {
         payMethod: {
             type: Number,
             default: 0
-        },
-        depositor: {
-            type: String,
-            default : ''
         }
     },
     setup (props) {
@@ -63,7 +59,6 @@ export default {
             memberNumber : sessionStorage.getItem("TOKEN"),
             member : "",
             buyer: "",
-            depositor: "",
             
             paymentType : 0, // 1:카드 간편결제 2:일반카드 3:카카오페이 4:네이버페이
             finalPrice : 0,
@@ -103,8 +98,9 @@ export default {
             // console.log("멤버정보", state.member)
             // console.log("셀링받아왔나", state.selling);
             // console.log("콘트랙트", state.contract);
-            console.log("아이템 정보", state.item);
+            // console.log("아이템 정보", state.item);
             // console.log("배송요청", state.message);
+            console.log("자식 계좌주", state.depositor);
         });
 
         // 주문번호 생성
@@ -139,7 +135,7 @@ export default {
             const headers = {"Content-Type":"application/json", "auth" : state.memberNumber};
             const { data } = await axios.get(url,{headers});
             state.member = data;
-            console.log("회원정보: ", state.member);
+            console.log("자식에서 회원정보: ", state.member);
         };
 
         // 즉시판매의 경우 구매자 데이터 필요
@@ -266,7 +262,7 @@ export default {
                     )
                 }
             } else if (state.type ==='keep') { // 판매-보관판매
-                if(!state.depositor || !state.member.depositor) {
+                if(!state.member.depositor) {
                     alert('판매 정산 계좌를 입력하세요.')
                     return false
                 }
@@ -364,7 +360,7 @@ export default {
                     )
                 }
             } else if (state.type === 'sell') { // 즉시판매
-                if(!state.depositor || !state.member.depositor) {
+                if(!state.member.depositor) {
                     alert('판매 정산 계좌를 입력하세요.')
                     return false
                 }
@@ -374,7 +370,7 @@ export default {
                     contractDto,
                     sellingDto,
                     paymentDto : {        
-                        impUid: state.ImpUid, // 결제번호
+                        impUid: state.impUid, // 결제번호
                         merchantUid: state.merchantUid, // 주문번호
                         contractId : null,
                         sellingId : null,
