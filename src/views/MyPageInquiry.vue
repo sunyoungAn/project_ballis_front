@@ -16,7 +16,7 @@
                     <table class="table">
                     <thead>
                         <tr style="text-align: center;">
-                        <th scope="col" style="width:100px">글번호</th>
+                        <th scope="col" style="width:100px">문의번호</th>
                         <th scope="col" style="width:300px">글제목</th>
                         <th scope="col" style="width:100px">문의유형</th>
                         <th scope="col" style="width:100px">작성날짜</th>

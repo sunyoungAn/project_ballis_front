@@ -61,7 +61,7 @@ export default {
         const handleData = () => {
             axios.get("/api/get/notice").then((data)=>{
                 console.log(data);
-                state.list=data.data;
+                state.list = data.data.sort((a, b) => b.id - a.id);
                 console.log(state.list)
 
             })
