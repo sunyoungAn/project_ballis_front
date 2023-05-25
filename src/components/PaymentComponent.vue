@@ -266,7 +266,7 @@ export default {
                     )
                 }
             } else if (state.type ==='keep') { // 판매-보관판매
-                if(!state.depositor) {
+                if(!state.depositor || !state.member.depositor) {
                     alert('판매 정산 계좌를 입력하세요.')
                     return false
                 }
@@ -364,7 +364,7 @@ export default {
                     )
                 }
             } else if (state.type === 'sell') { // 즉시판매
-                if(!state.depositor) {
+                if(!state.depositor || !state.member.depositor) {
                     alert('판매 정산 계좌를 입력하세요.')
                     return false
                 }
