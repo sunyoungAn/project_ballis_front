@@ -59,7 +59,7 @@
                 <hr>
                 <div class="p_tag_box_2" v-show="state.div1 === 1">
                     <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="state.div1 = 2" v-if="!state.cards.length">추가</button>
-                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="handleDeletecard(tmp.id)" v-if="state.cards.length">삭제</button>
+                    <button type="button" style="float: right;" class="btn btn-outline-dark mypage_button" @click="handleDeletecard(state.cards[0].id)" v-if="state.cards.length">삭제</button>
                     <p class="p_title">결제카드</p>
                     <div v-for="tmp of state.cards" :key="tmp">
                         <span>{{ tmp.name }}</span> <br> <br>
