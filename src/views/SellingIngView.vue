@@ -120,7 +120,7 @@ export default {
         //이미지 불러오기
         const getImagePath = (tmp) => {
             if (tmp.imagelist && tmp.imagelist.length > 0) {
-            return `http://localhost:8088/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`;
+            return `/api/wish/display/image?imagePath=${tmp.imagelist[0].imagePath}`;
             } else {
             // 이미지 리스트가 없는 경우에는 null을 반환하여 아무 항목도 출력되지 않도록 함
             return null;
