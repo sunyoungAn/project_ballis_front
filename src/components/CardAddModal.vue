@@ -5,7 +5,7 @@
                 <h4>카드 등록</h4>
             </div>
             <div class="input_box_card mx-3 ">
-                <input class="form-control text-center mt-5" type="text" v-model="state.card.cardNumber" placeholder="카드 번호 입력(-포함)">
+                <input class="form-control text-center mt-5" type="text" v-model="state.card.cardNumber" placeholder="카드 번호 입력(-제외)">
                 <input class="form-control text-center mt-3" type="text" v-model="state.card.expiryYear" placeholder="카드 유효년(YY) 입력">
                 <input class="form-control text-center my-3" type="text" v-model="state.card.expiryMonth" placeholder="카드 유효월(MM) 입력">
                 <input class="form-control text-center my-3" type="text" v-model="state.card.name" placeholder="카드 소유주 입력">

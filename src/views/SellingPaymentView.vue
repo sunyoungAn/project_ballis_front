@@ -353,6 +353,7 @@
                 :type="state.type" 
                 :sellingDto="state.sellingDto"
                 :payMethod="state.payMethod"
+                :depositor="state.depositor"
                 />
             </div>
         </div>
@@ -398,6 +399,7 @@ export default {
             memberNumber : sessionStorage.getItem("TOKEN"),
             member : '',
             cards : '',
+            depositor : '',
             
             row : [],
             sellingStatus : null,
@@ -519,8 +521,10 @@ export default {
             const { data } = await axios.get(url,{headers});
             state.member = data;
             state.cards = data.cards;
+            state.depositor = data.depositor;
             console.log("회원정보: ", state.member);
             console.log("카드정보: ", state.cards);
+            console.log("계좌주:", state.depositor);
         };
 
         // 판매 입찰, 보관 판매 시 상품 정보 출력용 데이터 필요

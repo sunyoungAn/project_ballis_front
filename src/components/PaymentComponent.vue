@@ -38,6 +38,10 @@ export default {
         payMethod: {
             type: Number,
             default: 0
+        },
+        depositor: {
+            type: String,
+            default : ''
         }
     },
     setup (props) {
@@ -59,6 +63,7 @@ export default {
             memberNumber : sessionStorage.getItem("TOKEN"),
             member : "",
             buyer: "",
+            depositor: "",
             
             paymentType : 0, // 1:카드 간편결제 2:일반카드 3:카카오페이 4:네이버페이
             finalPrice : 0,
@@ -72,6 +77,7 @@ export default {
             state.selling = props.sellingDto;
             state.message = props.delivery;
             state.paymentType = props.payMethod;
+            state.depositor = props.depositor;
             if(state.type === 'fast' || state.type === 'normal') { // 구매-빠른배송, 즉시구매
                 state.contract = {
                     productId : state.item.id,
@@ -109,7 +115,7 @@ export default {
         // 카드 간편 결제시 결제번호 생성
         const setImpUid = () => {
             const timestamp = Math.floor(Date.now()/100).toString(); // 11자리 맞추기
-            state.ImpUid = `imp_${timestamp}${state.memberNumber}`;
+            state.impUid = `imp_${timestamp}${state.memberNumber}`;
         }
 
         // 빠른배송 구매 and 즉시구매 and 즉시판매->거래체결 테이블에 저장, 보관판매->거래체결 테이블에 저장x
@@ -174,7 +180,7 @@ export default {
                             contractDto,
                             sellingDto,
                             paymentDto : {        
-                                impUid: state.ImpUid, // 결제번호
+                                impUid: state.impUid, // 결제번호
                                 merchantUid: state.merchantUid, // 주문번호
                                 contractId : null,
                                 sellingId : state.item.sellingId,
@@ -260,7 +266,7 @@ export default {
                     )
                 }
             } else if (state.type ==='keep') { // 판매-보관판매
-                if(!state.member.depositor) {
+                if(!state.depositor) {
                     alert('판매 정산 계좌를 입력하세요.')
                     return false
                 }
@@ -358,7 +364,7 @@ export default {
                     )
                 }
             } else if (state.type === 'sell') { // 즉시판매
-                if(!state.member.depositor) {
+                if(!state.depositor) {
                     alert('판매 정산 계좌를 입력하세요.')
                     return false
                 }
